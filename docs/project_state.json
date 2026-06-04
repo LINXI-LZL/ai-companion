@@ -1,0 +1,746 @@
+{
+  "project": {
+    "id": "wechat-vent-ai",
+    "title": "微信树洞 AI",
+    "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天。",
+    "project_type": "multi_platform",
+    "current_phase_id": "phase-03-static-prototype",
+    "current_step_id": "step-03-01-prototype-review-mode",
+    "overall_status": "waiting_user",
+    "strategy": "hybrid",
+    "total_phase_count": 11,
+    "total_step_count": 25,
+    "completed_step_count": 8,
+    "owner_role": "nontechnical_pm",
+    "requires_user_attention": true,
+    "next_action_summary": "确认是否使用浏览器可视化方式查看 Web 静态原型，然后进入原型页面结构设计。",
+    "current_risk_summary": "微信接入方式需要在架构阶段继续核对企业微信和微信客服官方能力；情绪陪伴产品需要明确安全边界。",
+    "created_at": "2026-06-04T20:28:26+08:00",
+    "updated_at": "2026-06-04T20:28:26+08:00"
+  },
+  "phases": [
+    {
+      "id": "phase-01-intake",
+      "project_id": "wechat-vent-ai",
+      "order": 1,
+      "title": "Intake and maturity assessment",
+      "goal": "把早期想法整理成可推进的项目入口，明确项目类型、成熟度、风险和下一阶段。",
+      "status": "done",
+      "outputs": [
+        "docs/product_intake.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 2,
+      "completed_step_count": 2,
+      "summary": "项目已判断为多平台产品，从想法输入进入蓝图阶段。",
+      "notes": "当前没有现有代码或产品文档，按从 0 到 1 的产品启动处理。",
+      "user_action": "none",
+      "acceptance_hint": "项目类型、起点和主要风险已清楚列出。",
+      "depends_on_phase_ids": [],
+      "started_at": "2026-06-04T20:28:26+08:00",
+      "finished_at": "2026-06-04T20:28:26+08:00"
+    },
+    {
+      "id": "phase-02-blueprint",
+      "project_id": "wechat-vent-ai",
+      "order": 2,
+      "title": "Product blueprint confirmation",
+      "goal": "把产品定位、目标用户、核心场景、MVP 范围和非目标确认下来。",
+      "status": "done",
+      "outputs": [
+        "docs/meeting_notes.md",
+        "docs/product_blueprint.md",
+        "docs/decision_log.md",
+        "docs/superpowers/specs/2026-06-04-wechat-ai-companion-design.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 6,
+      "completed_step_count": 6,
+      "summary": "用户已确认产品蓝图。",
+      "notes": "人格、MVP 场景、用户范围和微信路线均已确认。",
+      "user_action": "none",
+      "acceptance_hint": "蓝图可以指导静态原型和后续技术规划。",
+      "depends_on_phase_ids": [
+        "phase-01-intake"
+      ],
+      "started_at": "2026-06-04T20:28:26+08:00",
+      "finished_at": "2026-06-04T20:28:26+08:00"
+    },
+    {
+      "id": "phase-03-static-prototype",
+      "project_id": "wechat-vent-ai",
+      "order": 3,
+      "title": "Web static prototype confirmation",
+      "goal": "在正式编码前，用可查看的静态原型确认聊天体验、管理后台和主要页面结构。",
+      "status": "waiting_user",
+      "outputs": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 4,
+      "completed_step_count": 0,
+      "summary": "等待用户确认是否使用浏览器可视化方式查看原型。",
+      "notes": "只有原型确认后才进入架构和正式开发规划。",
+      "user_action": "review_output",
+      "acceptance_hint": "用户应能看懂页面、入口、主要流程和信息摆放。",
+      "depends_on_phase_ids": [
+        "phase-02-blueprint"
+      ]
+    },
+    {
+      "id": "phase-04-architecture",
+      "project_id": "wechat-vent-ai",
+      "order": 4,
+      "title": "Architecture and module-boundary planning",
+      "goal": "把确认后的产品和原型翻译成稳定、可迭代的技术结构。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 3,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "需要等待静态原型确认。",
+      "user_action": "none",
+      "acceptance_hint": "用户应能理解每个模块为什么存在，以及它如何支撑产品稳定上线。",
+      "depends_on_phase_ids": [
+        "phase-03-static-prototype"
+      ]
+    },
+    {
+      "id": "phase-05-master-task-board",
+      "project_id": "wechat-vent-ai",
+      "order": 5,
+      "title": "Master task board generation",
+      "goal": "把项目拆成可追踪的小步骤，并生成用户可读和机器可读的任务状态。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 2,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "任务板必须在正式实现前完成。",
+      "user_action": "none",
+      "acceptance_hint": "用户应能看清项目被拆成多少步，每步产出什么。",
+      "depends_on_phase_ids": [
+        "phase-04-architecture"
+      ]
+    },
+    {
+      "id": "phase-06-build-round-scoping",
+      "project_id": "wechat-vent-ai",
+      "order": 6,
+      "title": "Build-round scoping",
+      "goal": "在每轮开发前明确本轮做什么、不做什么、完成后用户能验证什么。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "需要等待主任务板完成。",
+      "user_action": "none",
+      "acceptance_hint": "用户应知道每轮建设的边界和可验收结果。",
+      "depends_on_phase_ids": [
+        "phase-05-master-task-board"
+      ]
+    },
+    {
+      "id": "phase-07-development",
+      "project_id": "wechat-vent-ai",
+      "order": 7,
+      "title": "Development progress orchestration",
+      "goal": "按已确认的任务板推进开发，并用产品语言持续报告进展。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 4,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "开发必须等待原型、架构和任务板确认。",
+      "user_action": "none",
+      "acceptance_hint": "用户能看到每个开发步骤完成了什么产物。",
+      "depends_on_phase_ids": [
+        "phase-06-build-round-scoping"
+      ]
+    },
+    {
+      "id": "phase-08-user-test-guidance",
+      "project_id": "wechat-vent-ai",
+      "order": 8,
+      "title": "User test intervention guidance",
+      "goal": "在可运行版本完成后，引导用户测试核心流程。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "只有构建可运行后才邀请用户测试。",
+      "user_action": "none",
+      "acceptance_hint": "用户能按清单验证真实聊天流程。",
+      "depends_on_phase_ids": [
+        "phase-07-development"
+      ]
+    },
+    {
+      "id": "phase-09-uat-docs",
+      "project_id": "wechat-vent-ai",
+      "order": 9,
+      "title": "User-level test documentation",
+      "goal": "生成非技术用户也能执行的测试说明。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "需要等待可运行版本。",
+      "user_action": "none",
+      "acceptance_hint": "测试用例应包含目标、前置条件、步骤、预期结果和失败反馈方式。",
+      "depends_on_phase_ids": [
+        "phase-08-user-test-guidance"
+      ]
+    },
+    {
+      "id": "phase-10-debug-collaboration",
+      "project_id": "wechat-vent-ai",
+      "order": 10,
+      "title": "Debug collaboration",
+      "goal": "当内测发现问题时，用结构化反馈转成下一步修复行动。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "只有测试发现问题后进入。",
+      "user_action": "none",
+      "acceptance_hint": "用户不需要懂技术，也能清楚报告问题。",
+      "depends_on_phase_ids": [
+        "phase-09-uat-docs"
+      ]
+    },
+    {
+      "id": "phase-11-delivery",
+      "project_id": "wechat-vent-ai",
+      "order": 11,
+      "title": "Delivery and handoff",
+      "goal": "整理交付内容、已知问题和下一轮建议。",
+      "status": "not_started",
+      "outputs": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 0,
+      "summary": "尚未开始。",
+      "notes": "需要等待构建、测试和修复完成。",
+      "user_action": "none",
+      "acceptance_hint": "交付摘要应清楚说明源码、文档、架构、核心流程和下一步。",
+      "depends_on_phase_ids": [
+        "phase-10-debug-collaboration"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-01-01-context",
+      "phase_id": "phase-01-intake",
+      "order": 1,
+      "title": "Explore project context",
+      "goal": "确认当前目录中是否已有产品材料或代码，避免重复假设。",
+      "status": "done",
+      "output": [
+        "当前目录无已有产品代码或文档；Git 尚无提交记录。"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "按新项目启动。",
+      "depends_on": [],
+      "user_action": "none",
+      "acceptance_hint": "工作区情况已明确。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-01-02-intake",
+      "phase_id": "phase-01-intake",
+      "order": 2,
+      "title": "Create intake artifact",
+      "goal": "形成项目启动说明和初始状态。",
+      "status": "done",
+      "output": [
+        "docs/product_intake.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "项目类型为 multi-platform。",
+      "depends_on": [
+        "step-01-01-context"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "启动说明包含项目类型、成熟度和风险。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-001"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-02-01-personality",
+      "phase_id": "phase-02-blueprint",
+      "order": 1,
+      "title": "Choose AI personality",
+      "goal": "确定陪聊智能体给人的第一感受。",
+      "status": "done",
+      "output": [
+        "B + D: 嘴欠但靠谱的深夜损友"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "人格同时包含毒舌损友和深夜陪伴。",
+      "depends_on": [],
+      "user_action": "none",
+      "acceptance_hint": "人格方向清楚且可写入 prompt。",
+      "progress_summary": "用户已选择。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-003"
+      ],
+      "related_decision_ids": [
+        "decision-001"
+      ]
+    },
+    {
+      "id": "step-02-02-scenario",
+      "phase_id": "phase-02-blueprint",
+      "order": 2,
+      "title": "Choose MVP anchor scenario",
+      "goal": "避免第一版覆盖过宽，先找一个最能体现产品气质的主场景。",
+      "status": "done",
+      "output": [
+        "生活压力、emo、睡前陪伴优先"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "其他吐槽类型兼容，但不作为第一主轴。",
+      "depends_on": [
+        "step-02-01-personality"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "MVP 主场景已明确。",
+      "progress_summary": "用户已选择。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-003"
+      ],
+      "related_decision_ids": [
+        "decision-002"
+      ]
+    },
+    {
+      "id": "step-02-03-user-scope",
+      "phase_id": "phase-02-blueprint",
+      "order": 3,
+      "title": "Choose initial user scope",
+      "goal": "明确第一版是自用、内测还是公开产品。",
+      "status": "done",
+      "output": [
+        "你本人 + 少数朋友内测"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "需要白名单、基础用户隔离和轻量管理后台。",
+      "depends_on": [
+        "step-02-02-scenario"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "用户规模边界已明确。",
+      "progress_summary": "用户已选择。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-003"
+      ],
+      "related_decision_ids": [
+        "decision-003"
+      ]
+    },
+    {
+      "id": "step-02-04-wechat-route",
+      "phase_id": "phase-02-blueprint",
+      "order": 4,
+      "title": "Choose WeChat route",
+      "goal": "在体验、稳定性和合规风险之间选择第一版接入方式。",
+      "status": "done",
+      "output": [
+        "企业微信/微信客服式入口"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "不采用个人微信号自动化作为正式 MVP 路线。",
+      "depends_on": [
+        "step-02-03-user-scope"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "接入路线已明确，可进入原型和架构。",
+      "progress_summary": "用户已选择。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-003"
+      ],
+      "related_decision_ids": [
+        "decision-004"
+      ]
+    },
+    {
+      "id": "step-02-05-blueprint",
+      "phase_id": "phase-02-blueprint",
+      "order": 5,
+      "title": "Consolidate product blueprint",
+      "goal": "将已确认的选择整理成一份可执行产品蓝图。",
+      "status": "done",
+      "output": [
+        "docs/product_blueprint.md",
+        "docs/meeting_notes.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "蓝图已被用户确认。",
+      "depends_on": [
+        "step-02-04-wechat-route"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "产品定义、目标用户、核心场景、MVP 范围和非目标都已写明。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-002",
+        "artifact-003"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-02-06-design-spec",
+      "phase_id": "phase-02-blueprint",
+      "order": 6,
+      "title": "Write confirmed design spec",
+      "goal": "保存一份可供后续原型、架构和任务拆分使用的确认版规格。",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-04-wechat-ai-companion-design.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "已完成完整性和矛盾检查。",
+      "depends_on": [
+        "step-02-05-blueprint"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "规格无未完成标记和明显矛盾。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-005"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-03-01-prototype-review-mode",
+      "phase_id": "phase-03-static-prototype",
+      "order": 1,
+      "title": "Confirm prototype review mode",
+      "goal": "确认用户是否希望用浏览器可视化方式查看原型。",
+      "status": "waiting_user",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "如果用户同意，将准备可打开的 Web 静态原型。",
+      "depends_on": [
+        "step-02-06-design-spec"
+      ],
+      "user_action": "review_output",
+      "acceptance_hint": "用户确认是否要打开本地浏览器原型。",
+      "progress_summary": "等待用户回应。",
+      "blockers": [
+        "需要用户确认是否使用浏览器可视化原型伴随"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-005"
+      ]
+    },
+    {
+      "id": "step-03-02-screen-map",
+      "phase_id": "phase-03-static-prototype",
+      "order": 2,
+      "title": "Create screen map and screen specs",
+      "goal": "列出原型需要包含的页面和每页信息重点。",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "预计包括聊天入口、管理后台、人格配置、用户记忆和安全规则。",
+      "depends_on": [
+        "step-03-01-prototype-review-mode"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "页面清单能覆盖 MVP 主流程。",
+      "progress_summary": "尚未开始。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-03-03-static-prototype",
+      "phase_id": "phase-03-static-prototype",
+      "order": 3,
+      "title": "Build web static prototype",
+      "goal": "让用户能实际查看页面结构、主流程和信息层级。",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "静态原型不需要真实后端。",
+      "depends_on": [
+        "step-03-02-screen-map"
+      ],
+      "user_action": "confirm_ui",
+      "acceptance_hint": "用户能打开原型并判断页面和流程是否正确。",
+      "progress_summary": "尚未开始。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-03-04-ui-confirmation",
+      "phase_id": "phase-03-static-prototype",
+      "order": 4,
+      "title": "Confirm static prototype",
+      "goal": "在正式编码前确认页面、主流程和信息摆放。",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "确认后才进入架构阶段。",
+      "depends_on": [
+        "step-03-03-static-prototype"
+      ],
+      "user_action": "confirm_ui",
+      "acceptance_hint": "用户明确同意原型可以进入正式实现规划。",
+      "progress_summary": "尚未开始。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "title": "Product intake",
+      "artifact_type": "document",
+      "location": "docs/product_intake.md",
+      "summary": "项目启动说明，包含项目类型、成熟度、推荐起点和风险。",
+      "phase_id": "phase-01-intake",
+      "step_id": "step-01-02-intake",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-002",
+      "title": "Meeting notes",
+      "artifact_type": "document",
+      "location": "docs/meeting_notes.md",
+      "summary": "想法输入阶段的结构化会议纪要。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-05-blueprint",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-003",
+      "title": "Product blueprint",
+      "artifact_type": "document",
+      "location": "docs/product_blueprint.md",
+      "summary": "已确认的产品定义、用户、场景、价值、流程、MVP 和非目标。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-05-blueprint",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-004",
+      "title": "Decision log",
+      "artifact_type": "document",
+      "location": "docs/decision_log.md",
+      "summary": "记录人格、场景、用户范围、微信路线和原型查看方式等决策。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-05-blueprint",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-005",
+      "title": "Design spec",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-04-wechat-ai-companion-design.md",
+      "summary": "确认版设计规格，用于后续原型、架构和任务拆分。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-06-design-spec",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-006",
+      "title": "Project state",
+      "artifact_type": "other",
+      "location": "docs/project_state.json",
+      "summary": "机器可读项目状态，作为后续阶段和任务板的来源。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-06-design-spec",
+      "created_at": "2026-06-04T20:28:26+08:00",
+      "version": "v0.1"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-001",
+      "title": "AI personality",
+      "context": "智能体需要有稳定人格，避免像普通客服或问答机器人。",
+      "status": "resolved",
+      "recommended_option_id": "option-b-plus-d",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-01-personality",
+      "options": [
+        {
+          "id": "option-a",
+          "label": "温柔树洞型"
+        },
+        {
+          "id": "option-b-plus-d",
+          "label": "毒舌损友型 + 深夜陪伴型"
+        }
+      ],
+      "user_decision": "B + D",
+      "recommendation_reason": "这个组合最贴近用户想要的吐槽陪伴感。",
+      "notes": "最终人格名暂定为深夜损友。"
+    },
+    {
+      "id": "decision-002",
+      "title": "MVP anchor scenario",
+      "context": "产品可以聊很多内容，但第一版需要一个最能体现价值的主场景。",
+      "status": "resolved",
+      "recommended_option_id": "option-d",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-02-scenario",
+      "options": [
+        {
+          "id": "option-a",
+          "label": "工作吐槽"
+        },
+        {
+          "id": "option-b",
+          "label": "感情吐槽"
+        },
+        {
+          "id": "option-c",
+          "label": "人际/家庭吐槽"
+        },
+        {
+          "id": "option-d",
+          "label": "生活压力 + emo + 睡前陪伴"
+        }
+      ],
+      "user_decision": "D",
+      "recommendation_reason": "最适合深夜损友人格，也能自然覆盖其他吐槽场景。",
+      "notes": "MVP 主轴已确定。"
+    },
+    {
+      "id": "decision-003",
+      "title": "Initial user scope",
+      "context": "用户范围决定是否需要白名单、管理后台和更严格的隔离。",
+      "status": "resolved",
+      "recommended_option_id": "option-b",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-03-user-scope",
+      "options": [
+        {
+          "id": "option-a",
+          "label": "只给自己用"
+        },
+        {
+          "id": "option-b",
+          "label": "自己和少数朋友用"
+        },
+        {
+          "id": "option-c",
+          "label": "一开始公开给很多用户"
+        }
+      ],
+      "user_decision": "B",
+      "recommendation_reason": "少数朋友内测能验证真实使用感，同时避免过早做复杂运营系统。",
+      "notes": "第一版需要内测白名单。"
+    },
+    {
+      "id": "decision-004",
+      "title": "WeChat integration route",
+      "context": "产品要接入微信环境，但不同路线在体验、稳定性和风险上差异很大。",
+      "status": "resolved",
+      "recommended_option_id": "option-a",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-04-wechat-route",
+      "options": [
+        {
+          "id": "option-a",
+          "label": "企业微信/微信客服式入口"
+        },
+        {
+          "id": "option-b",
+          "label": "公众号客服消息"
+        },
+        {
+          "id": "option-c",
+          "label": "小程序 + 客服/聊天页"
+        },
+        {
+          "id": "option-d",
+          "label": "个人微信号自动回复"
+        }
+      ],
+      "user_decision": "A",
+      "recommendation_reason": "MVP 优先稳定和可内测，不选择高封号风险的个人微信自动化。",
+      "notes": "架构阶段需要继续核对当前官方能力。"
+    },
+    {
+      "id": "decision-005",
+      "title": "Prototype review mode",
+      "context": "下一阶段是静态原型确认，用户可以选择是否用浏览器查看视觉原型。",
+      "status": "waiting_user",
+      "recommended_option_id": "option-visual",
+      "related_phase_id": "phase-03-static-prototype",
+      "related_step_id": "step-03-01-prototype-review-mode",
+      "options": [
+        {
+          "id": "option-visual",
+          "label": "使用浏览器可视化原型"
+        },
+        {
+          "id": "option-text",
+          "label": "先用文本页面规格"
+        }
+      ],
+      "user_decision": "",
+      "recommendation_reason": "聊天体验和管理后台更适合看原型确认。",
+      "notes": "等待用户确认。"
+    }
+  ]
+}
