@@ -103,3 +103,21 @@ These items should not block Build Round 1 acceptance:
 | Smoke test script | `docs/wecom_live_round_3_smoke_test.md` |
 | Current owner action | Run the WeCom live route smoke test in `微信入口` |
 | Acceptance level | Ready for owner test |
+
+## Auto Memory Polish Acceptance
+
+| Area | Pass Criteria | Status |
+|---|---|---|
+| Automatic preference memory | A preference such as `以后跟我说短点` saves `用户喜欢短回复` automatically | Automated pass |
+| Automatic repeated-theme memory | Repeated work rants save one work-pressure memory without duplicates | Automated pass |
+| Sensitive suppression | Phone numbers, tokens, secrets, and credential-like content are not saved, even if the user says to remember them | Automated pass |
+| High-risk suppression | High-risk self-harm wording is not saved as memory, even when phrased as an explicit remember request | Automated pass |
+| Memory page copy | The Memory page reads as automatic memory management, not manual data entry | Automated pass |
+
+## Auto Memory Owner Test
+
+| Field | Value |
+|---|---|
+| Smoke test script | `docs/auto_memory_smoke_test.md` |
+| Current owner action | Run the auto memory smoke test in `聊天模拟` and `记忆` |
+| Acceptance level | Ready for owner test |

@@ -98,14 +98,15 @@
         <section class="view" data-view="memory">
           <section class="panel">
             <div class="panel-header">
-              <h3>用户记忆</h3>
+              <div>
+                <h3>自动记忆</h3>
+                <p class="small">智能体会从聊天里自动保存稳定偏好，敏感信息和高风险内容不会写入记忆。</p>
+              </div>
               <select id="memory-user"></select>
             </div>
-            <form class="inline-form wide" id="memory-form">
-              <input id="memory-content" placeholder="例如：用户喜欢短回复">
-              <button type="submit">保存</button>
-              <button type="button" class="secondary" id="clear-memory">清空</button>
-            </form>
+            <div class="panel-actions">
+              <button type="button" class="secondary" id="clear-memory">清空自动记忆</button>
+            </div>
             <div class="list-stack" id="memory-list"></div>
           </section>
         </section>

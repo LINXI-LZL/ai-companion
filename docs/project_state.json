@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-13-wecom-live-route",
-    "current_step_id": "step-13-05-owner-smoke-test",
+    "current_phase_id": "phase-14-auto-memory-polish",
+    "current_step_id": "step-14-04-owner-smoke-test",
     "overall_status": "ready_for_test",
     "strategy": "hybrid",
-    "total_phase_count": 13,
-    "total_step_count": 51,
-    "completed_step_count": 50,
+    "total_phase_count": 14,
+    "total_step_count": 55,
+    "completed_step_count": 54,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Run the Build Round 3 WeCom live route smoke test and decide whether the credential-route skeleton passes.",
-    "current_risk_summary": "Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.",
+    "next_action_summary": "Run the automatic memory smoke test and decide whether the automatic lightweight memory behavior passes.",
+    "current_risk_summary": "Automatic memory is intentionally conservative and rule-based; real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T18:20:00+08:00"
+    "updated_at": "2026-06-05T19:10:00+08:00"
   },
   "phases": [
     {
@@ -317,7 +317,7 @@
       "project_id": "wechat-vent-ai",
       "order": 13,
       "title": "Build Round 3 WeCom live credential route",
-      "goal": "??? mock ??????/??????????????????????????????",
+      "goal": "从本地 mock 过渡到真实企业微信凭证路线的本地骨架，支持配置自检和回调预检。",
       "status": "ready_for_test",
       "outputs": [
         "docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md",
@@ -335,10 +335,39 @@
       "summary": "WeCom live credential-route skeleton is implemented and ready for owner smoke test.",
       "notes": "This round does not finish encrypted echostr decryption or real outbound network sending.",
       "user_action": "run_user_test",
-      "acceptance_hint": "???????????????????????????????????",
+      "acceptance_hint": "用户能在本地页面看懂真实接入准备状态和仍然延期的边界。",
       "depends_on_phase_ids": [
         "phase-12-personality-quality"
       ]
+    },
+    {
+      "id": "phase-14-auto-memory-polish",
+      "project_id": "wechat-vent-ai",
+      "order": 14,
+      "title": "Auto lightweight memory polish",
+      "goal": "把用户记忆从手动添加改成由智能体在聊天中自动沉淀，同时避免写入敏感信息、高风险内容和一次性情绪。",
+      "status": "ready_for_test",
+      "outputs": [
+        "docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md",
+        "docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md",
+        "app/auto_memory.py",
+        "app/server.py",
+        "app/static/index.html",
+        "app/static/app.js",
+        "docs/auto_memory_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "step_count": 4,
+      "completed_step_count": 3,
+      "summary": "Automatic lightweight memory is implemented and ready for owner smoke test.",
+      "notes": "This round removes manual memory add from the owner-facing UI. Memory inference stays conservative, deduped, and safety-aware.",
+      "user_action": "run_user_test",
+      "acceptance_hint": "用户在本地聊天模拟里验证记忆是否会自动添加、不会重复刷屏、不会保存敏感内容。",
+      "depends_on_phase_ids": [
+        "phase-13-wecom-live-route"
+      ],
+      "started_at": "2026-06-05T19:10:00+08:00"
     }
   ],
   "steps": [
@@ -1709,6 +1738,122 @@
       "related_decision_ids": [
         "decision-012"
       ]
+    },
+    {
+      "id": "step-14-01-auto-memory-scope",
+      "phase_id": "phase-14-auto-memory-polish",
+      "order": 1,
+      "title": "Confirm auto memory scope",
+      "goal": "确认用户记忆应由智能体自动添加，而不是要求用户手动维护。",
+      "status": "done",
+      "output": [
+        "User chose option A: automatic lightweight memory."
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Scope is limited to stable preferences and repeated themes; secrets and high-risk content are excluded.",
+      "depends_on": [
+        "step-13-05-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "自动记忆方向已明确。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-013"
+      ]
+    },
+    {
+      "id": "step-14-02-spec-plan",
+      "phase_id": "phase-14-auto-memory-polish",
+      "order": 2,
+      "title": "Write spec and plan",
+      "goal": "把自动记忆的保存范围、排除范围、UI 改动和验证方式写清楚。",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md",
+        "docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Uses test-first implementation with conservative rules.",
+      "depends_on": [
+        "step-14-01-auto-memory-scope"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "设计和计划能解释为什么不让用户手动添加记忆。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-047",
+        "artifact-048"
+      ],
+      "related_decision_ids": [
+        "decision-013"
+      ]
+    },
+    {
+      "id": "step-14-03-auto-memory-engine",
+      "phase_id": "phase-14-auto-memory-polish",
+      "order": 3,
+      "title": "Build auto memory engine",
+      "goal": "在聊天响应中自动推断安全的轻量记忆，并把记忆页改为自动记忆管理。",
+      "status": "done",
+      "output": [
+        "app/auto_memory.py",
+        "app/server.py",
+        "app/static/index.html",
+        "app/static/app.js",
+        "tests/test_storage_api.py",
+        "tests/test_static_app.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "The memory API remains for backend/admin use, but the owner-facing UI no longer asks users to add memory manually.",
+      "depends_on": [
+        "step-14-02-spec-plan"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "聊天后自动出现偏好记忆，重复表达不会重复保存。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-049",
+        "artifact-050"
+      ],
+      "related_decision_ids": [
+        "decision-013"
+      ]
+    },
+    {
+      "id": "step-14-04-owner-smoke-test",
+      "phase_id": "phase-14-auto-memory-polish",
+      "order": 4,
+      "title": "Owner auto memory smoke test",
+      "goal": "让用户用本地页面验证自动记忆是否符合预期。",
+      "status": "ready_for_test",
+      "output": [
+        "docs/auto_memory_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Owner should check automatic add, dedupe, sensitive skip, and Chinese-only memory UI copy.",
+      "depends_on": [
+        "step-14-03-auto-memory-engine"
+      ],
+      "user_action": "run_user_test",
+      "acceptance_hint": "用户按烟测脚本通过后，本轮自动记忆打磨即可验收。",
+      "progress_summary": "等待用户测试。",
+      "blockers": [
+        "Needs owner smoke test"
+      ],
+      "related_artifact_ids": [
+        "artifact-051"
+      ],
+      "related_decision_ids": [
+        "decision-013"
+      ]
     }
   ],
   "artifacts": [
@@ -2217,6 +2362,61 @@
       "step_id": "step-13-05-owner-smoke-test",
       "created_at": "2026-06-05T18:20:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-047",
+      "title": "Auto memory design",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md",
+      "summary": "Confirmed automatic lightweight memory rules, exclusions, and acceptance criteria.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-02-spec-plan",
+      "created_at": "2026-06-05T19:10:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-048",
+      "title": "Auto memory implementation plan",
+      "artifact_type": "implementation_plan",
+      "location": "docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md",
+      "summary": "Test-first plan for automatic memory extraction and UI polish.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-02-spec-plan",
+      "created_at": "2026-06-05T19:10:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-049",
+      "title": "Auto memory extractor",
+      "artifact_type": "source_code",
+      "location": "app/auto_memory.py",
+      "summary": "Conservative rule-based memory inference with safety and sensitive-content suppression.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-03-auto-memory-engine",
+      "created_at": "2026-06-05T19:10:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-050",
+      "title": "Automatic memory UI",
+      "artifact_type": "source_code",
+      "location": "app/static/index.html, app/static/app.js, app/static/styles.css",
+      "summary": "Memory page changed from manual add to automatic memory review and clear controls.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-03-auto-memory-engine",
+      "created_at": "2026-06-05T19:10:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-051",
+      "title": "Auto memory smoke test",
+      "artifact_type": "document",
+      "location": "docs/auto_memory_smoke_test.md",
+      "summary": "Owner smoke test for automatic add, dedupe, sensitive skip, and Chinese-only memory UI.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-04-owner-smoke-test",
+      "created_at": "2026-06-05T19:10:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -2509,20 +2709,46 @@
       "options": [
         {
           "id": "option-real-wechat-credentials",
-          "label": "??????????"
+          "label": "真实企业微信凭证路线"
         },
         {
           "id": "option-real-media-assets",
-          "label": "?????/??????"
+          "label": "真实表情包/语音素材路线"
         },
         {
           "id": "option-wider-personality-feedback",
-          "label": "????????"
+          "label": "更多真人感反馈"
         }
       ],
       "user_decision": "A, then confirmed: real WeCom credential-route skeleton.",
       "recommendation_reason": "The local personality quality is accepted, so the next highest-value step is moving toward a real WeChat-side entry without exposing secrets.",
       "notes": "Round 3 builds the route skeleton; real encrypted callback verification and public HTTPS remain next steps."
+    },
+    {
+      "id": "decision-013",
+      "title": "Automatic lightweight memory mode",
+      "context": "用户指出记忆应该由智能体自动添加，而不是要求用户手动维护，这会影响陪聊产品是否像真人朋友。",
+      "status": "resolved",
+      "recommended_option_id": "option-auto-lightweight-memory",
+      "related_phase_id": "phase-14-auto-memory-polish",
+      "related_step_id": "step-14-01-auto-memory-scope",
+      "options": [
+        {
+          "id": "option-auto-lightweight-memory",
+          "label": "自动轻量记忆"
+        },
+        {
+          "id": "option-manual-review",
+          "label": "用户手动审核后保存"
+        },
+        {
+          "id": "option-no-memory",
+          "label": "暂不保存记忆"
+        }
+      ],
+      "user_decision": "A: 自动轻量记忆。",
+      "recommendation_reason": "自动沉淀稳定偏好和反复主题更像真人朋友，也减少用户维护成本；敏感和高风险内容必须跳过。",
+      "notes": "本轮采用规则型保守推断，后续可再升级为模型抽取加用户可撤销审核。"
     }
   ]
 }

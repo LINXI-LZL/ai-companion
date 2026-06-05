@@ -65,18 +65,6 @@ function bindForms() {
     await refreshUsers();
   });
 
-  document.getElementById("memory-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const content = document.getElementById("memory-content").value.trim();
-    if (!content || !state.selectedUserId) return;
-    await api("/api/memories", {
-      method: "POST",
-      body: { user_id: state.selectedUserId, content, source: "manual" },
-    });
-    document.getElementById("memory-content").value = "";
-    await refreshMemories();
-  });
-
   document.getElementById("clear-memory").addEventListener("click", async () => {
     if (!state.selectedUserId) return;
     await api(`/api/memories?user_id=${encodeURIComponent(state.selectedUserId)}`, {
@@ -206,13 +194,13 @@ async function refreshMemories() {
   const data = await api(`/api/memories?user_id=${encodeURIComponent(state.selectedUserId)}`);
   document.getElementById("memory-list").innerHTML =
     data.memories.length === 0
-      ? `<div class="list-item"><strong>暂无启用记忆</strong><p>第 1 轮里记忆是可选能力。</p></div>`
+      ? `<div class="list-item"><strong>自动记忆为空</strong><p>聊几轮之后，智能体会自动保存稳定偏好和反复出现的压力源。</p></div>`
       : data.memories
           .map(
             (memory) => `
               <div class="list-item">
                 <strong>${escapeHtml(memory.content)}</strong>
-                <p>${escapeHtml(memory.source)} · ${formatDate(memory.created_at)}</p>
+                <p>${memorySourceLabel(memory.source)} · ${formatDate(memory.created_at)}</p>
               </div>
             `
           )
@@ -432,6 +420,15 @@ function assetNoteLabel(value) {
     "Real sticker files wait for rights review.": "真实表情包文件等待版权和使用权确认。",
     "Use text fallback for now.": "当前先用文字兜底。",
     "Voice provider is not chosen yet.": "语音服务商尚未选择。",
+  };
+  return labels[value] || value || "-";
+}
+
+function memorySourceLabel(value) {
+  const labels = {
+    auto: "自动记忆",
+    chat: "聊天明确要求",
+    manual: "后台手动添加",
   };
   return labels[value] || value || "-";
 }

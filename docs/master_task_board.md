@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Build Round 3 WeCom live credential route |
-| Current step | Owner WeCom route smoke test |
+| Current phase | Auto lightweight memory polish |
+| Current step | Owner auto memory smoke test |
 | Overall status | Ready for owner test |
-| Total phases | 13 |
-| Total substeps | 51 |
-| Completed substeps | 50 |
+| Total phases | 14 |
+| Total substeps | 55 |
+| Completed substeps | 54 |
 | Needs user attention | Yes |
-| Next action | Run the Build Round 3 WeCom route smoke test |
-| Current risk | Real encrypted callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS |
+| Next action | Run the automatic memory smoke test |
+| Current risk | Automatic memory is intentionally conservative and rule-based; real WeCom encrypted callback verification remains deferred |
 
 ## Full Board
 
@@ -70,7 +70,11 @@
 | phase-13-wecom-live-route | step-13-03-live-adapter | Build Round 3 WeCom live credential route | Build live adapter skeleton | Add config self-check, signature validation, callback preflight, dev inbound, and text payloads | `app/wecom_live.py`, `app/server.py`, tests | step-13-02-spec-plan | done | none | no | yes | Real encrypted callback still needs WXBizMsgCrypt-compatible library |
 | phase-13-wecom-live-route | step-13-04-admin-self-check | Build Round 3 WeCom live credential route | Add admin self-check UI | Show live channel readiness in WeChat Entry | `app/static/index.html`, `app/static/app.js` | step-13-03-live-adapter | done | none | no | yes | none |
 | phase-13-wecom-live-route | step-13-05-owner-smoke-test | Build Round 3 WeCom live credential route | Owner WeCom route smoke test | Verify status panel, local mock preservation, and live boundary | `docs/wecom_live_round_3_smoke_test.md` | step-13-04-admin-self-check | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-14-auto-memory-polish | step-14-01-auto-memory-scope | Auto lightweight memory polish | Confirm auto memory scope | Move memory capture out of manual user entry | User chose automatic lightweight memory | step-13-05-owner-smoke-test | done | none | no | no | none |
+| phase-14-auto-memory-polish | step-14-02-spec-plan | Auto lightweight memory polish | Write spec and plan | Save automatic memory rules and implementation route | `docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md`, `docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md` | step-14-01-auto-memory-scope | done | none | no | no | none |
+| phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Auto lightweight memory polish | Build auto memory engine | Infer safe lightweight preferences from chat and remove manual add UI | `app/auto_memory.py`, `app/server.py`, `app/static/index.html`, `app/static/app.js`, tests | step-14-02-spec-plan | done | none | no | yes | none |
+| phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Auto lightweight memory polish | Owner auto memory smoke test | Verify memory is added automatically, deduped, and sensitive content is skipped | `docs/auto_memory_smoke_test.md` | step-14-03-auto-memory-engine | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 
 ## Current Confirmation Gate
 
-Run `docs/wecom_live_round_3_smoke_test.md` in the local app, then decide whether the third-round live route skeleton passes.
+Run `docs/auto_memory_smoke_test.md` in the local app, then decide whether automatic memory behavior passes.

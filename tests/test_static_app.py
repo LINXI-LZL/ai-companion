@@ -62,6 +62,14 @@ class StaticAppTests(unittest.TestCase):
         self.assertIn("/api/wecom-live/status", script)
         self.assertIn("renderWecomLiveStatus", script)
 
+    def test_memory_page_is_automatic_memory_manager(self):
+        index = (ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("自动记忆", index)
+        self.assertIn("智能体会从聊天里自动保存稳定偏好", index)
+        self.assertIn("自动记忆为空", script)
+
 
 if __name__ == "__main__":
     unittest.main()

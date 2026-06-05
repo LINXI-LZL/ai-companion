@@ -291,6 +291,12 @@ pre {
   margin-bottom: 14px;
 }
 
+.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
 .wechat-form {
   display: grid;
   gap: 10px;

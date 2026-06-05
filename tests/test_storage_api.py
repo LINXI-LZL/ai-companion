@@ -55,6 +55,75 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0]["incoming_text"], "我又拖到最后一天，真服了我自己")
 
+    def test_chat_auto_saves_short_reply_preference_memory(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "以后跟我说短点，别长篇大论"},
+            )
+            memories = store.list_memories(user["id"])
+
+        self.assertTrue(any(memory["content"] == "用户喜欢短回复" for memory in memories))
+        self.assertTrue(any(memory["source"] == "auto" for memory in memories))
+        self.assertIn("我会短点说", response["plan"]["reply_text"])
+
+    def test_chat_auto_saves_repeated_work_pressure_once(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        prompts = [
+            "老板又临下班改需求，真的离谱",
+            "领导又让我背锅，服了",
+            "甲方又改需求，我人麻了",
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            for prompt in prompts:
+                create_chat_response(store, {"user_id": user["id"], "message": prompt})
+            memories = store.list_memories(user["id"])
+
+        matching = [memory for memory in memories if memory["content"] == "用户最近反复被工作/老板改需求困扰"]
+        self.assertEqual(len(matching), 1)
+        self.assertEqual(matching[0]["source"], "auto")
+
+    def test_chat_does_not_auto_save_sensitive_or_high_risk_memory(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(store, {"user_id": user["id"], "message": "我的手机号是 13812345678，你记一下"})
+            create_chat_response(store, {"user_id": user["id"], "message": "api token 是 sk-abcdefg123456"})
+            create_chat_response(store, {"user_id": user["id"], "message": "我真的撑不下去了，不想继续了"})
+            memories = store.list_memories(user["id"])
+
+        self.assertEqual(memories, [])
+
+    def test_chat_does_not_store_explicit_sensitive_or_high_risk_memory(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(store, {"user_id": user["id"], "message": "你记一下我的手机号是 13812345678"})
+            create_chat_response(store, {"user_id": user["id"], "message": "记住：我真的撑不下去了，不想继续了"})
+            memories = store.list_memories(user["id"])
+
+        self.assertEqual(memories, [])
+
     def test_repeated_same_question_gets_varied_replies(self):
         from app.server import create_chat_response
         from app.storage import Storage

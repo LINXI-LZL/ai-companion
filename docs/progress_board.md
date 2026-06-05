@@ -4,12 +4,12 @@
 
 | Field | Content |
 |---|---|
-| Current phase | Build Round 3 WeCom live credential route |
-| Current step | Owner WeCom route smoke test |
+| Current phase | Auto lightweight memory polish |
+| Current step | Owner auto memory smoke test |
 | Overall status | ready_for_test |
-| Completed substeps | 50 / 51 |
-| User action needed | Run the Build Round 3 WeCom route smoke test |
-| Next step after confirmation | Accept Round 3 or request credential-route polish |
+| Completed substeps | 54 / 55 |
+| User action needed | Run the automatic memory smoke test |
+| Next step after confirmation | Accept auto memory polish or request memory-rule tuning |
 
 ## Completed Outputs
 
@@ -28,6 +28,7 @@
 | Delivery | 2 / 2 | `docs/delivery_summary.md`, `docs/handoff_notes.md` |
 | Build Round 2 personality quality | 4 / 4 | personality design spec, implementation plan, scenario-aware reply engine, smoke test script, acceptance result |
 | Build Round 3 WeCom live credential route | 4 / 5 | live route design spec, implementation plan, `wecom_live` adapter, server endpoints, admin self-check |
+| Auto lightweight memory polish | 3 / 4 | automatic memory design spec, implementation plan, auto memory extractor, server wiring, automatic memory UI |
 
 ## Ready For Test
 
@@ -44,13 +45,14 @@
 | Personality smoke test | `docs/personality_round_2_smoke_test.md` | passed |
 | Personality result | `docs/personality_round_2_result.md` | accepted |
 | WeCom live route smoke test | `docs/wecom_live_round_3_smoke_test.md` | ready for owner test |
+| Automatic memory smoke test | `docs/auto_memory_smoke_test.md` | ready for owner test |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Owner acceptance | Run the Round 3 WeCom live route smoke test and decide whether the skeleton passes |
+| Owner acceptance | Run the automatic memory smoke test and decide whether the automatic memory behavior passes |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner smoke-test feedback on the WeCom live credential-route skeleton. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. The project is waiting for owner smoke-test feedback on automatic lightweight memory. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.

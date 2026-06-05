@@ -6,6 +6,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from .auto_memory import can_store_memory, infer_auto_memories
 from .orchestrator import plan_reply
 from .sample_sources import load_source_status
 from .storage import DEFAULT_DB, Storage
@@ -34,12 +35,14 @@ def create_chat_response(store, payload):
     if not user["allowed"]:
         raise PermissionError("user is not allowlisted")
 
+    recent_messages = store.list_messages(user_id, limit=None)
     extracted_memory = _extract_memory(message)
     if extracted_memory:
-        store.save_memory(user_id, extracted_memory, source="chat")
+        _save_memory_once(store, user_id, extracted_memory, source="chat")
+    for memory in infer_auto_memories(message, recent_messages):
+        _save_memory_once(store, user_id, memory, source="auto")
 
     memories = [memory["content"] for memory in store.list_memories(user_id)]
-    recent_messages = store.list_messages(user_id, limit=None)
     plan = plan_reply(user_id, message, memories=memories, recent_messages=recent_messages)
     saved = store.save_message(user_id, message, plan)
     store.record_audit(
@@ -109,6 +112,15 @@ def _extract_memory(message):
     if "我喜欢短回复" in text:
         return "用户喜欢短回复"
     return None
+
+
+def _save_memory_once(store, user_id, content, source):
+    if not can_store_memory(content):
+        return None
+    existing = {memory["content"] for memory in store.list_memories(user_id)}
+    if content in existing:
+        return None
+    return store.save_memory(user_id, content, source=source)
 
 
 class CompanionRequestHandler(SimpleHTTPRequestHandler):
