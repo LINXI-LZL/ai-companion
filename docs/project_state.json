@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-09-uat-docs",
-    "current_step_id": "step-09-02-acceptance-checklist",
+    "current_phase_id": "phase-11-delivery",
+    "current_step_id": "step-11-02-handoff-notes",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 42,
-    "completed_step_count": 38,
+    "completed_step_count": 41,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Review the acceptance checklist and choose the next build-round focus.",
+    "next_action_summary": "Choose the Build Round 2 focus: real WeChat credentials, real media assets, or personality quality.",
     "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T16:57:24+08:00"
+    "updated_at": "2026-06-05T17:02:55+08:00"
   },
   "phases": [
     {
@@ -223,18 +223,18 @@
       "order": 9,
       "title": "User-level test documentation",
       "goal": "生成非技术用户也能执行的测试说明。",
-      "status": "waiting_user",
+      "status": "done",
       "outputs": [
         "docs/uat_scripts.md",
         "docs/acceptance_checklist.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 1,
-      "summary": "UAT scripts are ready, and the acceptance checklist is waiting for owner review after smoke testing.",
-      "notes": "Owner smoke test is complete; acceptance checklist remains the current user review gate.",
-      "user_action": "review_output",
+      "completed_step_count": 2,
+      "summary": "UAT scripts and acceptance checklist are complete; owner accepted Build Round 1.",
+      "notes": "Owner explicitly confirmed first round passed.",
+      "user_action": "none",
       "acceptance_hint": "测试用例应包含目标、前置条件、步骤、预期结果和失败反馈方式。",
       "depends_on_phase_ids": [
         "phase-08-user-test-guidance"
@@ -246,16 +246,17 @@
       "order": 10,
       "title": "Debug collaboration",
       "goal": "当内测发现问题时，用结构化反馈转成下一步修复行动。",
-      "status": "in_progress",
+      "status": "done",
       "outputs": [
-        "docs/bug_feedback_template.md"
+        "docs/bug_feedback_template.md",
+        "docs/debug_next_actions.md"
       ],
       "requires_user_confirmation": false,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 1,
-      "summary": "Bug feedback template is ready; repair actions wait for actual test findings.",
-      "notes": "Only the feedback template is complete. Debug next actions enter after the owner or friends report issues.",
+      "completed_step_count": 2,
+      "summary": "Debug feedback template and no-active-issue ledger are complete.",
+      "notes": "No active repair tasks block Build Round 1 acceptance.",
       "user_action": "none",
       "acceptance_hint": "用户不需要懂技术，也能清楚报告问题。",
       "depends_on_phase_ids": [
@@ -268,15 +269,18 @@
       "order": 11,
       "title": "Delivery and handoff",
       "goal": "整理交付内容、已知问题和下一轮建议。",
-      "status": "not_started",
-      "outputs": [],
-      "requires_user_confirmation": false,
+      "status": "waiting_user",
+      "outputs": [
+        "docs/delivery_summary.md",
+        "docs/handoff_notes.md"
+      ],
+      "requires_user_confirmation": true,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "需要等待构建、测试和修复完成。",
-      "user_action": "none",
+      "completed_step_count": 1,
+      "summary": "Build Round 1 delivery summary is complete; handoff waits for next-round focus choice.",
+      "notes": "User should choose whether Build Round 2 starts with real WeChat credentials, real media assets, or personality quality.",
+      "user_action": "choose_next_round",
       "acceptance_hint": "交付摘要应清楚说明源码、文档、架构、核心流程和下一步。",
       "depends_on_phase_ids": [
         "phase-10-debug-collaboration"
@@ -1277,22 +1281,20 @@
       "order": 2,
       "title": "Acceptance checklist",
       "goal": "Define first-version pass/fail criteria.",
-      "status": "waiting_user",
+      "status": "done",
       "output": [
         "docs/acceptance_checklist.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Draft checklist is ready; owner should review pass/fail criteria after or during smoke testing.",
+      "notes": "Owner explicitly confirmed Build Round 1 passed.",
       "depends_on": [
         "step-09-01-uat-scripts"
       ],
-      "user_action": "review_output",
+      "user_action": "none",
       "acceptance_hint": "User can confirm whether MVP meets the bar.",
-      "progress_summary": "Waiting for owner review.",
-      "blockers": [
-        "Waiting for owner acceptance checklist review"
-      ],
+      "progress_summary": "Done. Build Round 1 accepted.",
+      "blockers": [],
       "related_artifact_ids": [
         "artifact-029"
       ],
@@ -1329,21 +1331,23 @@
       "order": 2,
       "title": "Debug next actions",
       "goal": "Turn found issues into repair actions.",
-      "status": "not_started",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "docs/debug_next_actions.md"
+      ],
+      "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Enter only after issues appear.",
+      "notes": "No active repair queue remains after Build Round 1 acceptance.",
       "depends_on": [
         "step-10-01-bug-template"
       ],
-      "user_action": "provide_bug_feedback",
+      "user_action": "none",
       "acceptance_hint": "Each issue has a next action.",
-      "progress_summary": "Not started.",
-      "blockers": [
-        "Waiting for actual issue feedback"
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-032"
       ],
-      "related_artifact_ids": [],
       "related_decision_ids": []
     },
     {
@@ -1352,19 +1356,23 @@
       "order": 1,
       "title": "Delivery summary",
       "goal": "Summarize delivered work and known issues.",
-      "status": "not_started",
-      "output": [],
+      "status": "done",
+      "output": [
+        "docs/delivery_summary.md"
+      ],
       "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Delivery explains source, docs, core flows, and risks.",
+      "notes": "Delivery explains source, docs, core flows, deferred items, verification, and next-round choices.",
       "depends_on": [
         "step-10-02-debug-next-actions"
       ],
       "user_action": "none",
       "acceptance_hint": "Delivery content is clear.",
-      "progress_summary": "Not started.",
+      "progress_summary": "Done.",
       "blockers": [],
-      "related_artifact_ids": [],
+      "related_artifact_ids": [
+        "artifact-033"
+      ],
       "related_decision_ids": []
     },
     {
@@ -1373,19 +1381,25 @@
       "order": 2,
       "title": "Handoff notes",
       "goal": "Record next-iteration guidance and maintenance notes.",
-      "status": "not_started",
-      "output": [],
+      "status": "waiting_user",
+      "output": [
+        "docs/handoff_notes.md"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
-      "notes": "Support the next iteration.",
+      "notes": "Handoff notes are ready; next action is choosing the Build Round 2 focus.",
       "depends_on": [
         "step-11-01-delivery-summary"
       ],
-      "user_action": "review_output",
+      "user_action": "choose_next_round",
       "acceptance_hint": "User can decide the next direction.",
-      "progress_summary": "Not started.",
-      "blockers": [],
-      "related_artifact_ids": [],
+      "progress_summary": "Waiting for next-round focus choice.",
+      "blockers": [
+        "Waiting for Build Round 2 focus choice"
+      ],
+      "related_artifact_ids": [
+        "artifact-034"
+      ],
       "related_decision_ids": []
     }
   ],
@@ -1729,6 +1743,39 @@
       "phase_id": "phase-08-user-test-guidance",
       "step_id": "step-08-02-owner-smoke-test",
       "created_at": "2026-06-05T16:57:24+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-032",
+      "title": "Debug next actions",
+      "artifact_type": "document",
+      "location": "docs/debug_next_actions.md",
+      "summary": "No active repair queue and issue ledger after Build Round 1 acceptance.",
+      "phase_id": "phase-10-debug-collaboration",
+      "step_id": "step-10-02-debug-next-actions",
+      "created_at": "2026-06-05T17:02:55+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-033",
+      "title": "Delivery summary",
+      "artifact_type": "document",
+      "location": "docs/delivery_summary.md",
+      "summary": "Build Round 1 delivered source, docs, flows, deferred items, and verification.",
+      "phase_id": "phase-11-delivery",
+      "step_id": "step-11-01-delivery-summary",
+      "created_at": "2026-06-05T17:02:55+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-034",
+      "title": "Handoff notes",
+      "artifact_type": "document",
+      "location": "docs/handoff_notes.md",
+      "summary": "How to run, verify, maintain boundaries, and choose Build Round 2 focus.",
+      "phase_id": "phase-11-delivery",
+      "step_id": "step-11-02-handoff-notes",
+      "created_at": "2026-06-05T17:02:55+08:00",
       "version": "v0.1"
     }
   ],

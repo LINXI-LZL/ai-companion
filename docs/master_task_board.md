@@ -5,14 +5,14 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | UAT docs |
-| Current step | Acceptance checklist |
-| Overall status | Waiting for acceptance review |
+| Current phase | Delivery |
+| Current step | Handoff notes |
+| Overall status | Waiting for next-round direction |
 | Total phases | 11 |
 | Total substeps | 42 |
-| Completed substeps | 38 |
+| Completed substeps | 41 |
 | Needs user attention | Yes |
-| Next action | Review the acceptance checklist |
+| Next action | Choose the Build Round 2 focus |
 | Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation |
 
 ## Full Board
@@ -56,12 +56,12 @@
 | phase-08-user-test-guidance | step-08-01-test-notice | User test guidance | Prepare test notice | Tell user what to test now | `docs/test_intervention_notice.md` | step-07-14-mvp-integration | done | none | no | no | none |
 | phase-08-user-test-guidance | step-08-02-owner-smoke-test | User test guidance | Owner smoke test | Verify core flows with owner | `docs/smoke_test_result.md` | step-08-01-test-notice | done | none | no | yes | none |
 | phase-09-uat-docs | step-09-01-uat-scripts | UAT docs | Write UAT scripts | Give nontechnical test steps | `docs/uat_scripts.md` | step-08-01-test-notice | done | none | no | no | none |
-| phase-09-uat-docs | step-09-02-acceptance-checklist | UAT docs | Acceptance checklist | Define pass/fail criteria | `docs/acceptance_checklist.md` | step-09-01-uat-scripts | waiting_user | review_output | yes | no | Needs owner review |
+| phase-09-uat-docs | step-09-02-acceptance-checklist | UAT docs | Acceptance checklist | Define pass/fail criteria | `docs/acceptance_checklist.md` | step-09-01-uat-scripts | done | none | no | no | none |
 | phase-10-debug-collaboration | step-10-01-bug-template | Debug collaboration | Bug feedback template | Make user reports actionable | `docs/bug_feedback_template.md` | step-09-01-uat-scripts | done | none | no | no | none |
-| phase-10-debug-collaboration | step-10-02-debug-next-actions | Debug collaboration | Debug next actions | Turn issues into fixes | `docs/debug_next_actions.md` | step-10-01-bug-template | not_started | provide_bug_feedback | yes | no | Waits for issues |
-| phase-11-delivery | step-11-01-delivery-summary | Delivery | Delivery summary | Summarize delivered work | `docs/delivery_summary.md` | step-10-02-debug-next-actions | not_started | none | no | no | none |
-| phase-11-delivery | step-11-02-handoff-notes | Delivery | Handoff notes | Prepare next-iteration handoff | `docs/handoff_notes.md` | step-11-01-delivery-summary | not_started | review_output | yes | no | none |
+| phase-10-debug-collaboration | step-10-02-debug-next-actions | Debug collaboration | Debug next actions | Turn issues into fixes | `docs/debug_next_actions.md` | step-10-01-bug-template | done | none | no | no | none |
+| phase-11-delivery | step-11-01-delivery-summary | Delivery | Delivery summary | Summarize delivered work | `docs/delivery_summary.md` | step-10-02-debug-next-actions | done | none | no | no | none |
+| phase-11-delivery | step-11-02-handoff-notes | Delivery | Handoff notes | Prepare next-iteration handoff | `docs/handoff_notes.md` | step-11-01-delivery-summary | waiting_user | choose_next_round | yes | no | Needs Build Round 2 focus choice |
 
 ## Current Confirmation Gate
 
-Review `docs/acceptance_checklist.md`, then decide whether Build Round 1 passes and which next build-round focus to choose.
+Review `docs/handoff_notes.md`, then choose Build Round 2 focus: real WeChat credentials, real media assets, or personality quality.

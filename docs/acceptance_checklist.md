@@ -42,8 +42,17 @@ These items should not block Build Round 1 acceptance:
 
 | Question | Decision |
 |---|---|
-| Can the owner use the local simulator to judge the personality direction? | To review |
-| Is the safety behavior acceptable for inner testing? | To review |
-| Is the admin console clear enough for the owner to operate? | To review |
-| Is the product ready to invite one or two friends for local-style feedback? | To review |
+| Can the owner use the local simulator to judge the personality direction? | Pass |
+| Is the safety behavior acceptable for inner testing? | Pass |
+| Is the admin console clear enough for the owner to operate? | Pass after status-page wording fix |
+| Is the product ready to invite one or two friends for local-style feedback? | Pass for local-style feedback |
 | Should the next build round focus on real WeChat credentials, real media assets, or personality quality? | To decide |
+
+## Final Round 1 Decision
+
+| Field | Decision |
+|---|---|
+| Owner decision | 第一轮通过 |
+| Decision date | 2026-06-05 |
+| Acceptance level | Pass |
+| Notes | Build Round 1 local simulator and admin foundation are accepted. Real WeChat send/receive, real sticker files, real voice synthesis, and deployment remain next-round decisions. |

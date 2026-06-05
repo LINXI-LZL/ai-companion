@@ -33,3 +33,6 @@
 | artifact-029 | Acceptance checklist | document | `docs/acceptance_checklist.md` | phase-09-uat-docs | step-09-02-acceptance-checklist | Build Round 1 pass/fail criteria and deferred items |
 | artifact-030 | Bug feedback template | document | `docs/bug_feedback_template.md` | phase-10-debug-collaboration | step-10-01-bug-template | Structured issue report format for chat, page, adapter, and safety problems |
 | artifact-031 | Owner smoke test result | document | `docs/smoke_test_result.md` | phase-08-user-test-guidance | step-08-02-owner-smoke-test | Smoke-test evidence, resolved display issue, and next decision |
+| artifact-032 | Debug next actions | document | `docs/debug_next_actions.md` | phase-10-debug-collaboration | step-10-02-debug-next-actions | No active repair queue and issue ledger after Build Round 1 acceptance |
+| artifact-033 | Delivery summary | document | `docs/delivery_summary.md` | phase-11-delivery | step-11-01-delivery-summary | Build Round 1 delivered source, docs, flows, deferred items, and verification |
+| artifact-034 | Handoff notes | document | `docs/handoff_notes.md` | phase-11-delivery | step-11-02-handoff-notes | How to run, verify, maintain boundaries, and choose Build Round 2 focus |
