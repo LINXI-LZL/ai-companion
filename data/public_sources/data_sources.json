@@ -1,0 +1,269 @@
+{
+  "version": "v0.1",
+  "updated_at": "2026-06-05T00:00:00+08:00",
+  "policy": {
+    "large_asset_downloads": "deferred",
+    "large_asset_note": "Sticker, audio, video, and multi-GB archives are not downloaded in this phase to avoid VPN traffic. Keep download URLs and instructions only.",
+    "usage_rule": "Use public sources to distill behavior patterns, multimodal decision rules, and evaluation cases. Do not copy public samples verbatim into product prompts or generated replies.",
+    "privacy_rule": "Do not use leaked private chat logs, private WeChat records, or materials that identify private people without consent.",
+    "commercial_caution": "Sources with non-commercial, research-only, or unclear terms should be used for analysis and prototype evaluation only unless later licensing review approves product use."
+  },
+  "sources": [
+    {
+      "id": "source-cped",
+      "name": "CPED",
+      "url": "https://github.com/scutcyr/CPED",
+      "type": "chinese_personalized_emotional_dialogue_dataset",
+      "license": "Apache-2.0",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "medium",
+      "recommended_use": [
+        "emotion labels",
+        "personality labels",
+        "dialogue-act patterns",
+        "Chinese emotional conversation structure"
+      ],
+      "fit_for_product": "high",
+      "risks": [
+        "Dataset content should be transformed into abstract rules or filtered examples, not copied into final product replies."
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "source-lccc-cdial-gpt",
+      "name": "CDial-GPT / LCCC",
+      "url": "https://github.com/thu-coai/CDial-GPT",
+      "type": "large_scale_chinese_short_text_conversation_dataset",
+      "license": "MIT",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "high",
+      "recommended_use": [
+        "short Chinese reply rhythm",
+        "multi-turn casual-chat length distribution",
+        "generic open-domain response patterns"
+      ],
+      "fit_for_product": "medium",
+      "risks": [
+        "Large dataset; original source mixture includes social-media style text and needs quality filtering.",
+        "Some emoji and noisy content may have been filtered by the original project, so it is weaker for sticker behavior."
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "source-esconv",
+      "name": "Emotional-Support-Conversation / ESConv",
+      "url": "https://github.com/thu-coai/Emotional-Support-Conversation",
+      "type": "emotional_support_conversation_dataset",
+      "license": "academic_research_only",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "low",
+      "recommended_use": [
+        "support strategy taxonomy",
+        "empathy flow",
+        "what makes support ineffective",
+        "safety fallback evaluation"
+      ],
+      "fit_for_product": "medium",
+      "risks": [
+        "English dataset; useful for support strategy, less direct for Chinese voice.",
+        "Repository states data and code are for academic research use only, so use it for strategy reference and evaluation design, not product training."
+      ],
+      "status": "research_reference"
+    },
+    {
+      "id": "source-soulchat",
+      "name": "SoulChat / SoulChatCorpus",
+      "url": "https://github.com/scutcyr/SoulChat",
+      "type": "chinese_mental_health_empathy_dialogue_model_and_corpus",
+      "license": "Apache-2.0 for repository; model use may be non-commercial because of base-model terms",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "medium",
+      "recommended_use": [
+        "Chinese empathy response patterns",
+        "listening and comfort strategies",
+        "risk-boundary inspiration"
+      ],
+      "fit_for_product": "research_only_until_license_review",
+      "risks": [
+        "Mental-health data requires extra safety review.",
+        "The project notes non-commercial restrictions for model weights; avoid using model outputs or weights in product without legal review."
+      ],
+      "status": "research_reference"
+    },
+    {
+      "id": "source-emotiontalk",
+      "name": "EmotionTalk",
+      "url": "https://github.com/flageval-baai/EmotionTalk",
+      "type": "chinese_multimodal_emotion_dataset",
+      "license": "CC-BY-NC-SA-4.0",
+      "download_policy": "metadata_only",
+      "traffic_level": "high",
+      "recommended_use": [
+        "voice emotion labels",
+        "speaking style captions",
+        "audio emotion evaluation ideas"
+      ],
+      "fit_for_product": "research_only",
+      "risks": [
+        "Non-commercial and share-alike license; use as research reference only unless product licensing is clarified.",
+        "Audio/video assets are larger and should not be downloaded during VPN-saving phase."
+      ],
+      "status": "research_reference"
+    },
+    {
+      "id": "source-u-sticker",
+      "name": "U-Sticker",
+      "url": "https://huggingface.co/datasets/metchee/u-sticker",
+      "type": "multilingual_conversation_with_stickers_dataset",
+      "license": "check_dataset_card_and_files_before_product_use",
+      "download_policy": "metadata_now_assets_later",
+      "traffic_level": "very_high",
+      "recommended_use": [
+        "sticker trigger behavior",
+        "reply-to-message structure",
+        "sticker plus text pairing",
+        "multi-domain sticker usage"
+      ],
+      "fit_for_product": "medium_after_license_review",
+      "risks": [
+        "Sticker archive is very large and should be downloaded only after VPN is off.",
+        "Sticker media may carry additional copyright risk; prefer using source only to learn trigger rules, then generate or license our own sticker pack."
+      ],
+      "status": "candidate_metadata_only"
+    },
+    {
+      "id": "source-stickerconv",
+      "name": "StickerConv",
+      "url": "https://huggingface.co/datasets/NEUDM/StickerConv",
+      "type": "multimodal_empathetic_dialogue_with_stickers_dataset",
+      "license": "Apache-2.0",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "medium",
+      "recommended_use": [
+        "empathetic sticker response generation",
+        "context-to-sticker decision rules",
+        "multimodal support evaluation"
+      ],
+      "fit_for_product": "high_for_rules",
+      "risks": [
+        "Use stickers as behavior examples, not as final product assets unless asset rights are checked."
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "source-stickerint-int-ra",
+      "name": "StickerInt / Int-RA",
+      "url": "https://arxiv.org/abs/2403.05427",
+      "type": "sticker_retrieval_paper_and_code_reference",
+      "license": "paper_reference; code/data license should be checked at repository before use",
+      "download_policy": "paper_reference_only",
+      "traffic_level": "low",
+      "recommended_use": [
+        "sticker intention taxonomy",
+        "sticker retrieval architecture",
+        "relation-aware sticker selection"
+      ],
+      "fit_for_product": "research_reference",
+      "risks": [
+        "Use the architecture idea and evaluation design; do not assume data assets are product-cleared."
+      ],
+      "status": "research_reference"
+    },
+    {
+      "id": "source-livechat",
+      "name": "LiveChat",
+      "url": "https://github.com/gaojingsheng/LiveChat",
+      "type": "large_scale_chinese_personalized_live_stream_dialogue_dataset",
+      "license": "MIT",
+      "download_policy": "metadata_now_dataset_later",
+      "traffic_level": "medium",
+      "recommended_use": [
+        "persona-specific Chinese response patterns",
+        "casual social rhythm",
+        "multi-party-to-one response modeling"
+      ],
+      "fit_for_product": "medium",
+      "risks": [
+        "Live-stream style may be too public and performative for private late-night companionship.",
+        "Needs filtering to avoid streamer-specific catchphrases and platform slang overfitting."
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "source-llm-roleplay",
+      "name": "LLM Roleplay",
+      "url": "https://github.com/UKPLab/llm-roleplay",
+      "type": "persona_based_dialogue_generation_framework",
+      "license": "check_repository_license_before_reuse",
+      "download_policy": "metadata_only",
+      "traffic_level": "low",
+      "recommended_use": [
+        "persona-conditioned synthetic dialogue generation",
+        "goal-oriented roleplay evaluation",
+        "diverse scenario simulation"
+      ],
+      "fit_for_product": "method_reference",
+      "risks": [
+        "Use method ideas; do not depend on gated model APIs or unreviewed generated datasets for product training."
+      ],
+      "status": "method_reference"
+    },
+    {
+      "id": "source-character-llm",
+      "name": "Character-LLM / trainable-agents",
+      "url": "https://github.com/choosewhatulike/trainable-agents",
+      "type": "role_playing_agent_training_framework",
+      "license": "Apache-2.0 repository; academic/non-commercial restrictions noted by authors for resources",
+      "download_policy": "metadata_only",
+      "traffic_level": "low",
+      "recommended_use": [
+        "experience reconstruction method",
+        "protective scenes for reducing character hallucination",
+        "persona training-data format ideas"
+      ],
+      "fit_for_product": "method_reference",
+      "risks": [
+        "The project notes academic research restrictions for resources; use as method inspiration, not product asset source."
+      ],
+      "status": "method_reference"
+    },
+    {
+      "id": "source-openpersona",
+      "name": "OpenPersona",
+      "url": "https://github.com/acnlabs/OpenPersona",
+      "type": "persona_framework_reference",
+      "license": "check_repository_license_before_reuse",
+      "download_policy": "metadata_only",
+      "traffic_level": "low",
+      "recommended_use": [
+        "persona layer structure",
+        "handoff and memory concepts",
+        "persona switching and evolution design"
+      ],
+      "fit_for_product": "method_reference",
+      "risks": [
+        "Do not adopt framework internals before architecture review."
+      ],
+      "status": "method_reference"
+    },
+    {
+      "id": "source-awesome-persona-distill-skills",
+      "name": "awesome-persona-distill-skills",
+      "url": "https://github.com/xixu-me/awesome-persona-distill-skills",
+      "type": "persona_distillation_resource_list",
+      "license": "check_repository_license_before_reuse",
+      "download_policy": "metadata_only",
+      "traffic_level": "low",
+      "recommended_use": [
+        "persona distillation terminology",
+        "relationship-based persona categories",
+        "style and interaction pattern extraction ideas"
+      ],
+      "fit_for_product": "method_reference",
+      "risks": [
+        "Use as inspiration for distillation workflow, not as a source for copying private-persona templates."
+      ],
+      "status": "method_reference"
+    }
+  ]
+}

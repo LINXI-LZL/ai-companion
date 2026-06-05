@@ -4,12 +4,16 @@
 
 微信树洞 AI is a WeChat-entry AI companion for the owner and a small group of invited friends. The MVP centers on late-night stress, emo moments, and sleep-time companionship. The agent's personality is a mixed "sharp-tongued late-night friend": playful, lightly toxic, protective, emotionally present, and able to become serious when safety requires it.
 
+The realism upgrade adds public-source behavior distillation, sticker intent, and short voice-message intent. The project should learn behavior patterns from public sources and synthetic seed examples, not copy public samples into final replies.
+
 ## Confirmed Decisions
 
 - Personality: B + D, a sharp-tongued friend combined with late-night companionship.
 - MVP scenario: life pressure, emo, and sleep-time companionship.
 - Initial audience: the owner and a few invited friends.
 - WeChat route: Enterprise WeChat or WeChat customer-service style entry.
+- Public behavior source route: use public datasets and GitHub projects for behavior distillation, with large sticker/audio downloads deferred until VPN is off.
+- Multimodal realism route: support sticker intent and short voice-message scripts before wiring final assets and voice synthesis.
 - Product strategy: hybrid. Confirm blueprint, confirm static prototype, then plan architecture and implementation rounds.
 
 ## Product Experience
@@ -22,15 +26,18 @@ Example voice:
 
 The AI must avoid fake medical authority. It can provide emotional support and practical grounding, but it must not claim to diagnose, treat, or replace professional help.
 
+The agent can decide to send text, a sticker intent, a short voice script, or a serious safety response. In the first product version, sticker and voice can be represented as structured actions even before final media assets are connected.
+
 ## MVP User Flow
 
 1. The user opens the WeChat-side entry.
 2. The user sends a venting or late-night emotional message.
 3. The backend receives the message and identifies the user.
 4. The agent checks topic, mood, risk level, and known user preferences.
-5. The agent replies in the "late-night sharp-tongued friend" voice.
-6. The system stores useful lightweight memory only when appropriate.
-7. The admin can review users, adjust personality settings, and manage memory behavior.
+5. The behavior layer chooses text-only, text plus sticker, short voice script, or safety response.
+6. The agent replies in the "late-night sharp-tongued friend" voice.
+7. The system stores useful lightweight memory only when appropriate.
+8. The admin can review users, adjust personality settings, manage memory behavior, and configure sticker or voice behavior.
 
 ## Main Components
 
@@ -45,6 +52,14 @@ The backend receives inbound messages, routes them to the AI model, applies memo
 ### Personality Engine
 
 The personality engine holds the core prompt, tone limits, example style, and fallback behavior. It should support small adjustments per user, such as softer or sharper tone.
+
+### Public Behavior Distillation Layer
+
+The public behavior distillation layer stores source metadata, sample schemas, distilled rules, and synthetic seed examples. It should not blindly ingest public text into prompts. Its output should be behavior rules, evaluation cases, and product-owned examples.
+
+### Multimodal Realism Layer
+
+The multimodal realism layer decides when the agent should use text, sticker intent, short voice script, or serious safety response. It should separate intent from assets so the product can later swap sticker packs, voice providers, and WeChat media APIs without rewriting the personality.
 
 ### Memory Layer
 
@@ -65,8 +80,9 @@ The admin console should let the owner see invited users, configure personality,
 3. The message is analyzed for topic, emotional state, and risk.
 4. Relevant memory is retrieved if memory is enabled.
 5. The AI response is generated using the personality and safety rules.
-6. The response is sent back to the WeChat-side channel.
-7. Minimal logs and memory updates are stored.
+6. The multimodal realism layer chooses response mode and media intent.
+7. The response is sent back to the WeChat-side channel.
+8. Minimal logs and memory updates are stored.
 
 ## Error Handling
 
@@ -74,6 +90,8 @@ The admin console should let the owner see invited users, configure personality,
 - If the AI model fails, the user should receive a short, natural fallback message.
 - If memory lookup fails, the conversation should continue without memory.
 - If risk detection is uncertain, the system should choose the safer serious tone.
+- If sticker media is unavailable, the system should fall back to text that preserves the intended reaction.
+- If voice generation is unavailable, the system should fall back to a short text reply using the same emotional intent.
 
 ## Testing Expectations
 
@@ -86,11 +104,14 @@ The first testable milestone is not implementation. It is a web static prototype
 - Memory disabled behavior.
 - Safety fallback behavior.
 - Admin changes to personality settings.
+- Sticker intent selection for work rants, loneliness, absurd complaints, and playful jokes.
+- Voice intent selection for late-night fatigue and serious grounding.
+- Public sample source manifest and license-tier handling.
 - WeChat message receive/send path.
 
 ## Scope Boundaries
 
-The MVP should not include payment, public registration, personal WeChat automation, medical diagnosis, therapy claims, voice chat, image chat, or a large public community.
+The MVP should not include payment, public registration, personal WeChat automation, medical diagnosis, therapy claims, video chat, real-person voice cloning, unauthorized sticker assets, or a large public community.
 
 ## Next Stage
 
@@ -100,7 +121,8 @@ Create a web static prototype for:
 - Admin dashboard.
 - Personality configuration.
 - User and memory management.
+- Sticker and voice strategy preview.
+- Public sample distillation status.
 - Safety rule overview.
 
 The user must confirm the prototype before formal implementation planning begins.
-

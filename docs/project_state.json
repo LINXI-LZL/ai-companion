@@ -2,21 +2,21 @@
   "project": {
     "id": "wechat-vent-ai",
     "title": "微信树洞 AI",
-    "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天。",
+    "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
     "current_phase_id": "phase-03-static-prototype",
     "current_step_id": "step-03-01-prototype-review-mode",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
-    "total_step_count": 25,
-    "completed_step_count": 8,
+    "total_step_count": 27,
+    "completed_step_count": 10,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "确认是否使用浏览器可视化方式查看 Web 静态原型，然后进入原型页面结构设计。",
-    "current_risk_summary": "微信接入方式需要在架构阶段继续核对企业微信和微信客服官方能力；情绪陪伴产品需要明确安全边界。",
+    "next_action_summary": "确认是否使用浏览器可视化方式查看 Web 静态原型，然后进入包含聊天、表情包、语音、管理后台和样本蒸馏状态的页面结构设计。",
+    "current_risk_summary": "微信接入方式需要在架构阶段继续核对企业微信和微信客服官方能力；表情包素材、语音素材和公开数据许可需要在接入前逐项核准；情绪陪伴产品需要明确安全边界。",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-04T20:28:26+08:00"
+    "updated_at": "2026-06-05T00:00:00+08:00"
   },
   "phases": [
     {
@@ -52,14 +52,19 @@
         "docs/meeting_notes.md",
         "docs/product_blueprint.md",
         "docs/decision_log.md",
-        "docs/superpowers/specs/2026-06-04-wechat-ai-companion-design.md"
+        "docs/superpowers/specs/2026-06-04-wechat-ai-companion-design.md",
+        "data/public_sources/data_sources.json",
+        "docs/public_sample_distillation_plan.md",
+        "docs/public_sample_schema.md",
+        "docs/behavior_distillation_rules.md",
+        "samples/public/seed_behavior_examples.jsonl"
       ],
       "requires_user_confirmation": false,
       "testable": false,
-      "step_count": 6,
-      "completed_step_count": 6,
-      "summary": "用户已确认产品蓝图。",
-      "notes": "人格、MVP 场景、用户范围和微信路线均已确认。",
+      "step_count": 8,
+      "completed_step_count": 8,
+      "summary": "用户已确认产品蓝图，并补充确认公开样本蒸馏与表情包/短语音真人感增强范围。",
+      "notes": "人格、MVP 场景、用户范围、微信路线、公开样本路线和多模态真人感范围均已确认。",
       "user_action": "none",
       "acceptance_hint": "蓝图可以指导静态原型和后续技术规划。",
       "depends_on_phase_ids": [
@@ -455,6 +460,66 @@
       "related_decision_ids": []
     },
     {
+      "id": "step-02-07-public-sources",
+      "phase_id": "phase-02-blueprint",
+      "order": 7,
+      "title": "Confirm public sample distillation route",
+      "goal": "降低用户手动整理私人聊天样本的负担，改用公开来源和合成样本提炼真人聊天行为。",
+      "status": "done",
+      "output": [
+        "data/public_sources/data_sources.json",
+        "docs/public_sample_distillation_plan.md",
+        "docs/public_sample_schema.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "用户确认使用公开样本，表情包大文件等到关闭 VPN 后再下载。",
+      "depends_on": [
+        "step-02-06-design-spec"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "公开来源、许可边界、下载策略和样本结构已写明。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-007",
+        "artifact-008",
+        "artifact-009"
+      ],
+      "related_decision_ids": [
+        "decision-006"
+      ]
+    },
+    {
+      "id": "step-02-08-multimodal-realism",
+      "phase_id": "phase-02-blueprint",
+      "order": 8,
+      "title": "Define sticker and voice realism scope",
+      "goal": "把表情包、短语音和真人感行为从口头想法变成可设计、可测试的产品范围。",
+      "status": "done",
+      "output": [
+        "docs/behavior_distillation_rules.md",
+        "samples/public/seed_behavior_examples.jsonl"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "MVP 先做表情包意图和短语音脚本，真实素材下载、版权和语音合成接入留到架构阶段确认。",
+      "depends_on": [
+        "step-02-07-public-sources"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "真人感行为规则能指导原型页面和后续多模态架构。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-010",
+        "artifact-011"
+      ],
+      "related_decision_ids": [
+        "decision-007"
+      ]
+    },
+    {
       "id": "step-03-01-prototype-review-mode",
       "phase_id": "phase-03-static-prototype",
       "order": 1,
@@ -466,7 +531,7 @@
       "testable": false,
       "notes": "如果用户同意，将准备可打开的 Web 静态原型。",
       "depends_on": [
-        "step-02-06-design-spec"
+        "step-02-08-multimodal-realism"
       ],
       "user_action": "review_output",
       "acceptance_hint": "用户确认是否要打开本地浏览器原型。",
@@ -609,6 +674,61 @@
       "step_id": "step-02-06-design-spec",
       "created_at": "2026-06-04T20:28:26+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-007",
+      "title": "Public data source manifest",
+      "artifact_type": "other",
+      "location": "data/public_sources/data_sources.json",
+      "summary": "公开样本和 GitHub 项目来源清单，包含许可、用途、流量等级和下载策略。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-07-public-sources",
+      "created_at": "2026-06-05T00:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-008",
+      "title": "Public sample distillation plan",
+      "artifact_type": "document",
+      "location": "docs/public_sample_distillation_plan.md",
+      "summary": "公开样本蒸馏方案，说明来源分层、下载策略、许可处理和输出产物。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-07-public-sources",
+      "created_at": "2026-06-05T00:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-009",
+      "title": "Public sample schema",
+      "artifact_type": "document",
+      "location": "docs/public_sample_schema.md",
+      "summary": "统一样本结构，用于文本、表情包、短语音和行为标签蒸馏。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-07-public-sources",
+      "created_at": "2026-06-05T00:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-010",
+      "title": "Behavior distillation rules",
+      "artifact_type": "document",
+      "location": "docs/behavior_distillation_rules.md",
+      "summary": "深夜损友人格的文本、表情包、短语音和安全模式行为规则。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-08-multimodal-realism",
+      "created_at": "2026-06-05T00:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-011",
+      "title": "Synthetic seed behavior examples",
+      "artifact_type": "other",
+      "location": "samples/public/seed_behavior_examples.jsonl",
+      "summary": "项目自有合成样本，用于描述真人感行为，不复制公开数据原文。",
+      "phase_id": "phase-02-blueprint",
+      "step_id": "step-02-08-multimodal-realism",
+      "created_at": "2026-06-05T00:00:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -741,6 +861,50 @@
       "user_decision": "",
       "recommendation_reason": "聊天体验和管理后台更适合看原型确认。",
       "notes": "等待用户确认。"
+    },
+    {
+      "id": "decision-006",
+      "title": "Public sample distillation route",
+      "context": "用户认为手动整理私人聊天样本太麻烦，希望使用公开样本和 GitHub 蒸馏项目作为行为来源。",
+      "status": "resolved",
+      "recommended_option_id": "option-public-plus-synthetic",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-07-public-sources",
+      "options": [
+        {
+          "id": "option-private-samples",
+          "label": "用户手动提供私人样本"
+        },
+        {
+          "id": "option-public-plus-synthetic",
+          "label": "公开来源 + 合成样本"
+        }
+      ],
+      "user_decision": "确认抓取公开样本，表情包文件等关闭 VPN 后再下载",
+      "recommendation_reason": "能减少用户整理成本，同时降低私人聊天隐私风险。",
+      "notes": "本阶段只抓元数据、来源清单和轻量合成样本，不下载大体积素材。"
+    },
+    {
+      "id": "decision-007",
+      "title": "Multimodal realism scope",
+      "context": "用户希望 AI 能发表情包、语音等，更像真人朋友。",
+      "status": "resolved",
+      "recommended_option_id": "option-intent-first-assets-later",
+      "related_phase_id": "phase-02-blueprint",
+      "related_step_id": "step-02-08-multimodal-realism",
+      "options": [
+        {
+          "id": "option-full-media-now",
+          "label": "立即下载并接入所有表情包和语音素材"
+        },
+        {
+          "id": "option-intent-first-assets-later",
+          "label": "先做表情包意图和短语音脚本，素材后接入"
+        }
+      ],
+      "user_decision": "先节省 VPN 流量，等关闭 VPN 后再下载表情包文件",
+      "recommendation_reason": "先把行为逻辑做清楚，避免大文件流量、版权和 API 细节拖慢产品设计。",
+      "notes": "架构阶段继续确认微信媒体能力、素材版权和语音合成路线。"
     }
   ]
 }
