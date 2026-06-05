@@ -29,3 +29,6 @@
 | artifact-025 | Test intervention notice | document | `docs/test_intervention_notice.md` | phase-08-user-test-guidance | step-08-01-test-notice | Owner testing guide for Build Round 1 |
 | artifact-026 | Local run instructions | document | `README.md` | phase-07-development | step-07-01-project-scaffold | Local run and test commands |
 | artifact-027 | WeChat adapter prototype | source_code | `app/wechat_adapter.py` | phase-07-development | step-07-12-wechat-adapter | Local-only inbound normalizer and outbound envelope for future WeChat integration |
+| artifact-028 | UAT scripts | document | `docs/uat_scripts.md` | phase-09-uat-docs | step-09-01-uat-scripts | Nontechnical test scripts for local owner and inner-test validation |
+| artifact-029 | Acceptance checklist | document | `docs/acceptance_checklist.md` | phase-09-uat-docs | step-09-02-acceptance-checklist | Build Round 1 pass/fail criteria and deferred items |
+| artifact-030 | Bug feedback template | document | `docs/bug_feedback_template.md` | phase-10-debug-collaboration | step-10-01-bug-template | Structured issue report format for chat, page, adapter, and safety problems |

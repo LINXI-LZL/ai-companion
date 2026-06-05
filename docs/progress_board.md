@@ -7,9 +7,9 @@
 | Current phase | User test guidance |
 | Current step | Owner smoke test |
 | Overall status | ready_for_test |
-| Completed substeps | 35 / 42 |
-| User action needed | Open the local app and run the owner smoke test |
-| Next step after confirmation | Record smoke-test result and produce UAT scripts |
+| Completed substeps | 37 / 42 |
+| User action needed | Run the owner smoke test and review the acceptance checklist |
+| Next step after confirmation | Record smoke-test result and turn any issues into repair actions |
 
 ## Completed Outputs
 
@@ -23,6 +23,8 @@
 | Build round scoping | 1 / 1 | `docs/build_scope_current_round.md` |
 | Development | 14 / 14 | `app/`, `tests/`, `README.md`, local app at `http://127.0.0.1:8765` |
 | User testing | 1 / 2 | `docs/test_intervention_notice.md` |
+| UAT docs | 1 / 2 | `docs/uat_scripts.md`, `docs/acceptance_checklist.md` |
+| Debug collaboration | 1 / 2 | `docs/bug_feedback_template.md` |
 
 ## Ready For Test
 
@@ -32,6 +34,8 @@
 | Automated tests | `tests/` | 15 passing |
 | Owner smoke test | `docs/test_intervention_notice.md` | waiting for user |
 | WeChat entry mock | `WeChat Entry` tab | ready for local simulation |
+| UAT scripts | `docs/uat_scripts.md` | ready to use |
+| Acceptance checklist | `docs/acceptance_checklist.md` | waiting for user review |
 
 ## Not Started Yet
 
@@ -39,10 +43,10 @@
 |---|---|
 | Platform integration | Real credentialed WeChat send/receive remains unstarted until API credentials and current docs are reviewed |
 | User testing | Owner smoke test is ready now |
-| UAT docs | Produce nontechnical testing scripts and acceptance checklist |
-| Debug collaboration | Convert user-found issues into repair actions |
+| UAT docs | User review of the acceptance checklist |
+| Debug collaboration | Convert user-found issues into repair actions after feedback exists |
 | Delivery | Summarize delivered source, docs, known issues, and next iteration |
 
 ## Current Blocker
 
-The project is waiting for the owner smoke test. Real credentialed WeChat integration, real sticker assets, and real voice synthesis are still deferred.
+The project is waiting for the owner smoke test and acceptance checklist review. Real credentialed WeChat integration, real sticker assets, and real voice synthesis are still deferred.

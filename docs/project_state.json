@@ -10,13 +10,13 @@
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 42,
-    "completed_step_count": 35,
+    "completed_step_count": 37,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Open http://127.0.0.1:8765 and run the owner smoke test, including the WeChat Entry mock.",
+    "next_action_summary": "Run the owner smoke test and review the acceptance checklist.",
     "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T16:33:00+08:00"
+    "updated_at": "2026-06-05T16:42:35+08:00"
   },
   "phases": [
     {
@@ -222,15 +222,18 @@
       "order": 9,
       "title": "User-level test documentation",
       "goal": "生成非技术用户也能执行的测试说明。",
-      "status": "not_started",
-      "outputs": [],
-      "requires_user_confirmation": false,
+      "status": "waiting_user",
+      "outputs": [
+        "docs/uat_scripts.md",
+        "docs/acceptance_checklist.md"
+      ],
+      "requires_user_confirmation": true,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "需要等待可运行版本。",
-      "user_action": "none",
+      "completed_step_count": 1,
+      "summary": "UAT scripts are ready, and the acceptance checklist is waiting for owner review.",
+      "notes": "Prepared before owner smoke completion so the owner can test and review in one pass.",
+      "user_action": "review_output",
       "acceptance_hint": "测试用例应包含目标、前置条件、步骤、预期结果和失败反馈方式。",
       "depends_on_phase_ids": [
         "phase-08-user-test-guidance"
@@ -242,14 +245,16 @@
       "order": 10,
       "title": "Debug collaboration",
       "goal": "当内测发现问题时，用结构化反馈转成下一步修复行动。",
-      "status": "not_started",
-      "outputs": [],
+      "status": "in_progress",
+      "outputs": [
+        "docs/bug_feedback_template.md"
+      ],
       "requires_user_confirmation": false,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "只有测试发现问题后进入。",
+      "completed_step_count": 1,
+      "summary": "Bug feedback template is ready; repair actions wait for actual test findings.",
+      "notes": "Only the feedback template is complete. Debug next actions enter after the owner or friends report issues.",
       "user_action": "none",
       "acceptance_hint": "用户不需要懂技术，也能清楚报告问题。",
       "depends_on_phase_ids": [
@@ -1245,19 +1250,23 @@
       "order": 1,
       "title": "Write UAT scripts",
       "goal": "Create nontechnical user test scripts.",
-      "status": "not_started",
-      "output": [],
+      "status": "done",
+      "output": [
+        "docs/uat_scripts.md"
+      ],
       "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Cover scenarios and failure-reporting instructions.",
+      "notes": "Covers local console, normal rant, sleepy voice intent, safety mode, memory, WeChat Entry mock, and source/run status.",
       "depends_on": [
-        "step-08-02-owner-smoke-test"
+        "step-08-01-test-notice"
       ],
       "user_action": "none",
       "acceptance_hint": "Scripts can be shared with inner-test friends.",
-      "progress_summary": "Not started.",
+      "progress_summary": "Done.",
       "blockers": [],
-      "related_artifact_ids": [],
+      "related_artifact_ids": [
+        "artifact-028"
+      ],
       "related_decision_ids": []
     },
     {
@@ -1266,19 +1275,25 @@
       "order": 2,
       "title": "Acceptance checklist",
       "goal": "Define first-version pass/fail criteria.",
-      "status": "not_started",
-      "output": [],
+      "status": "waiting_user",
+      "output": [
+        "docs/acceptance_checklist.md"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
-      "notes": "Clarify what passes now and what remains next.",
+      "notes": "Draft checklist is ready; owner should review pass/fail criteria after or during smoke testing.",
       "depends_on": [
         "step-09-01-uat-scripts"
       ],
       "user_action": "review_output",
       "acceptance_hint": "User can confirm whether MVP meets the bar.",
-      "progress_summary": "Not started.",
-      "blockers": [],
-      "related_artifact_ids": [],
+      "progress_summary": "Waiting for owner review.",
+      "blockers": [
+        "Waiting for owner acceptance checklist review"
+      ],
+      "related_artifact_ids": [
+        "artifact-029"
+      ],
       "related_decision_ids": []
     },
     {
@@ -1287,19 +1302,23 @@
       "order": 1,
       "title": "Bug feedback template",
       "goal": "Make inner-test issue reports actionable.",
-      "status": "not_started",
-      "output": [],
+      "status": "done",
+      "output": [
+        "docs/bug_feedback_template.md"
+      ],
       "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Template includes action, expected result, actual result, reproduction, and evidence.",
+      "notes": "Template includes chat reply, page operation, WeChat Entry mock, safety issue, severity, and evidence fields.",
       "depends_on": [
-        "step-09-02-acceptance-checklist"
+        "step-09-01-uat-scripts"
       ],
       "user_action": "none",
       "acceptance_hint": "User can report issues clearly.",
-      "progress_summary": "Not started.",
+      "progress_summary": "Done.",
       "blockers": [],
-      "related_artifact_ids": [],
+      "related_artifact_ids": [
+        "artifact-030"
+      ],
       "related_decision_ids": []
     },
     {
@@ -1664,6 +1683,39 @@
       "phase_id": "phase-07-development",
       "step_id": "step-07-12-wechat-adapter",
       "created_at": "2026-06-05T16:33:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-028",
+      "title": "UAT scripts",
+      "artifact_type": "document",
+      "location": "docs/uat_scripts.md",
+      "summary": "Nontechnical test scripts for local owner and inner-test validation.",
+      "phase_id": "phase-09-uat-docs",
+      "step_id": "step-09-01-uat-scripts",
+      "created_at": "2026-06-05T16:42:35+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-029",
+      "title": "Acceptance checklist",
+      "artifact_type": "document",
+      "location": "docs/acceptance_checklist.md",
+      "summary": "Build Round 1 pass/fail criteria and deferred items.",
+      "phase_id": "phase-09-uat-docs",
+      "step_id": "step-09-02-acceptance-checklist",
+      "created_at": "2026-06-05T16:42:35+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-030",
+      "title": "Bug feedback template",
+      "artifact_type": "document",
+      "location": "docs/bug_feedback_template.md",
+      "summary": "Structured issue report format for chat, page, adapter, and safety problems.",
+      "phase_id": "phase-10-debug-collaboration",
+      "step_id": "step-10-01-bug-template",
+      "created_at": "2026-06-05T16:42:35+08:00",
       "version": "v0.1"
     }
   ],
