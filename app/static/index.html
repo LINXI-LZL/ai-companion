@@ -20,6 +20,7 @@
           <button class="tab-button active" data-tab="chat">Chat Simulator</button>
           <button class="tab-button" data-tab="users">Users</button>
           <button class="tab-button" data-tab="memory">Memory</button>
+          <button class="tab-button" data-tab="wechat">WeChat Entry</button>
           <button class="tab-button" data-tab="sources">Sample Status</button>
           <button class="tab-button" data-tab="status">Run Status</button>
         </nav>
@@ -107,6 +108,39 @@
             </form>
             <div class="list-stack" id="memory-list"></div>
           </section>
+        </section>
+
+        <section class="view" data-view="wechat">
+          <div class="split">
+            <section class="panel">
+              <div class="panel-header">
+                <h3>Mock WeChat Inbound</h3>
+              </div>
+              <form class="wechat-form" id="wechat-form">
+                <input id="wechat-external-user" value="external-owner" placeholder="external user id">
+                <textarea id="wechat-content" rows="5" placeholder="今晚想吐槽点什么？">老板又临下班改需求，真的离谱</textarea>
+                <button type="submit">Simulate</button>
+              </form>
+            </section>
+
+            <section class="panel inspect-panel">
+              <h3>Adapter Result</h3>
+              <div class="metrics">
+                <div><span>Channel</span><strong id="wechat-channel">-</strong></div>
+                <div><span>Content Type</span><strong id="wechat-content-type">-</strong></div>
+                <div><span>Mode</span><strong id="wechat-mode">-</strong></div>
+                <div><span>Send Policy</span><strong id="wechat-send-policy">-</strong></div>
+              </div>
+              <div class="voice-box">
+                <span>Outbound Text</span>
+                <p id="wechat-outbound-text">-</p>
+              </div>
+              <div class="voice-box">
+                <span>Outbound Envelope</span>
+                <pre id="wechat-envelope">-</pre>
+              </div>
+            </section>
+          </div>
         </section>
 
         <section class="view" data-view="sources">

@@ -10,10 +10,10 @@
 | Overall status | Ready for owner test |
 | Total phases | 11 |
 | Total substeps | 42 |
-| Completed substeps | 34 |
+| Completed substeps | 35 |
 | Needs user attention | Yes |
 | Next action | Open the local app and run the owner smoke test |
-| Current risk | Real WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation |
+| Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation |
 
 ## Full Board
 
@@ -50,7 +50,7 @@
 | phase-07-development | step-07-09-multimodal-decision | Development | Multimodal decision layer | Choose text, sticker, voice, or safety | `app/multimodal.py` | step-07-08-orchestrator | done | none | no | yes | none |
 | phase-07-development | step-07-10-distillation-status | Development | Distillation source status | Expose public source readiness | Source status UI/API | step-07-03-admin-shell | done | none | no | yes | none |
 | phase-07-development | step-07-11-media-layer | Development | Media asset layer stub | Defer real assets while supporting intent | `app/media.py` and media asset fallback | step-07-09-multimodal-decision | done | none | no | yes | none |
-| phase-07-development | step-07-12-wechat-adapter | Development | WeChat adapter prototype | Isolate platform receive/send logic | Adapter module | step-07-11-media-layer | not_started | choose_technical_path | yes | yes | WeChat API credentials and current docs must be checked |
+| phase-07-development | step-07-12-wechat-adapter | Development | WeChat adapter prototype | Isolate platform receive/send logic | `app/wechat_adapter.py`, `/api/wechat/mock-inbound`, `WeChat Entry` tab | step-07-11-media-layer | done | none | no | yes | Real credentialed WeChat API mapping remains future work |
 | phase-07-development | step-07-13-observability | Development | Observability and audit | Make failures visible | Status API, server log, audit events | step-07-12-wechat-adapter | done | none | no | yes | none |
 | phase-07-development | step-07-14-mvp-integration | Development | End-to-end MVP integration | Connect core flow | Runnable local MVP | step-07-13-observability | done | run_user_test | yes | yes | none |
 | phase-08-user-test-guidance | step-08-01-test-notice | User test guidance | Prepare test notice | Tell user what to test now | `docs/test_intervention_notice.md` | step-07-14-mvp-integration | done | none | no | no | none |
@@ -64,4 +64,4 @@
 
 ## Current Confirmation Gate
 
-Open `http://127.0.0.1:8765` and run the owner smoke test from `docs/test_intervention_notice.md`.
+Open `http://127.0.0.1:8765` and run the owner smoke test from `docs/test_intervention_notice.md`, including the new `WeChat Entry` tab.

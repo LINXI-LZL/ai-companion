@@ -28,3 +28,4 @@
 | artifact-024 | Automated tests | test | `tests/` | phase-07-development | step-07-14-mvp-integration | Unit and smoke tests for core behavior, storage, API, and static app wiring |
 | artifact-025 | Test intervention notice | document | `docs/test_intervention_notice.md` | phase-08-user-test-guidance | step-08-01-test-notice | Owner testing guide for Build Round 1 |
 | artifact-026 | Local run instructions | document | `README.md` | phase-07-development | step-07-01-project-scaffold | Local run and test commands |
+| artifact-027 | WeChat adapter prototype | source_code | `app/wechat_adapter.py` | phase-07-development | step-07-12-wechat-adapter | Local-only inbound normalizer and outbound envelope for future WeChat integration |

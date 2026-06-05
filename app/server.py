@@ -8,6 +8,7 @@ from urllib.parse import parse_qs, urlparse
 from .orchestrator import plan_reply
 from .sample_sources import load_source_status
 from .storage import DEFAULT_DB, Storage
+from .wechat_adapter import build_outbound_message, normalize_inbound_event, resolve_mock_user
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,6 +49,19 @@ def create_chat_response(store, payload):
         "plan": plan,
         "media": plan["media"],
         "memories": store.list_memories(user_id),
+    }
+
+
+def create_mock_wechat_response(store, payload):
+    inbound = normalize_inbound_event(payload)
+    user = resolve_mock_user(store, inbound)
+    chat = create_chat_response(store, {"user_id": user["id"], "message": inbound["content"]})
+    outbound = build_outbound_message(inbound, chat["plan"])
+    return {
+        "inbound": inbound,
+        "user": user,
+        "chat": chat,
+        "outbound": outbound,
     }
 
 
@@ -118,6 +132,9 @@ class CompanionRequestHandler(SimpleHTTPRequestHandler):
                 return
             if parsed.path == "/api/chat":
                 self._send_json(create_chat_response(self.store, payload), status=201)
+                return
+            if parsed.path == "/api/wechat/mock-inbound":
+                self._send_json(create_mock_wechat_response(self.store, payload), status=201)
                 return
             self._send_json({"error": "not found"}, status=404)
         except PermissionError as exc:

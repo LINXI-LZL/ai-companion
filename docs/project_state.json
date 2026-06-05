@@ -10,13 +10,13 @@
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 42,
-    "completed_step_count": 34,
+    "completed_step_count": 35,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Open http://127.0.0.1:8765 and run the owner smoke test.",
-    "current_risk_summary": "Real WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
+    "next_action_summary": "Open http://127.0.0.1:8765 and run the owner smoke test, including the WeChat Entry mock.",
+    "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T16:05:00+08:00"
+    "updated_at": "2026-06-05T16:33:00+08:00"
   },
   "phases": [
     {
@@ -176,7 +176,7 @@
       "order": 7,
       "title": "Development progress orchestration",
       "goal": "按已确认的任务板推进开发，并用产品语言持续报告进展。",
-      "status": "ready_for_test",
+      "status": "done",
       "outputs": [
         "app/",
         "tests/",
@@ -185,9 +185,9 @@
       "requires_user_confirmation": false,
       "testable": true,
       "step_count": 14,
-      "completed_step_count": 13,
-      "summary": "Local Build Round 1 implementation is ready for owner smoke test.",
-      "notes": "Real WeChat adapter remains deferred; local simulator, admin, storage, safety, memory, multimodal, source status, media fallback, and run status are implemented.",
+      "completed_step_count": 14,
+      "summary": "Local Build Round 1 development is complete and ready for owner smoke test.",
+      "notes": "Local simulator, admin, storage, safety, memory, multimodal, source status, media fallback, run status, and local WeChat entry mock are implemented. Real credentialed WeChat mapping remains deferred.",
       "user_action": "none",
       "acceptance_hint": "用户能看到每个开发步骤完成了什么产物。",
       "depends_on_phase_ids": [
@@ -1111,21 +1111,27 @@
       "order": 12,
       "title": "WeChat adapter prototype",
       "goal": "Wrap WeChat customer-service style receive/send and media capability.",
-      "status": "not_started",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "app/wechat_adapter.py",
+        "/api/wechat/mock-inbound",
+        "app/static/index.html"
+      ],
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Deferred outside Build Round 1 until current WeChat docs and credentials are reviewed.",
+      "notes": "Implemented as a local-only adapter contract. It normalizes a WeChat-style inbound text event, maps a mock external user to an inner-test user, runs the companion core, and builds an outbound envelope. Real credentialed WeChat mapping remains deferred until current docs and credentials are available.",
       "depends_on": [
         "step-07-11-media-layer"
       ],
-      "user_action": "choose_technical_path",
+      "user_action": "none",
       "acceptance_hint": "Adapter can receive/send or simulate receive/send in test.",
-      "progress_summary": "Not started; intentionally deferred.",
-      "blockers": [
-        "Waiting for WeChat API credential and documentation review"
+      "progress_summary": "Done as local simulation.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-023",
+        "artifact-024",
+        "artifact-027"
       ],
-      "related_artifact_ids": [],
       "related_decision_ids": []
     },
     {
@@ -1647,6 +1653,17 @@
       "phase_id": "phase-07-development",
       "step_id": "step-07-01-project-scaffold",
       "created_at": "2026-06-05T16:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-027",
+      "title": "WeChat adapter prototype",
+      "artifact_type": "source_code",
+      "location": "app/wechat_adapter.py",
+      "summary": "Local-only inbound normalizer and outbound envelope for future WeChat integration.",
+      "phase_id": "phase-07-development",
+      "step_id": "step-07-12-wechat-adapter",
+      "created_at": "2026-06-05T16:33:00+08:00",
       "version": "v0.1"
     }
   ],

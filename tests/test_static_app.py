@@ -14,6 +14,7 @@ class StaticAppTests(unittest.TestCase):
             "Chat Simulator",
             "Users",
             "Memory",
+            "WeChat Entry",
             "Sample Status",
             "Run Status",
         ]:
@@ -23,6 +24,7 @@ class StaticAppTests(unittest.TestCase):
             "/api/status",
             "/api/users",
             "/api/chat",
+            "/api/wechat/mock-inbound",
             "/api/memories",
             "/api/sources",
         ]:

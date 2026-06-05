@@ -64,6 +64,15 @@ textarea {
   resize: vertical;
 }
 
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .app-shell {
   min-height: 100vh;
   display: grid;
@@ -282,6 +291,11 @@ textarea {
   margin-bottom: 14px;
 }
 
+.wechat-form {
+  display: grid;
+  gap: 10px;
+}
+
 .table-wrap {
   overflow: auto;
 }
@@ -348,7 +362,7 @@ th {
   }
 
   .nav-tabs {
-    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
     overflow-x: auto;
   }
 

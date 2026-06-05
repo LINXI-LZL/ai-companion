@@ -8,6 +8,7 @@ const subtitles = {
   chat: "Local companion flow before real WeChat integration.",
   users: "Inner-test whitelist and user state.",
   memory: "Lightweight preferences the agent can use or forget.",
+  wechat: "Local adapter contract for the future WeChat-side entry.",
   sources: "Public distillation sources without large media downloads.",
   status: "Local service, database, and deferred media assets.",
 };
@@ -81,6 +82,28 @@ function bindForms() {
     await api(`/api/memories?user_id=${encodeURIComponent(state.selectedUserId)}`, {
       method: "DELETE",
     });
+    await refreshMemories();
+  });
+
+  document.getElementById("wechat-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const externalUser = document.getElementById("wechat-external-user").value.trim();
+    const content = document.getElementById("wechat-content").value.trim();
+    if (!externalUser || !content) return;
+    const response = await api("/api/wechat/mock-inbound", {
+      method: "POST",
+      body: {
+        FromUserName: externalUser,
+        MsgType: "text",
+        Content: content,
+        MsgId: `mock-${Date.now()}`,
+      },
+    });
+    renderWechatResult(response);
+    state.latestPlan = response.chat.plan;
+    state.selectedUserId = response.user.id;
+    await refreshUsers();
+    await refreshMessages();
     await refreshMemories();
   });
 
@@ -235,6 +258,15 @@ function renderPlan(response) {
   document.getElementById("media-notice").textContent = mediaNotice(response.media);
 }
 
+function renderWechatResult(response) {
+  document.getElementById("wechat-channel").textContent = response.inbound.channel;
+  document.getElementById("wechat-content-type").textContent = response.inbound.content_type;
+  document.getElementById("wechat-mode").textContent = displayLabel(response.outbound.mode);
+  document.getElementById("wechat-send-policy").textContent = displayLabel(response.outbound.send_policy);
+  document.getElementById("wechat-outbound-text").textContent = response.outbound.text;
+  document.getElementById("wechat-envelope").textContent = JSON.stringify(response.outbound, null, 2);
+}
+
 function addBubble(kind, text) {
   const list = document.getElementById("message-list");
   const bubble = document.createElement("div");
@@ -284,6 +316,7 @@ function displayLabel(value) {
     sticker_reaction_mocking: "吐槽反应表情",
     voice_sleepy_companion: "困倦陪伴语音",
     voice_serious_grounding: "严肃安抚语音",
+    local_mock_only: "仅本地模拟",
   };
   return labels[value] || value || "-";
 }
