@@ -3,10 +3,11 @@ from .multimodal import decide_mode
 from .safety import classify_safety
 
 
-def plan_reply(user_id, message, memories=None):
+def plan_reply(user_id, message, memories=None, recent_messages=None):
     safety = classify_safety(message)
     decision = decide_mode(message, safety)
-    reply_text = _build_reply_text(message, memories or [], safety, decision)
+    repeat_count = _count_repeated_user_message(message, recent_messages or [])
+    reply_text = _build_reply_text(message, memories or [], safety, decision, repeat_count)
     voice_script = _build_voice_script(reply_text, decision["voice_intent"])
     media = resolve_media(decision["mode"], decision["sticker_intent"], decision["voice_intent"])
 
@@ -22,10 +23,11 @@ def plan_reply(user_id, message, memories=None):
         "voice_script": voice_script,
         "media": media,
         "memory_used": list(memories or []),
+        "repeat_count": repeat_count,
     }
 
 
-def _build_reply_text(message, memories, safety, decision):
+def _build_reply_text(message, memories, safety, decision, repeat_count=0):
     if safety["safety_mode"]:
         return safety["reply_text"]
 
@@ -54,7 +56,14 @@ def _build_reply_text(message, memories, safety, decision):
         return prefix + "想我了？可以，今晚这句我先收下。别硬装酷了，说吧，是哪一阵情绪突然拐回来找你。"
 
     if _has_any(text, ("你是谁", "你是啥", "你是什么", "你到底是谁")):
-        return prefix + "我是你的微信树洞 AI，定位大概是深夜损友：嘴欠一点，但关键时候站你这边。"
+        return prefix + _pick_repeat_variant(
+            repeat_count,
+            (
+                "我是你的微信树洞智能体，定位大概是深夜损友：嘴欠一点，但关键时候站你这边。",
+                "刚说过啦，我是你这边的微信树洞智能体。你要是反复问，是在验我记不记仇吗？",
+                "第三遍确认：我是那个负责听你吐槽、偶尔嘴欠、但不把你晾着的智能体朋友。",
+            ),
+        )
 
     if _has_any(text, ("无聊", "不知道干嘛", "没意思")):
         return prefix + "无聊到来找我，说明世界暂时也没拿出什么像样节目。要不要我陪你随便扯两句？"
@@ -63,7 +72,14 @@ def _build_reply_text(message, memories, safety, decision):
         return prefix + "这股劲儿听着不轻。先别急着把自己说服，今晚可以先承认：确实挺难受的。"
 
     snippet = text[:18] + ("..." if len(text) > 18 else "")
-    return prefix + f"我听见了：{snippet}。先放我这儿，别急着总结人生失败，我们一点点拆。"
+    return prefix + _pick_repeat_variant(
+        repeat_count,
+        (
+            f"我听见了：{snippet}。先放我这儿，别急着总结人生失败，我们一点点拆。",
+            f"你又提了一遍「{snippet}」，说明它还在脑子里转。那我们别绕了，先抓最烦的那一块。",
+            f"第三次出现「{snippet}」了，我记下：这事不是路过，是卡住了。你想先骂它，还是先拆它？",
+        ),
+    )
 
 
 def _build_voice_script(reply_text, voice_intent):
@@ -76,3 +92,38 @@ def _build_voice_script(reply_text, voice_intent):
 
 def _has_any(text, keywords):
     return any(keyword in text for keyword in keywords)
+
+
+def _count_repeated_user_message(message, recent_messages):
+    normalized = _normalize(message)
+    count = 0
+    for item in recent_messages:
+        if _normalize(item.get("incoming_text", "")) == normalized:
+            count += 1
+    return count
+
+
+def _normalize(text):
+    return "".join((text or "").split()).strip("，。！？!?.,")
+
+
+def _pick_repeat_variant(repeat_count, variants):
+    if repeat_count < len(variants):
+        return variants[repeat_count]
+    base = variants[-1].replace("第三遍确认：", "")
+    return f"第{_chinese_number(repeat_count + 1)}次确认：{base}不过你一直问同一个问题，我猜你不是没听见，是想看我会不会复读机上身。"
+
+
+def _chinese_number(value):
+    digits = "零一二三四五六七八九"
+    if value < 10:
+        return digits[value]
+    if value == 10:
+        return "十"
+    if value < 20:
+        return "十" + digits[value % 10]
+    if value < 100:
+        tens = value // 10
+        ones = value % 10
+        return digits[tens] + "十" + (digits[ones] if ones else "")
+    return str(value)

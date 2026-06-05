@@ -201,8 +201,10 @@ class Storage:
         if user_id:
             query += " WHERE user_id = ?"
             params.append(user_id)
-        query += " ORDER BY created_at DESC LIMIT ?"
-        params.append(limit)
+        query += " ORDER BY created_at DESC, rowid DESC"
+        if limit is not None:
+            query += " LIMIT ?"
+            params.append(limit)
         with self._connect() as conn:
             rows = conn.execute(query, params).fetchall()
         return [self._row_to_message(row) for row in rows]

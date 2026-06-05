@@ -29,7 +29,7 @@
 | Flow | Where | Status |
 |---|---|---|
 | Local app | `http://127.0.0.1:8765` | running |
-| Automated tests | `tests/` | 11 passing |
+| Automated tests | `tests/` | 13 passing |
 | Owner smoke test | `docs/test_intervention_notice.md` | waiting for user |
 
 ## Not Started Yet

@@ -31,7 +31,8 @@ def create_chat_response(store, payload):
         store.save_memory(user_id, extracted_memory, source="chat")
 
     memories = [memory["content"] for memory in store.list_memories(user_id)]
-    plan = plan_reply(user_id, message, memories=memories)
+    recent_messages = store.list_messages(user_id, limit=None)
+    plan = plan_reply(user_id, message, memories=memories, recent_messages=recent_messages)
     saved = store.save_message(user_id, message, plan)
     store.record_audit(
         "chat_response",

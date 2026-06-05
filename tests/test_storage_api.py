@@ -55,6 +55,63 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0]["incoming_text"], "我又拖到最后一天，真服了我自己")
 
+    def test_repeated_same_question_gets_varied_replies(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+
+            replies = [
+                create_chat_response(store, {"user_id": user["id"], "message": "你是谁"})["plan"]["reply_text"]
+                for _ in range(5)
+            ]
+
+        self.assertEqual(len(set(replies)), 5)
+        self.assertTrue(any("刚说过" in reply or "第三遍" in reply for reply in replies))
+
+    def test_repeated_question_keeps_varying_with_existing_mixed_history(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        def seed_plan(text):
+            return {
+                "reply_text": text,
+                "mode": "text_only",
+                "safety_mode": False,
+                "sticker_intent": "",
+                "voice_intent": "",
+            }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            history = [
+                "你是谁",
+                "换个话题",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "你是谁",
+                "今天有点烦",
+            ]
+            for text in history:
+                store.save_message(user["id"], text, seed_plan("seed reply"))
+
+            first = create_chat_response(store, {"user_id": user["id"], "message": "你是谁"})["plan"]
+            second = create_chat_response(store, {"user_id": user["id"], "message": "你是谁"})["plan"]
+
+        self.assertNotEqual(first["reply_text"], second["reply_text"])
+        self.assertEqual(first["repeat_count"] + 1, second["repeat_count"])
+
 
 if __name__ == "__main__":
     unittest.main()
