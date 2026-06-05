@@ -38,6 +38,20 @@ class CompanionCoreTests(unittest.TestCase):
 
         self.assertIn("我会短点说", plan["reply_text"])
 
+    def test_common_low_risk_messages_do_not_share_one_default_reply(self):
+        from app.orchestrator import plan_reply
+
+        replies = {
+            plan_reply("u1", "你好啊", memories=[])["reply_text"],
+            plan_reply("u1", "我想你了", memories=[])["reply_text"],
+            plan_reply("u1", "你是谁", memories=[])["reply_text"],
+        }
+
+        self.assertEqual(len(replies), 3)
+        self.assertTrue(any("在呢" in reply for reply in replies))
+        self.assertTrue(any("想我" in reply for reply in replies))
+        self.assertTrue(any("深夜损友" in reply for reply in replies))
+
 
 if __name__ == "__main__":
     unittest.main()

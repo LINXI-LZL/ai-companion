@@ -227,19 +227,19 @@ async function refreshMedia() {
 
 function renderPlan(response) {
   const plan = response.plan;
-  document.getElementById("plan-mode").textContent = plan.mode;
-  document.getElementById("plan-safety").textContent = plan.safety_mode ? "on" : "off";
-  document.getElementById("plan-sticker").textContent = plan.sticker_intent;
-  document.getElementById("plan-voice").textContent = plan.voice_intent;
+  document.getElementById("plan-mode").textContent = displayLabel(plan.mode);
+  document.getElementById("plan-safety").textContent = plan.safety_mode ? "开启" : "关闭";
+  document.getElementById("plan-sticker").textContent = displayLabel(plan.sticker_intent);
+  document.getElementById("plan-voice").textContent = displayLabel(plan.voice_intent);
   document.getElementById("voice-script").textContent = plan.voice_script || "-";
-  document.getElementById("media-notice").textContent = response.media.notice;
+  document.getElementById("media-notice").textContent = mediaNotice(response.media);
 }
 
-function addBubble(kind, text, response) {
+function addBubble(kind, text) {
   const list = document.getElementById("message-list");
   const bubble = document.createElement("div");
   bubble.className = `bubble ${kind}`;
-  bubble.innerHTML = `${escapeHtml(text)}${response ? `<small>${escapeHtml(response.plan.mode)} · ${escapeHtml(response.media.notice)}</small>` : ""}`;
+  bubble.textContent = text;
   list.appendChild(bubble);
   list.scrollTop = list.scrollHeight;
 }
@@ -269,6 +269,31 @@ function escapeHtml(value) {
 function formatDate(value) {
   if (!value) return "-";
   return value.replace("T", " ").slice(0, 19);
+}
+
+function displayLabel(value) {
+  const labels = {
+    text_only: "纯文字",
+    text_plus_sticker: "文字加表情意图",
+    text_plus_short_voice: "文字加短语音脚本",
+    safety_response: "安全回应",
+    none: "无",
+    sticker_speechless: "无语表情",
+    sticker_supportive_mocking: "损友式鼓励表情",
+    sticker_supportive_hug: "抱抱表情",
+    sticker_reaction_mocking: "吐槽反应表情",
+    voice_sleepy_companion: "困倦陪伴语音",
+    voice_serious_grounding: "严肃安抚语音",
+  };
+  return labels[value] || value || "-";
+}
+
+function mediaNotice(media) {
+  if (!media) return "-";
+  if (media.asset_type === "sticker") return "真实表情包素材暂未接入，当前先显示表情意图并用文字兜底。";
+  if (media.asset_type === "voice") return "真实语音合成暂未接入，当前先显示短语音脚本并用文字兜底。";
+  if (media.asset_type === "safety") return "安全模式下不发送玩笑式表情或语音。";
+  return "纯文字回复。";
 }
 
 window.toggleUser = toggleUser;

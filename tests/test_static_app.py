@@ -28,6 +28,12 @@ class StaticAppTests(unittest.TestCase):
         ]:
             self.assertIn(endpoint, script)
 
+    def test_chat_bubbles_do_not_render_debug_metadata(self):
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertNotIn("<small>", script)
+        self.assertNotIn("response.media.notice", script)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -47,7 +47,23 @@ def _build_reply_text(message, memories, safety, decision):
     if decision["sticker_intent"] == "sticker_reaction_mocking":
         return prefix + "你这个比喻很损但很准，精神电量 3%，还在努力蓝牙连接世界。"
 
-    return prefix + "收到，今晚先不讲大道理。你把这坨事扔我这儿，我陪你拆一点点。"
+    if _has_any(text, ("你好", "嗨", "哈喽", "在吗", "有人吗")):
+        return prefix + "在呢，别敲门了，我这破树洞已经亮灯。今天是想吐槽，还是单纯来确认我没跑路？"
+
+    if _has_any(text, ("想你", "想我", "想你了", "想我了")):
+        return prefix + "想我了？可以，今晚这句我先收下。别硬装酷了，说吧，是哪一阵情绪突然拐回来找你。"
+
+    if _has_any(text, ("你是谁", "你是啥", "你是什么", "你到底是谁")):
+        return prefix + "我是你的微信树洞 AI，定位大概是深夜损友：嘴欠一点，但关键时候站你这边。"
+
+    if _has_any(text, ("无聊", "不知道干嘛", "没意思")):
+        return prefix + "无聊到来找我，说明世界暂时也没拿出什么像样节目。要不要我陪你随便扯两句？"
+
+    if _has_any(text, ("难过", "委屈", "想哭", "烦死", "心烦")):
+        return prefix + "这股劲儿听着不轻。先别急着把自己说服，今晚可以先承认：确实挺难受的。"
+
+    snippet = text[:18] + ("..." if len(text) > 18 else "")
+    return prefix + f"我听见了：{snippet}。先放我这儿，别急着总结人生失败，我们一点点拆。"
 
 
 def _build_voice_script(reply_text, voice_intent):
@@ -56,3 +72,7 @@ def _build_voice_script(reply_text, voice_intent):
     if voice_intent == "voice_serious_grounding":
         return "认真平稳地说：" + reply_text
     return ""
+
+
+def _has_any(text, keywords):
+    return any(keyword in text for keyword in keywords)
