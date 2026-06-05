@@ -5,14 +5,14 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Auto lightweight memory polish |
-| Current step | Owner auto memory smoke test |
-| Overall status | Ready for next build-round choice |
-| Total phases | 14 |
-| Total substeps | 55 |
-| Completed substeps | 55 |
+| Current phase | Expression logic polish |
+| Current step | Owner expression smoke test |
+| Overall status | Ready for owner test |
+| Total phases | 15 |
+| Total substeps | 59 |
+| Completed substeps | 58 |
 | Needs user attention | Yes |
-| Next action | Choose the next build-round focus |
+| Next action | Run the expression logic smoke test |
 | Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
@@ -74,7 +74,11 @@
 | phase-14-auto-memory-polish | step-14-02-spec-plan | Auto lightweight memory polish | Write spec and plan | Save automatic memory rules and implementation route | `docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md`, `docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md` | step-14-01-auto-memory-scope | done | none | no | no | none |
 | phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Auto lightweight memory polish | Build auto memory engine | Infer safe lightweight preferences from chat and remove manual add UI | `app/auto_memory.py`, `app/server.py`, `app/static/index.html`, `app/static/app.js`, tests | step-14-02-spec-plan | done | none | no | yes | none |
 | phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Auto lightweight memory polish | Owner auto memory smoke test | Verify memory is added automatically, deduped, and sensitive content is skipped | `docs/auto_memory_smoke_test.md`, `docs/auto_memory_result.md` | step-14-03-auto-memory-engine | done | none | no | yes | none |
+| phase-15-expression-logic-polish | step-15-01-owner-feedback | Expression logic polish | Capture owner feedback | Fix replies that paste unrelated logic together | Screenshot feedback: AI replies lack logic | step-14-04-owner-smoke-test | done | none | no | no | none |
+| phase-15-expression-logic-polish | step-15-02-regression-tests | Expression logic polish | Add regression tests | Lock poetic generic and AI-quality feedback behavior | `tests/test_companion_core.py` | step-15-01-owner-feedback | done | none | no | yes | none |
+| phase-15-expression-logic-polish | step-15-03-reply-engine-polish | Expression logic polish | Polish reply expression logic | Add meta-feedback scenario and remove generic repeated-theme suffix | `app/orchestrator.py` | step-15-02-regression-tests | done | none | no | yes | none |
+| phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Expression logic polish | Owner expression smoke test | Verify replies are logical and context-specific | `docs/expression_logic_smoke_test.md` | step-15-03-reply-engine-polish | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 
 ## Current Confirmation Gate
 
-Automatic lightweight memory is accepted. Next gate is choosing the next build-round focus.
+Run `docs/expression_logic_smoke_test.md` in the local app, then decide whether the expression logic polish passes.

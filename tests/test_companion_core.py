@@ -81,6 +81,42 @@ class CompanionCoreTests(unittest.TestCase):
         self.assertTrue("锅" in plan["reply_text"] or "老板" in plan["reply_text"])
         self.assertTrue("先" in plan["reply_text"] or "说吧" in plan["reply_text"])
 
+    def test_generic_poetic_message_does_not_get_life_coaching_repeat_suffix(self):
+        from app.orchestrator import plan_reply
+
+        recent_messages = [{"incoming_text": f"普通消息{i}"} for i in range(6)]
+
+        plan = plan_reply(
+            "u1",
+            "你是我今夜辗转反侧做的梦",
+            memories=["用户喜欢短回复"],
+            recent_messages=recent_messages,
+        )
+
+        self.assertEqual(plan["scenario"], "generic")
+        self.assertIn("我会短点说", plan["reply_text"])
+        self.assertNotIn("同类剧情", plan["reply_text"])
+        self.assertNotIn("人生失败", plan["reply_text"])
+        self.assertNotIn("这事还在黏人", plan["reply_text"])
+
+    def test_ai_feedback_gets_direct_repair_reply_not_generic_coaching(self):
+        from app.orchestrator import plan_reply
+
+        recent_messages = [{"incoming_text": f"普通消息{i}"} for i in range(6)]
+
+        plan = plan_reply(
+            "u1",
+            "我觉得你不太智能",
+            memories=["用户喜欢短回复"],
+            recent_messages=recent_messages,
+        )
+
+        self.assertEqual(plan["scenario"], "meta_feedback")
+        self.assertIn("不狡辩", plan["reply_text"])
+        self.assertTrue("我改" in plan["reply_text"] or "调整" in plan["reply_text"])
+        self.assertNotIn("同类剧情", plan["reply_text"])
+        self.assertNotIn("人生失败", plan["reply_text"])
+
 
 if __name__ == "__main__":
     unittest.main()

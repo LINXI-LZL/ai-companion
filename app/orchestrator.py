@@ -5,6 +5,21 @@ from .safety import classify_safety
 
 PERSONA_STYLE = "刀子嘴豆腐心"
 
+META_FEEDBACK_KEYWORDS = (
+    "不太智能",
+    "不智能",
+    "没有逻辑",
+    "没逻辑",
+    "逻辑不通",
+    "重复",
+    "答非所问",
+    "像机器人",
+    "胡说",
+    "乱说",
+    "说话怪",
+    "回复怪",
+)
+
 SCENARIO_KEYWORDS = (
     ("identity", ("你是谁", "你是啥", "你是什么", "你到底是谁")),
     ("greeting", ("你好", "嗨", "哈喽", "在吗", "有人吗")),
@@ -63,6 +78,11 @@ SCENARIO_REPLY_PACKS = {
         "刚说过啦，我是你这边的微信树洞智能体。你要是反复问，是在验我记不记仇吗？",
         "第三遍确认：我是那个负责听你吐槽、偶尔嘴欠、但不把你晾着的智能体朋友。",
     ),
+    "meta_feedback": (
+        "这句我认，不狡辩。刚才那种回法像把几段模板硬缝上了，我改：先听懂你这一句，再短点回，不乱升华。",
+        "收到，骂得有点准。我要是开始机械复读，你直接拍醒我；我会把话收短，先回应当前这句。",
+        "你这个反馈有效。我不继续演聪明，先把表达调顺：少套模板，多接住你真正说的意思。",
+    ),
     "tired_voice": (
         "你这不是矫情，是电量见底还硬撑。先别逼自己睡，陪你把脑子音量调小一点。",
         "好累还睡不着，这组合很会折磨人。我先不讲大道理，咱把今晚目标降到离谱地低：躺下，慢一点呼吸。",
@@ -113,22 +133,30 @@ def _build_reply_text(message, memories, safety, decision, repeat_count=0, scena
         return safety["reply_text"]
 
     text = message or ""
-    prefix = "我会短点说，" if any("短回复" in memory for memory in memories) else ""
-    variant_index = max(repeat_count, scenario_turn_count)
+    prefix = "我会短点说：" if any("短回复" in memory for memory in memories) else ""
+    variant_index = _variant_index_for(scenario, repeat_count, scenario_turn_count)
 
     if decision["mode"] == "text_plus_short_voice":
-        return prefix + _pick_contextual_variant(variant_index, SCENARIO_REPLY_PACKS["tired_voice"])
+        return prefix + _pick_contextual_variant(
+            variant_index,
+            SCENARIO_REPLY_PACKS["tired_voice"],
+            _repeat_note_for("tired_voice", variant_index),
+        )
 
     if scenario in SCENARIO_REPLY_PACKS:
-        return prefix + _pick_contextual_variant(variant_index, SCENARIO_REPLY_PACKS[scenario])
+        return prefix + _pick_contextual_variant(
+            variant_index,
+            SCENARIO_REPLY_PACKS[scenario],
+            _repeat_note_for(scenario, variant_index),
+        )
 
     snippet = text[:18] + ("..." if len(text) > 18 else "")
     return prefix + _pick_contextual_variant(
-        variant_index,
+        repeat_count,
         (
-            f"我听见了：{snippet}。先放我这儿，别急着总结人生失败，我们一点点拆。",
-            f"你又提了一遍「{snippet}」，说明它还在脑子里转。那我们别绕了，先抓最烦的那一块。",
-            f"第三次出现「{snippet}」了，我记下：这事不是路过，是卡住了。你想先骂它，还是先拆它？",
+            f"我听见了：{snippet}。这句我先不乱脑补，你想让我顺着聊，还是把它翻成大白话？",
+            f"你又提到「{snippet}」。我先按字面接住，不强行升华；你接着说，我跟上。",
+            f"第三次出现「{snippet}」了。它可能是在试探我，也可能是真卡住了；你想轻轻带过，还是认真拆一下？",
         ),
     )
 
@@ -149,6 +177,8 @@ def _classify_scenario(message, decision=None):
     text = message or ""
     if decision and decision["mode"] == "text_plus_short_voice":
         return "tired_voice"
+    if _is_meta_feedback(text):
+        return "meta_feedback"
     for scenario, keywords in SCENARIO_KEYWORDS:
         if _has_any(text, keywords):
             return scenario
@@ -156,7 +186,7 @@ def _classify_scenario(message, decision=None):
 
 
 def _count_recent_scenario(scenario, recent_messages):
-    if scenario == "safety":
+    if scenario in ("safety", "generic", "meta_feedback"):
         return 0
     count = 0
     for item in recent_messages:
@@ -178,14 +208,37 @@ def _normalize(text):
     return "".join((text or "").split()).strip("，。！？!?.,")
 
 
-def _pick_contextual_variant(index, variants):
+def _variant_index_for(scenario, repeat_count, scenario_turn_count):
+    if scenario in ("generic", "meta_feedback"):
+        return repeat_count
+    return max(repeat_count, scenario_turn_count)
+
+
+def _is_meta_feedback(text):
+    lowered = (text or "").lower()
+    targets_assistant = "你" in text or "ai" in lowered or "AI" in text
+    return targets_assistant and _has_any(text, META_FEEDBACK_KEYWORDS)
+
+
+def _pick_contextual_variant(index, variants, repeat_note=""):
     if index < len(variants):
         return variants[index]
     base = variants[index % len(variants)]
-    return (
-        f"{base} 这已经是第{_chinese_number(index + 1)}轮同类剧情了，我记着呢："
-        "不是你没听懂道理，是这事还在黏人。我们只处理眼前这一小块。"
-    )
+    return base + (" " + repeat_note if repeat_note else "")
+
+
+def _repeat_note_for(scenario, index):
+    if index < 3:
+        return ""
+    round_text = _chinese_number(index + 1)
+    notes = {
+        "work_boss": f"这是第{round_text}次绕回工作这摊事了，我记着：先别替他们扛全场，今天只抓最急的一处。",
+        "identity": f"第{round_text}次确认：我还是那个微信树洞 AI。你继续抽查也行，但咱可以把火力用到更值得骂的事上。",
+        "self_blame": f"这类自我审判第{round_text}次冒头了，我记着：问题可以拆，人不能被你顺手打包成问题。",
+        "night_emo": f"这股低落第{round_text}次绕回来了，我记着。今晚先不求想通，只先把最吵的一句说出来。",
+        "tired_voice": f"这是第{round_text}次回到睡前低电量模式了，我记着。今晚目标别拔高，先让身体慢下来。",
+    }
+    return notes.get(scenario, f"这类事第{round_text}次回来了，我记着；我们只处理眼前这一小块。")
 
 
 def _chinese_number(value):

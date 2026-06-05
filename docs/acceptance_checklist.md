@@ -130,3 +130,20 @@ These items should not block Build Round 1 acceptance:
 | Decision date | 2026-06-05 |
 | Acceptance level | Pass |
 | Notes | Automatic lightweight memory is accepted. The agent now auto-saves safe stable preferences and repeated themes, while skipping sensitive or high-risk content. |
+
+## Expression Logic Polish Acceptance
+
+| Area | Pass Criteria | Status |
+|---|---|---|
+| Generic poetic message | Ambiguous/poetic messages are acknowledged directly without `同类剧情` or life-coaching suffixes | Automated pass |
+| AI quality feedback | Feedback such as `我觉得你不太智能` gets a direct repair reply instead of generic coaching | Automated pass |
+| Scenario-specific repetition | Repeated-theme notes only appear in meaningful scenarios such as work, identity checks, self-blame, or sleep | Automated pass |
+| Existing personality | Work-rant replies still keep `刀子嘴豆腐心` shape | Automated pass |
+
+## Expression Logic Owner Test
+
+| Field | Value |
+|---|---|
+| Smoke test script | `docs/expression_logic_smoke_test.md` |
+| Current owner action | Run the expression logic smoke test in `聊天模拟` |
+| Acceptance level | Ready for owner test |

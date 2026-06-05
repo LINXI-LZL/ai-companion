@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-14-auto-memory-polish",
-    "current_step_id": "step-14-04-owner-smoke-test",
-    "overall_status": "ready_for_next_round_scope",
+    "current_phase_id": "phase-15-expression-logic-polish",
+    "current_step_id": "step-15-04-owner-smoke-test",
+    "overall_status": "ready_for_test",
     "strategy": "hybrid",
-    "total_phase_count": 14,
-    "total_step_count": 55,
-    "completed_step_count": 55,
+    "total_phase_count": 15,
+    "total_step_count": 59,
+    "completed_step_count": 58,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Choose the next build-round focus.",
+    "next_action_summary": "Run the expression logic smoke test and decide whether the expression polish passes.",
     "current_risk_summary": "Real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T19:40:00+08:00"
+    "updated_at": "2026-06-05T20:05:00+08:00"
   },
   "phases": [
     {
@@ -370,6 +370,31 @@
       ],
       "started_at": "2026-06-05T19:10:00+08:00",
       "finished_at": "2026-06-05T19:40:00+08:00"
+    },
+    {
+      "id": "phase-15-expression-logic-polish",
+      "project_id": "wechat-vent-ai",
+      "order": 15,
+      "title": "Expression logic polish",
+      "goal": "修复回复像模板拼接、逻辑跳跃的问题，让普通聊天、AI 反馈和重复主题各自使用合适表达。",
+      "status": "ready_for_test",
+      "outputs": [
+        "app/orchestrator.py",
+        "tests/test_companion_core.py",
+        "docs/expression_logic_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "step_count": 4,
+      "completed_step_count": 3,
+      "summary": "Expression logic is polished and ready for owner smoke test.",
+      "notes": "This round adds meta-feedback handling and stops generic messages from receiving unrelated repeated-theme suffixes.",
+      "user_action": "run_user_test",
+      "acceptance_hint": "用户在聊天模拟里验证回复是否更顺、更符合当前句子。",
+      "depends_on_phase_ids": [
+        "phase-14-auto-memory-polish"
+      ],
+      "started_at": "2026-06-05T20:05:00+08:00"
     }
   ],
   "steps": [
@@ -1857,6 +1882,114 @@
         "decision-013",
         "decision-014"
       ]
+    },
+    {
+      "id": "step-15-01-owner-feedback",
+      "phase_id": "phase-15-expression-logic-polish",
+      "order": 1,
+      "title": "Capture owner feedback",
+      "goal": "记录截图中 AI 回复逻辑跳跃、模板拼接感太强的问题。",
+      "status": "done",
+      "output": [
+        "Owner screenshot feedback: AI replies lack logic."
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "The observed issue came from generic replies receiving repeated-theme suffixes and AI-quality feedback being treated as ordinary chat.",
+      "depends_on": [
+        "step-14-04-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "问题已明确到回复表达逻辑层。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-015"
+      ]
+    },
+    {
+      "id": "step-15-02-regression-tests",
+      "phase_id": "phase-15-expression-logic-polish",
+      "order": 2,
+      "title": "Add regression tests",
+      "goal": "用测试锁住普通诗意句和 AI 质量反馈的正确回复形态。",
+      "status": "done",
+      "output": [
+        "tests/test_companion_core.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Tests first failed against the old generic repeated-theme behavior, then passed after the reply engine fix.",
+      "depends_on": [
+        "step-15-01-owner-feedback"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "测试能捕捉截图中的模板拼接问题。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-053"
+      ],
+      "related_decision_ids": [
+        "decision-015"
+      ]
+    },
+    {
+      "id": "step-15-03-reply-engine-polish",
+      "phase_id": "phase-15-expression-logic-polish",
+      "order": 3,
+      "title": "Polish reply expression logic",
+      "goal": "新增 AI 反馈场景，清理泛聊天的重复剧情后缀，并把重复提示改成分场景表达。",
+      "status": "done",
+      "output": [
+        "app/orchestrator.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Generic messages now stay literal and light; meta-feedback replies directly accept and repair; work/identity/self-blame repeats keep scenario-specific notes.",
+      "depends_on": [
+        "step-15-02-regression-tests"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "回复顺序应变成听懂当前句子、站队或承认问题、给下一步。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-054"
+      ],
+      "related_decision_ids": [
+        "decision-015"
+      ]
+    },
+    {
+      "id": "step-15-04-owner-smoke-test",
+      "phase_id": "phase-15-expression-logic-polish",
+      "order": 4,
+      "title": "Owner expression smoke test",
+      "goal": "让用户在本地聊天模拟中验证表达是否更有逻辑。",
+      "status": "ready_for_test",
+      "output": [
+        "docs/expression_logic_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Owner should test poetic generic messages, AI-quality feedback, and work rant preservation.",
+      "depends_on": [
+        "step-15-03-reply-engine-polish"
+      ],
+      "user_action": "run_user_test",
+      "acceptance_hint": "用户按烟测脚本通过后，本轮表达逻辑优化即可验收。",
+      "progress_summary": "等待用户测试。",
+      "blockers": [
+        "Needs owner smoke test"
+      ],
+      "related_artifact_ids": [
+        "artifact-055"
+      ],
+      "related_decision_ids": [
+        "decision-015"
+      ]
     }
   ],
   "artifacts": [
@@ -2431,6 +2564,39 @@
       "step_id": "step-14-04-owner-smoke-test",
       "created_at": "2026-06-05T19:40:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-053",
+      "title": "Expression logic regression tests",
+      "artifact_type": "test",
+      "location": "tests/test_companion_core.py",
+      "summary": "Tests for generic poetic messages and AI-quality feedback replies.",
+      "phase_id": "phase-15-expression-logic-polish",
+      "step_id": "step-15-02-regression-tests",
+      "created_at": "2026-06-05T20:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-054",
+      "title": "Expression logic reply engine polish",
+      "artifact_type": "source_code",
+      "location": "app/orchestrator.py",
+      "summary": "Meta-feedback scenario, generic reply cleanup, and scenario-specific repeat notes.",
+      "phase_id": "phase-15-expression-logic-polish",
+      "step_id": "step-15-03-reply-engine-polish",
+      "created_at": "2026-06-05T20:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-055",
+      "title": "Expression logic smoke test",
+      "artifact_type": "document",
+      "location": "docs/expression_logic_smoke_test.md",
+      "summary": "Owner smoke test for logical, context-specific expression quality.",
+      "phase_id": "phase-15-expression-logic-polish",
+      "step_id": "step-15-04-owner-smoke-test",
+      "created_at": "2026-06-05T20:05:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -2785,6 +2951,32 @@
       "user_decision": "验收通过",
       "recommendation_reason": "Owner confirmed the automatic memory behavior meets the acceptance bar.",
       "notes": "Project is ready for the next build-round focus choice."
+    },
+    {
+      "id": "decision-015",
+      "title": "Expression logic polish route",
+      "context": "Owner reported that AI replies lacked logic and showed a screenshot where generic replies received unrelated repeated-theme suffixes.",
+      "status": "resolved",
+      "recommended_option_id": "option-expression-logic-polish",
+      "related_phase_id": "phase-15-expression-logic-polish",
+      "related_step_id": "step-15-01-owner-feedback",
+      "options": [
+        {
+          "id": "option-expression-logic-polish",
+          "label": "先优化表达逻辑"
+        },
+        {
+          "id": "option-broader-personality-redesign",
+          "label": "重做整套人格"
+        },
+        {
+          "id": "option-platform-integration-first",
+          "label": "先继续真实微信接入"
+        }
+      ],
+      "user_decision": "Optimize AI expression logic after screenshot feedback.",
+      "recommendation_reason": "The issue is a local reply-planning bug, so a focused expression logic polish is faster and lower risk than redesigning the whole personality.",
+      "notes": "This keeps the accepted personality and automatic memory behavior while improving sentence logic."
     }
   ]
 }
