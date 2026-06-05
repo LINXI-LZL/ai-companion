@@ -5,18 +5,18 @@
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
     "current_phase_id": "phase-03-static-prototype",
-    "current_step_id": "step-03-01-prototype-review-mode",
+    "current_step_id": "step-03-04-ui-confirmation",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 27,
-    "completed_step_count": 10,
+    "completed_step_count": 13,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "确认是否使用浏览器可视化方式查看 Web 静态原型，然后进入包含聊天、表情包、语音、管理后台和样本蒸馏状态的页面结构设计。",
-    "current_risk_summary": "微信接入方式需要在架构阶段继续核对企业微信和微信客服官方能力；表情包素材、语音素材和公开数据许可需要在接入前逐项核准；情绪陪伴产品需要明确安全边界。",
+    "next_action_summary": "请打开并确认 Web 静态原型：页面是否正确、主流程是否顺、信息摆放是否合适；确认后进入架构规划。",
+    "current_risk_summary": "内置浏览器工具本轮未暴露可执行入口，因此原型已完成静态检查但未完成浏览器截图验证；微信媒体 API、表情包素材、语音素材和公开数据许可仍需在架构阶段逐项核准。",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T00:00:00+08:00"
+    "updated_at": "2026-06-05T14:47:22+08:00"
   },
   "phases": [
     {
@@ -80,14 +80,20 @@
       "title": "Web static prototype confirmation",
       "goal": "在正式编码前，用可查看的静态原型确认聊天体验、管理后台和主要页面结构。",
       "status": "waiting_user",
-      "outputs": [],
+      "outputs": [
+        "docs/screen_specs.md",
+        "docs/ui_preview.md",
+        "web_prototype/index.html",
+        "web_prototype/styles.css",
+        "web_prototype/app.js"
+      ],
       "requires_user_confirmation": true,
-      "testable": false,
+      "testable": true,
       "step_count": 4,
-      "completed_step_count": 0,
-      "summary": "等待用户确认是否使用浏览器可视化方式查看原型。",
-      "notes": "只有原型确认后才进入架构和正式开发规划。",
-      "user_action": "review_output",
+      "completed_step_count": 3,
+      "summary": "Web 静态原型已创建，等待用户确认页面、主流程和信息摆放。",
+      "notes": "只有原型确认后才进入架构和正式开发规划。本轮已做静态文件检查；浏览器截图验证因工具入口不可用而未完成。",
+      "user_action": "confirm_ui",
       "acceptance_hint": "用户应能看懂页面、入口、主要流程和信息摆放。",
       "depends_on_phase_ids": [
         "phase-02-blueprint"
@@ -525,20 +531,20 @@
       "order": 1,
       "title": "Confirm prototype review mode",
       "goal": "确认用户是否希望用浏览器可视化方式查看原型。",
-      "status": "waiting_user",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "用户明确要求进入 Web 静态原型阶段。"
+      ],
+      "requires_user_confirmation": false,
       "testable": false,
-      "notes": "如果用户同意，将准备可打开的 Web 静态原型。",
+      "notes": "用户已确认进入可视化原型阶段。",
       "depends_on": [
         "step-02-08-multimodal-realism"
       ],
-      "user_action": "review_output",
+      "user_action": "none",
       "acceptance_hint": "用户确认是否要打开本地浏览器原型。",
-      "progress_summary": "等待用户回应。",
-      "blockers": [
-        "需要用户确认是否使用浏览器可视化原型伴随"
-      ],
+      "progress_summary": "已完成。",
+      "blockers": [],
       "related_artifact_ids": [],
       "related_decision_ids": [
         "decision-005"
@@ -550,19 +556,25 @@
       "order": 2,
       "title": "Create screen map and screen specs",
       "goal": "列出原型需要包含的页面和每页信息重点。",
-      "status": "not_started",
-      "output": [],
+      "status": "done",
+      "output": [
+        "docs/screen_specs.md",
+        "docs/ui_preview.md"
+      ],
       "requires_user_confirmation": false,
       "testable": false,
-      "notes": "预计包括聊天入口、管理后台、人格配置、用户记忆和安全规则。",
+      "notes": "页面清单包括聊天体验、表情包与语音、用户与记忆、样本蒸馏、安全与运行。",
       "depends_on": [
         "step-03-01-prototype-review-mode"
       ],
       "user_action": "none",
       "acceptance_hint": "页面清单能覆盖 MVP 主流程。",
-      "progress_summary": "尚未开始。",
+      "progress_summary": "已完成。",
       "blockers": [],
-      "related_artifact_ids": [],
+      "related_artifact_ids": [
+        "artifact-012",
+        "artifact-013"
+      ],
       "related_decision_ids": []
     },
     {
@@ -571,19 +583,25 @@
       "order": 3,
       "title": "Build web static prototype",
       "goal": "让用户能实际查看页面结构、主流程和信息层级。",
-      "status": "not_started",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "web_prototype/index.html",
+        "web_prototype/styles.css",
+        "web_prototype/app.js"
+      ],
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "静态原型不需要真实后端。",
+      "notes": "静态原型不需要真实后端。已做文件存在、交互选择器和响应式规则的静态检查；浏览器截图验证工具本轮不可用。",
       "depends_on": [
         "step-03-02-screen-map"
       ],
-      "user_action": "confirm_ui",
+      "user_action": "none",
       "acceptance_hint": "用户能打开原型并判断页面和流程是否正确。",
-      "progress_summary": "尚未开始。",
+      "progress_summary": "已完成。",
       "blockers": [],
-      "related_artifact_ids": [],
+      "related_artifact_ids": [
+        "artifact-014"
+      ],
       "related_decision_ids": []
     },
     {
@@ -592,7 +610,7 @@
       "order": 4,
       "title": "Confirm static prototype",
       "goal": "在正式编码前确认页面、主流程和信息摆放。",
-      "status": "not_started",
+      "status": "waiting_user",
       "output": [],
       "requires_user_confirmation": true,
       "testable": true,
@@ -602,9 +620,15 @@
       ],
       "user_action": "confirm_ui",
       "acceptance_hint": "用户明确同意原型可以进入正式实现规划。",
-      "progress_summary": "尚未开始。",
-      "blockers": [],
-      "related_artifact_ids": [],
+      "progress_summary": "等待用户确认静态原型。",
+      "blockers": [
+        "等待用户确认页面、主流程和信息摆放"
+      ],
+      "related_artifact_ids": [
+        "artifact-012",
+        "artifact-013",
+        "artifact-014"
+      ],
       "related_decision_ids": []
     }
   ],
@@ -729,6 +753,39 @@
       "step_id": "step-02-08-multimodal-realism",
       "created_at": "2026-06-05T00:00:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-012",
+      "title": "Screen specs",
+      "artifact_type": "document",
+      "location": "docs/screen_specs.md",
+      "summary": "Web 静态原型的页面清单、主流程、交互要求和非目标。",
+      "phase_id": "phase-03-static-prototype",
+      "step_id": "step-03-02-screen-map",
+      "created_at": "2026-06-05T14:47:22+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-013",
+      "title": "UI preview note",
+      "artifact_type": "document",
+      "location": "docs/ui_preview.md",
+      "summary": "静态原型打开方式和用户确认清单。",
+      "phase_id": "phase-03-static-prototype",
+      "step_id": "step-03-02-screen-map",
+      "created_at": "2026-06-05T14:47:22+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-014",
+      "title": "Web static prototype",
+      "artifact_type": "web_prototype",
+      "location": "web_prototype/index.html",
+      "summary": "可直接打开的静态原型，覆盖聊天体验、表情包与语音、用户记忆、样本蒸馏、安全与运行。",
+      "phase_id": "phase-03-static-prototype",
+      "step_id": "step-03-03-static-prototype",
+      "created_at": "2026-06-05T14:47:22+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -844,7 +901,7 @@
       "id": "decision-005",
       "title": "Prototype review mode",
       "context": "下一阶段是静态原型确认，用户可以选择是否用浏览器查看视觉原型。",
-      "status": "waiting_user",
+      "status": "resolved",
       "recommended_option_id": "option-visual",
       "related_phase_id": "phase-03-static-prototype",
       "related_step_id": "step-03-01-prototype-review-mode",
@@ -858,9 +915,9 @@
           "label": "先用文本页面规格"
         }
       ],
-      "user_decision": "",
+      "user_decision": "进入 Web 静态原型，把聊天、表情包、语音、管理后台和样本蒸馏状态都做成可看的页面流",
       "recommendation_reason": "聊天体验和管理后台更适合看原型确认。",
-      "notes": "等待用户确认。"
+      "notes": "用户已确认使用可视化静态原型。"
     },
     {
       "id": "decision-006",

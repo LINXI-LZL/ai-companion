@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>微信树洞 AI 原型</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Prototype navigation">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">树</div>
+          <div>
+            <h1>微信树洞 AI</h1>
+            <p>深夜损友 · 内测控制台</p>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Prototype sections">
+          <button class="nav-button is-active" data-view="chat" type="button">
+            <span class="nav-icon" aria-hidden="true">C</span>
+            聊天体验
+          </button>
+          <button class="nav-button" data-view="multimodal" type="button">
+            <span class="nav-icon" aria-hidden="true">M</span>
+            表情包与语音
+          </button>
+          <button class="nav-button" data-view="memory" type="button">
+            <span class="nav-icon" aria-hidden="true">U</span>
+            用户与记忆
+          </button>
+          <button class="nav-button" data-view="distill" type="button">
+            <span class="nav-icon" aria-hidden="true">D</span>
+            样本蒸馏
+          </button>
+          <button class="nav-button" data-view="safety" type="button">
+            <span class="nav-icon" aria-hidden="true">S</span>
+            安全与运行
+          </button>
+        </nav>
+
+        <div class="sidebar-status">
+          <span class="status-dot ok" aria-hidden="true"></span>
+          原型阶段 · 待确认
+        </div>
+      </aside>
+
+      <main class="main-stage">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Web Static Prototype</p>
+            <h2 id="view-title">聊天体验</h2>
+          </div>
+          <div class="topbar-actions">
+            <span class="pill quiet">企业微信/微信客服式入口</span>
+            <span class="pill warn">素材下载暂缓</span>
+          </div>
+        </header>
+
+        <section class="view is-active" id="view-chat" aria-labelledby="view-title">
+          <div class="chat-layout">
+            <section class="phone-surface" aria-label="WeChat chat preview">
+              <header class="phone-header">
+                <button class="icon-button" type="button" aria-label="返回">‹</button>
+                <div>
+                  <strong>深夜损友</strong>
+                  <span>企微客服入口 · 在线</span>
+                </div>
+                <button class="icon-button" type="button" aria-label="更多">⋯</button>
+              </header>
+
+              <div class="chat-thread" id="chat-thread">
+                <div class="message user">
+                  <div class="bubble">今天真的累到不想说话，但又睡不着。</div>
+                  <span class="time">23:48</span>
+                </div>
+                <div class="message agent">
+                  <div class="avatar">树</div>
+                  <div>
+                    <div class="bubble">行，今晚先别审判自己。你已经累成低电量模式了，还想着把一切都处理好，多少有点为难人。</div>
+                    <div class="media-chip">短语音脚本 · 8 秒 · 困倦但稳定</div>
+                    <span class="time">23:49</span>
+                  </div>
+                </div>
+                <div class="message agent">
+                  <div class="avatar">树</div>
+                  <div>
+                    <div class="sticker-card">
+                      <div class="sticker-face">抱</div>
+                      <span>sticker_supportive_hug</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="message agent">
+                  <div class="avatar">树</div>
+                  <div>
+                    <div class="bubble">说吧，最压着你的是哪一件？我先接住，不急着解决。</div>
+                  </div>
+                </div>
+              </div>
+
+              <footer class="composer">
+                <button class="icon-button" type="button" aria-label="语音">V</button>
+                <div class="composer-input">输入吐槽、emo 或睡前消息</div>
+                <button class="icon-button" type="button" aria-label="表情包">B</button>
+                <button class="send-button" type="button">发</button>
+              </footer>
+            </section>
+
+            <section class="control-panel" aria-label="Scenario controls">
+              <div class="section-heading">
+                <p class="eyebrow">Scenario</p>
+                <h3>切换聊天场景</h3>
+              </div>
+              <div class="scenario-grid" id="scenario-grid">
+                <button class="scenario-card is-selected" data-scenario="late" type="button">
+                  <strong>深夜睡不着</strong>
+                  <span>短语音 + 抱抱类表情</span>
+                </button>
+                <button class="scenario-card" data-scenario="work" type="button">
+                  <strong>工作离谱</strong>
+                  <span>无语表情 + 轻吐槽</span>
+                </button>
+                <button class="scenario-card" data-scenario="self" type="button">
+                  <strong>自我吐槽</strong>
+                  <span>轻损友 + 复盘</span>
+                </button>
+                <button class="scenario-card" data-scenario="risk" type="button">
+                  <strong>高风险情绪</strong>
+                  <span>停用玩笑与表情</span>
+                </button>
+              </div>
+
+              <div class="decision-card" id="decision-card">
+                <div class="section-heading">
+                  <p class="eyebrow">Decision</p>
+                  <h3>本轮回复决策</h3>
+                </div>
+                <dl class="decision-list">
+                  <div>
+                    <dt>模式</dt>
+                    <dd id="decision-mode">文字 + 短语音 + 表情包</dd>
+                  </div>
+                  <div>
+                    <dt>语气</dt>
+                    <dd id="decision-tone">低能量、温暖、轻微毒舌</dd>
+                  </div>
+                  <div>
+                    <dt>安全</dt>
+                    <dd id="decision-safety">低风险，可使用陪伴型玩笑</dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-multimodal" aria-labelledby="view-title">
+          <div class="split-layout">
+            <section>
+              <div class="section-heading">
+                <p class="eyebrow">Multimodal</p>
+                <h3>回复模式矩阵</h3>
+              </div>
+              <div class="mode-matrix">
+                <article class="mode-row">
+                  <span class="mode-key">文字</span>
+                  <strong>默认承接情绪和推进对话</strong>
+                  <p>短句、少说教、最多一个追问。</p>
+                </article>
+                <article class="mode-row">
+                  <span class="mode-key accent">表情包</span>
+                  <strong>用于反应而不是替代陪伴</strong>
+                  <p>离谱、抱抱、轻嘲、自嘲场景触发，素材版权待核准。</p>
+                </article>
+                <article class="mode-row">
+                  <span class="mode-key calm">语音</span>
+                  <strong>用于深夜和安抚收尾</strong>
+                  <p>先生成 5-12 秒脚本，音色接入后再发送真实语音。</p>
+                </article>
+                <article class="mode-row danger">
+                  <span class="mode-key danger">安全</span>
+                  <strong>风险升高时停用玩笑</strong>
+                  <p>不发玩笑表情，不使用毒舌，用严肃稳定回复。</p>
+                </article>
+              </div>
+            </section>
+
+            <section class="control-panel">
+              <div class="section-heading">
+                <p class="eyebrow">Trigger Preview</p>
+                <h3>触发规则预览</h3>
+              </div>
+              <div class="trigger-list">
+                <div class="trigger-item">
+                  <span>荒诞工作吐槽</span>
+                  <strong>无语类表情 + 一句轻损</strong>
+                </div>
+                <div class="trigger-item">
+                  <span>孤独/难受</span>
+                  <strong>抱抱类表情 + 降低毒舌</strong>
+                </div>
+                <div class="trigger-item">
+                  <span>睡不着</span>
+                  <strong>短语音脚本 + 一个问题</strong>
+                </div>
+                <div class="trigger-item">
+                  <span>自伤信号</span>
+                  <strong>安全回复，禁用表情包</strong>
+                </div>
+              </div>
+              <div class="asset-notice">
+                <strong>素材策略</strong>
+                <p>表情包文件、语音音色和微信媒体能力会在架构阶段核准；当前原型只确认“何时该发”。</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-memory" aria-labelledby="view-title">
+          <div class="split-layout">
+            <section>
+              <div class="section-heading">
+                <p class="eyebrow">Inner Test</p>
+                <h3>内测用户</h3>
+              </div>
+              <div class="user-list">
+                <article class="user-row is-active">
+                  <div class="avatar dark">我</div>
+                  <div>
+                    <strong>产品主人</strong>
+                    <span>偏好：嘴欠一点，但别长篇大道理</span>
+                  </div>
+                  <span class="pill ok">已启用</span>
+                </article>
+                <article class="user-row">
+                  <div class="avatar blue">A</div>
+                  <div>
+                    <strong>朋友 A</strong>
+                    <span>偏好：更温柔，少用反讽</span>
+                  </div>
+                  <span class="pill quiet">待邀请</span>
+                </article>
+                <article class="user-row">
+                  <div class="avatar green">B</div>
+                  <div>
+                    <strong>朋友 B</strong>
+                    <span>偏好：工作吐槽，接受表情包</span>
+                  </div>
+                  <span class="pill ok">白名单</span>
+                </article>
+              </div>
+            </section>
+
+            <section class="control-panel">
+              <div class="section-heading">
+                <p class="eyebrow">Memory</p>
+                <h3>记忆边界</h3>
+              </div>
+              <div class="memory-grid">
+                <div class="memory-card">
+                  <span>可记住</span>
+                  <strong>称呼、压力源、语气偏好</strong>
+                </div>
+                <div class="memory-card">
+                  <span>默认不记</span>
+                  <strong>敏感身份、完整聊天原文</strong>
+                </div>
+                <div class="memory-card">
+                  <span>可清除</span>
+                  <strong>单人记忆、某类偏好</strong>
+                </div>
+                <div class="memory-card">
+                  <span>安全优先</span>
+                  <strong>高风险只留必要状态</strong>
+                </div>
+              </div>
+              <label class="range-row">
+                <span>毒舌尺度</span>
+                <input type="range" min="1" max="5" value="3">
+              </label>
+              <label class="range-row">
+                <span>主动陪伴</span>
+                <input type="range" min="1" max="5" value="2">
+              </label>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-distill" aria-labelledby="view-title">
+          <div class="split-layout">
+            <section>
+              <div class="section-heading">
+                <p class="eyebrow">Public Sources</p>
+                <h3>公开样本来源状态</h3>
+              </div>
+              <div class="source-table">
+                <div class="source-row">
+                  <strong>CPED</strong>
+                  <span>情绪 + 人格中文对话</span>
+                  <span class="pill ok">候选</span>
+                </div>
+                <div class="source-row">
+                  <strong>LCCC</strong>
+                  <span>中文短对话节奏</span>
+                  <span class="pill warn">大文件暂缓</span>
+                </div>
+                <div class="source-row">
+                  <strong>StickerConv</strong>
+                  <span>共情贴纸回复</span>
+                  <span class="pill ok">规则可用</span>
+                </div>
+                <div class="source-row">
+                  <strong>U-Sticker</strong>
+                  <span>贴纸语境</span>
+                  <span class="pill warn">素材后下</span>
+                </div>
+                <div class="source-row">
+                  <strong>ESConv</strong>
+                  <span>情绪支持策略</span>
+                  <span class="pill quiet">研究参考</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="control-panel">
+              <div class="section-heading">
+                <p class="eyebrow">Pipeline</p>
+                <h3>蒸馏流程</h3>
+              </div>
+              <ol class="pipeline">
+                <li>
+                  <strong>来源核准</strong>
+                  <span>记录许可、用途、下载策略</span>
+                </li>
+                <li>
+                  <strong>行为标注</strong>
+                  <span>情绪、风险、表情包和语音意图</span>
+                </li>
+                <li>
+                  <strong>规则提炼</strong>
+                  <span>短句比例、追问节奏、安全切换</span>
+                </li>
+                <li>
+                  <strong>合成样本</strong>
+                  <span>生成项目自有样本，不照搬公开原文</span>
+                </li>
+              </ol>
+              <div class="asset-notice">
+                <strong>VPN 流量保护</strong>
+                <p>表情包、语音和大数据压缩包现在不下载，只保留清单和入口。</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-safety" aria-labelledby="view-title">
+          <div class="split-layout">
+            <section>
+              <div class="section-heading">
+                <p class="eyebrow">Safety</p>
+                <h3>安全模式切换</h3>
+              </div>
+              <div class="safety-comparison">
+                <article>
+                  <span class="pill ok">低风险</span>
+                  <p>“老板又临下班改需求。”</p>
+                  <strong>可以轻损、发表情、问一句。</strong>
+                </article>
+                <article class="danger">
+                  <span class="pill danger">高风险</span>
+                  <p>“我真的撑不下去了。”</p>
+                  <strong>停用玩笑、禁表情，切严肃支持。</strong>
+                </article>
+              </div>
+            </section>
+
+            <section class="control-panel">
+              <div class="section-heading">
+                <p class="eyebrow">Ops</p>
+                <h3>上线前状态</h3>
+              </div>
+              <div class="ops-list">
+                <div>
+                  <span class="status-dot ok"></span>
+                  蓝图确认
+                </div>
+                <div>
+                  <span class="status-dot ok"></span>
+                  公开样本清单
+                </div>
+                <div>
+                  <span class="status-dot warn"></span>
+                  微信媒体 API 待核准
+                </div>
+                <div>
+                  <span class="status-dot warn"></span>
+                  表情包版权待核准
+                </div>
+                <div>
+                  <span class="status-dot warn"></span>
+                  语音音色待选择
+                </div>
+              </div>
+              <div class="handoff-box">
+                <strong>确认原型后</strong>
+                <p>进入架构规划：微信接入、消息路由、多模态决策、记忆、安全和后台模块边界。</p>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
