@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-04-architecture",
-    "current_step_id": "step-04-03-implementation-strategy",
+    "current_phase_id": "phase-05-master-task-board",
+    "current_step_id": "step-05-02-board-confirmation",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
-    "total_step_count": 27,
-    "completed_step_count": 17,
+    "total_step_count": 42,
+    "completed_step_count": 18,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "请确认是否采用“模块化单体 + 后台任务 + 一个数据库”的 MVP 架构路线；确认后进入主任务板生成。",
-    "current_risk_summary": "微信媒体 API、表情包素材、语音素材和公开数据许可仍需在实现前逐项核准；架构建议已把这些风险隔离在 WeChat Adapter、Media Asset Layer 和 Public Sample Distillation 中。",
+    "next_action_summary": "Confirm the master task board before scoping Build Round 1.",
+    "current_risk_summary": "WeChat media APIs, sticker rights, voice provider, and public-data license checks still need confirmation before real integration. The master board tracks these risks as later steps.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T14:52:45+08:00"
+    "updated_at": "2026-06-05T15:00:00+08:00"
   },
   "phases": [
     {
@@ -105,19 +105,19 @@
       "order": 4,
       "title": "Architecture and module-boundary planning",
       "goal": "把确认后的产品和原型翻译成稳定、可迭代的技术结构。",
-      "status": "waiting_user",
+      "status": "done",
       "outputs": [
         "docs/architecture_overview.md",
         "docs/module_boundary.md",
         "docs/implementation_strategy.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": false,
       "step_count": 3,
       "completed_step_count": 3,
-      "summary": "架构概览、模块边界和实施策略已起草，等待用户确认推荐架构路线。",
-      "notes": "推荐 MVP 使用模块化单体 + 后台任务 + 一个数据库，后续可拆分为独立服务。",
-      "user_action": "confirm_product_rule",
+      "summary": "Architecture route confirmed by the user.",
+      "notes": "MVP route: modular monolith, background worker, and one database.",
+      "user_action": "none",
       "acceptance_hint": "用户应能理解每个模块为什么存在，以及它如何支撑产品稳定上线。",
       "depends_on_phase_ids": [
         "phase-03-static-prototype"
@@ -129,16 +129,21 @@
       "order": 5,
       "title": "Master task board generation",
       "goal": "把项目拆成可追踪的小步骤，并生成用户可读和机器可读的任务状态。",
-      "status": "not_started",
-      "outputs": [],
+      "status": "waiting_user",
+      "outputs": [
+        "docs/master_task_board.md",
+        "docs/progress_board.md",
+        "docs/artifact_registry.md",
+        "docs/project_state.json"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "任务板必须在正式实现前完成。",
-      "user_action": "none",
-      "acceptance_hint": "用户应能看清项目被拆成多少步，每步产出什么。",
+      "completed_step_count": 1,
+      "summary": "Master board, progress board, and artifact registry are ready for review.",
+      "notes": "After confirmation, the project moves to build round 1 scoping.",
+      "user_action": "review_output",
+      "acceptance_hint": "The user should be able to see total steps, completed steps, and each step output.",
       "depends_on_phase_ids": [
         "phase-04-architecture"
       ]
@@ -156,7 +161,7 @@
       "step_count": 1,
       "completed_step_count": 0,
       "summary": "尚未开始。",
-      "notes": "需要等待主任务板完成。",
+      "notes": "Waiting for master board confirmation.",
       "user_action": "none",
       "acceptance_hint": "用户应知道每轮建设的边界和可验收结果。",
       "depends_on_phase_ids": [
@@ -173,10 +178,10 @@
       "outputs": [],
       "requires_user_confirmation": false,
       "testable": false,
-      "step_count": 4,
+      "step_count": 14,
       "completed_step_count": 0,
       "summary": "尚未开始。",
-      "notes": "开发必须等待原型、架构和任务板确认。",
+      "notes": "Development waits for master board and build round scope confirmation.",
       "user_action": "none",
       "acceptance_hint": "用户能看到每个开发步骤完成了什么产物。",
       "depends_on_phase_ids": [
@@ -193,7 +198,7 @@
       "outputs": [],
       "requires_user_confirmation": true,
       "testable": false,
-      "step_count": 1,
+      "step_count": 2,
       "completed_step_count": 0,
       "summary": "尚未开始。",
       "notes": "只有构建可运行后才邀请用户测试。",
@@ -213,7 +218,7 @@
       "outputs": [],
       "requires_user_confirmation": false,
       "testable": false,
-      "step_count": 1,
+      "step_count": 2,
       "completed_step_count": 0,
       "summary": "尚未开始。",
       "notes": "需要等待可运行版本。",
@@ -233,7 +238,7 @@
       "outputs": [],
       "requires_user_confirmation": false,
       "testable": false,
-      "step_count": 1,
+      "step_count": 2,
       "completed_step_count": 0,
       "summary": "尚未开始。",
       "notes": "只有测试发现问题后进入。",
@@ -253,7 +258,7 @@
       "outputs": [],
       "requires_user_confirmation": false,
       "testable": false,
-      "step_count": 1,
+      "step_count": 2,
       "completed_step_count": 0,
       "summary": "尚未开始。",
       "notes": "需要等待构建、测试和修复完成。",
@@ -691,28 +696,575 @@
       "order": 3,
       "title": "Choose implementation strategy",
       "goal": "在速度、稳定性、成本和未来扩展之间选择 MVP 技术路线。",
-      "status": "waiting_user",
+      "status": "done",
       "output": [
         "docs/implementation_strategy.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": false,
-      "notes": "推荐模块化单体 + 后台任务 + 一个数据库。",
+      "notes": "User confirmed the modular monolith MVP route.",
       "depends_on": [
         "step-04-02-module-boundaries"
       ],
-      "user_action": "confirm_product_rule",
+      "user_action": "none",
       "acceptance_hint": "用户确认推荐路线后即可生成主任务板。",
-      "progress_summary": "等待用户确认架构路线。",
-      "blockers": [
-        "等待用户确认 MVP 架构路线"
-      ],
+      "progress_summary": "Done.",
+      "blockers": [],
       "related_artifact_ids": [
         "artifact-017"
       ],
       "related_decision_ids": [
         "decision-008"
       ]
+    },
+    {
+      "id": "step-05-01-master-board",
+      "phase_id": "phase-05-master-task-board",
+      "order": 1,
+      "title": "Generate master task board",
+      "goal": "Split the full project into trackable steps.",
+      "status": "done",
+      "output": [
+        "docs/master_task_board.md",
+        "docs/progress_board.md",
+        "docs/artifact_registry.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Master board, progress board, and artifact registry created.",
+      "depends_on": [
+        "step-04-03-implementation-strategy"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "The user can see total steps, completed steps, and outputs.",
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-018",
+        "artifact-019",
+        "artifact-020"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-05-02-board-confirmation",
+      "phase_id": "phase-05-master-task-board",
+      "order": 2,
+      "title": "Confirm master task board",
+      "goal": "Confirm the project split before implementation tracking starts.",
+      "status": "waiting_user",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Waiting for user confirmation.",
+      "depends_on": [
+        "step-05-01-master-board"
+      ],
+      "user_action": "review_output",
+      "acceptance_hint": "After confirmation, scope build round 1.",
+      "progress_summary": "Waiting for master board confirmation.",
+      "blockers": [
+        "Waiting for user confirmation"
+      ],
+      "related_artifact_ids": [
+        "artifact-018",
+        "artifact-019",
+        "artifact-020"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-06-01-build-scope-round-1",
+      "phase_id": "phase-06-build-round-scoping",
+      "order": 1,
+      "title": "Scope build round 1",
+      "goal": "Define what build round 1 includes, excludes, and makes testable.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Waiting for board confirmation.",
+      "depends_on": [
+        "step-05-02-board-confirmation"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "The user understands round 1 boundaries.",
+      "progress_summary": "Not started.",
+      "blockers": [
+        "Master board not confirmed"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-01-project-scaffold",
+      "phase_id": "phase-07-development",
+      "order": 1,
+      "title": "Project scaffold",
+      "goal": "Create the runnable app foundation.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Expected output: backend, frontend, and base run command.",
+      "depends_on": [
+        "step-06-01-build-scope-round-1"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Local app can start.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-02-database-schema",
+      "phase_id": "phase-07-development",
+      "order": 2,
+      "title": "Database schema",
+      "goal": "Create data structures for users, settings, memory, message metadata, and audit events.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Database must support inner test users and memory clearing.",
+      "depends_on": [
+        "step-07-01-project-scaffold"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Schema or migrations can be verified.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-03-admin-shell",
+      "phase_id": "phase-07-development",
+      "order": 3,
+      "title": "Admin console shell",
+      "goal": "Build the admin page shell from the confirmed prototype.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Build navigation and pages before real data wiring.",
+      "depends_on": [
+        "step-07-01-project-scaffold"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Admin pages open and switch.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-04-users-whitelist",
+      "phase_id": "phase-07-development",
+      "order": 4,
+      "title": "Users and whitelist",
+      "goal": "Manage inner-test user access.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Support enabled, invited, and allowlisted states.",
+      "depends_on": [
+        "step-07-02-database-schema"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "User states can be created and updated.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-05-conversation-simulator",
+      "phase_id": "phase-07-development",
+      "order": 5,
+      "title": "Conversation simulator",
+      "goal": "Test chat behavior without WeChat credentials.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Simulator verifies personality, memory, and multimodal decisions first.",
+      "depends_on": [
+        "step-07-03-admin-shell"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Local simulated chat works.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-06-safety-guard",
+      "phase_id": "phase-07-development",
+      "order": 6,
+      "title": "Safety Guard",
+      "goal": "Detect high-risk content and disable jokes, stickers, and playful voice.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Safety must run before personality and multimodal decisions.",
+      "depends_on": [
+        "step-07-05-conversation-simulator"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "High-risk tests switch to safety mode.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-07-memory-service",
+      "phase_id": "phase-07-development",
+      "order": 7,
+      "title": "Memory Service",
+      "goal": "Store limited preferences and support disabling or clearing.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Memory stores lightweight preferences only.",
+      "depends_on": [
+        "step-07-04-users-whitelist"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Memory can save, read, and clear values.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-08-orchestrator",
+      "phase_id": "phase-07-development",
+      "order": 8,
+      "title": "Orchestrator and personality",
+      "goal": "Generate the late-night friend response plan.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Combine safety, memory, personality, and model routing.",
+      "depends_on": [
+        "step-07-06-safety-guard"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Low-risk scenarios generate suitable response plans.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-09-multimodal-decision",
+      "phase_id": "phase-07-development",
+      "order": 9,
+      "title": "Multimodal decision layer",
+      "goal": "Choose text, sticker intent, short voice script, or safety response.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Use intent and scripts first, not real assets.",
+      "depends_on": [
+        "step-07-08-orchestrator"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Prototype scenarios produce different response modes.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-10-distillation-status",
+      "phase_id": "phase-07-development",
+      "order": 10,
+      "title": "Distillation source status",
+      "goal": "Expose public source, license, and download status.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Admin should show candidate, research-only, deferred, and method-reference sources.",
+      "depends_on": [
+        "step-07-03-admin-shell"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Source status appears in admin.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-11-media-layer",
+      "phase_id": "phase-07-development",
+      "order": 11,
+      "title": "Media asset layer stub",
+      "goal": "Create a boundary for future sticker and voice assets.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Missing media must degrade to text.",
+      "depends_on": [
+        "step-07-09-multimodal-decision"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Media fallback works.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-12-wechat-adapter",
+      "phase_id": "phase-07-development",
+      "order": 12,
+      "title": "WeChat adapter prototype",
+      "goal": "Wrap WeChat customer-service style receive/send and media capability.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Current official docs and credentials must be checked before implementation.",
+      "depends_on": [
+        "step-07-11-media-layer"
+      ],
+      "user_action": "choose_technical_path",
+      "acceptance_hint": "Adapter can receive/send or simulate receive/send in test.",
+      "progress_summary": "Not started.",
+      "blockers": [
+        "Waiting for WeChat API credential and documentation review"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-13-observability",
+      "phase_id": "phase-07-development",
+      "order": 13,
+      "title": "Observability and audit",
+      "goal": "Make message failures, safety events, and costs visible.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Admin needs run status and error summary.",
+      "depends_on": [
+        "step-07-12-wechat-adapter"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Error status can be tracked.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-07-14-mvp-integration",
+      "phase_id": "phase-07-development",
+      "order": 14,
+      "title": "End-to-end MVP integration",
+      "goal": "Connect core modules into a runnable inner-test MVP.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "After completion, invite user to test core flow.",
+      "depends_on": [
+        "step-07-13-observability"
+      ],
+      "user_action": "run_user_test",
+      "acceptance_hint": "User can run the main chat flow.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-08-01-test-notice",
+      "phase_id": "phase-08-user-test-guidance",
+      "order": 1,
+      "title": "Prepare test notice",
+      "goal": "Tell the user what to test and what not to test yet.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Generate only after runnable MVP exists.",
+      "depends_on": [
+        "step-07-14-mvp-integration"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "The user knows testing boundaries.",
+      "progress_summary": "Not started.",
+      "blockers": [
+        "Runnable MVP not ready"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-08-02-owner-smoke-test",
+      "phase_id": "phase-08-user-test-guidance",
+      "order": 2,
+      "title": "Owner smoke test",
+      "goal": "Let the owner verify core flows.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Test chat, sticker intent, voice script, memory, and safety mode.",
+      "depends_on": [
+        "step-08-01-test-notice"
+      ],
+      "user_action": "run_user_test",
+      "acceptance_hint": "Owner completes smoke test.",
+      "progress_summary": "Not started.",
+      "blockers": [
+        "Waiting for user test"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-09-01-uat-scripts",
+      "phase_id": "phase-09-uat-docs",
+      "order": 1,
+      "title": "Write UAT scripts",
+      "goal": "Create nontechnical user test scripts.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Cover scenarios and failure-reporting instructions.",
+      "depends_on": [
+        "step-08-02-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Scripts can be shared with inner-test friends.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-09-02-acceptance-checklist",
+      "phase_id": "phase-09-uat-docs",
+      "order": 2,
+      "title": "Acceptance checklist",
+      "goal": "Define first-version pass/fail criteria.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Clarify what passes now and what remains next.",
+      "depends_on": [
+        "step-09-01-uat-scripts"
+      ],
+      "user_action": "review_output",
+      "acceptance_hint": "User can confirm whether MVP meets the bar.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-10-01-bug-template",
+      "phase_id": "phase-10-debug-collaboration",
+      "order": 1,
+      "title": "Bug feedback template",
+      "goal": "Make inner-test issue reports actionable.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Template includes action, expected result, actual result, reproduction, and evidence.",
+      "depends_on": [
+        "step-09-02-acceptance-checklist"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "User can report issues clearly.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-10-02-debug-next-actions",
+      "phase_id": "phase-10-debug-collaboration",
+      "order": 2,
+      "title": "Debug next actions",
+      "goal": "Turn found issues into repair actions.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Enter only after issues appear.",
+      "depends_on": [
+        "step-10-01-bug-template"
+      ],
+      "user_action": "provide_bug_feedback",
+      "acceptance_hint": "Each issue has a next action.",
+      "progress_summary": "Not started.",
+      "blockers": [
+        "Waiting for actual issue feedback"
+      ],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-11-01-delivery-summary",
+      "phase_id": "phase-11-delivery",
+      "order": 1,
+      "title": "Delivery summary",
+      "goal": "Summarize delivered work and known issues.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Delivery explains source, docs, core flows, and risks.",
+      "depends_on": [
+        "step-10-02-debug-next-actions"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Delivery content is clear.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-11-02-handoff-notes",
+      "phase_id": "phase-11-delivery",
+      "order": 2,
+      "title": "Handoff notes",
+      "goal": "Record next-iteration guidance and maintenance notes.",
+      "status": "not_started",
+      "output": [],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Support the next iteration.",
+      "depends_on": [
+        "step-11-01-delivery-summary"
+      ],
+      "user_action": "review_output",
+      "acceptance_hint": "User can decide the next direction.",
+      "progress_summary": "Not started.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": []
     }
   ],
   "artifacts": [
@@ -902,6 +1454,39 @@
       "step_id": "step-04-03-implementation-strategy",
       "created_at": "2026-06-05T14:52:45+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-018",
+      "title": "Master task board",
+      "artifact_type": "task_board",
+      "location": "docs/master_task_board.md",
+      "summary": "Full phase and substep board with step counts, statuses, outputs, dependencies, and blockers.",
+      "phase_id": "phase-05-master-task-board",
+      "step_id": "step-05-01-master-board",
+      "created_at": "2026-06-05T15:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-019",
+      "title": "Progress board",
+      "artifact_type": "task_board",
+      "location": "docs/progress_board.md",
+      "summary": "Current progress summary showing completed and not-started areas.",
+      "phase_id": "phase-05-master-task-board",
+      "step_id": "step-05-01-master-board",
+      "created_at": "2026-06-05T15:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-020",
+      "title": "Artifact registry",
+      "artifact_type": "task_board",
+      "location": "docs/artifact_registry.md",
+      "summary": "Traceable artifact index linking files to phases and steps.",
+      "phase_id": "phase-05-master-task-board",
+      "step_id": "step-05-01-master-board",
+      "created_at": "2026-06-05T15:00:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -1083,7 +1668,7 @@
       "id": "decision-008",
       "title": "MVP architecture route",
       "context": "原型已确认，需要选择第一版实现方式，影响开发速度、调试难度和未来扩展。",
-      "status": "waiting_user",
+      "status": "resolved",
       "recommended_option_id": "option-modular-monolith",
       "related_phase_id": "phase-04-architecture",
       "related_step_id": "step-04-03-implementation-strategy",
@@ -1101,9 +1686,9 @@
           "label": "一开始就微服务"
         }
       ],
-      "user_decision": "",
+      "user_decision": "Confirmed architecture route",
       "recommendation_reason": "对你和少数朋友内测来说，这条路线最快、最容易调试，也能保持后续拆分空间。",
-      "notes": "等待用户确认后进入主任务板生成。"
+      "notes": "User confirmed modular monolith with background worker and one database; project moved to master board confirmation."
     }
   ]
 }
