@@ -4,12 +4,12 @@
 
 | Field | Content |
 |---|---|
-| Current phase | Delivery |
-| Current step | Handoff notes |
-| Overall status | waiting_user |
-| Completed substeps | 41 / 42 |
-| User action needed | Choose the Build Round 2 focus |
-| Next step after confirmation | Scope Build Round 2 |
+| Current phase | Build Round 2 personality quality |
+| Current step | Owner personality smoke test |
+| Overall status | ready_for_test |
+| Completed substeps | 45 / 46 |
+| User action needed | Run the Build Round 2 personality smoke test |
+| Next step after confirmation | Accept Round 2 or request wording polish |
 
 ## Completed Outputs
 
@@ -25,7 +25,8 @@
 | User testing | 2 / 2 | `docs/test_intervention_notice.md`, `docs/smoke_test_result.md` |
 | UAT docs | 2 / 2 | `docs/uat_scripts.md`, `docs/acceptance_checklist.md` |
 | Debug collaboration | 2 / 2 | `docs/bug_feedback_template.md`, `docs/debug_next_actions.md` |
-| Delivery | 1 / 2 | `docs/delivery_summary.md`, `docs/handoff_notes.md` |
+| Delivery | 2 / 2 | `docs/delivery_summary.md`, `docs/handoff_notes.md` |
+| Build Round 2 personality quality | 3 / 4 | personality design spec, implementation plan, scenario-aware reply engine, smoke test script |
 
 ## Ready For Test
 
@@ -38,14 +39,15 @@
 | UAT scripts | `docs/uat_scripts.md` | ready to use |
 | Acceptance checklist | `docs/acceptance_checklist.md` | accepted |
 | Delivery summary | `docs/delivery_summary.md` | ready |
-| Handoff notes | `docs/handoff_notes.md` | waiting for Build Round 2 direction |
+| Handoff notes | `docs/handoff_notes.md` | done |
+| Personality smoke test | `docs/personality_round_2_smoke_test.md` | ready for owner test |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Next round | Choose whether Build Round 2 starts with real WeChat credentials, real media assets, or personality quality |
+| Owner acceptance | Run the Round 2 personality smoke test and decide whether the feel passes |
 
 ## Current Blocker
 
-The project is waiting for the Build Round 2 focus choice. Real credentialed WeChat integration, real sticker assets, and real voice synthesis are still deferred.
+No engineering blocker is active. The project is waiting for owner feel-test feedback on the `刀子嘴豆腐心` personality upgrade. Real credentialed WeChat integration, real sticker assets, and real voice synthesis are still deferred.

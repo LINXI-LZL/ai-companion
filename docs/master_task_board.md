@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Delivery |
-| Current step | Handoff notes |
-| Overall status | Waiting for next-round direction |
-| Total phases | 11 |
-| Total substeps | 42 |
-| Completed substeps | 41 |
+| Current phase | Build Round 2 personality quality |
+| Current step | Owner personality smoke test |
+| Overall status | Ready for owner test |
+| Total phases | 12 |
+| Total substeps | 46 |
+| Completed substeps | 45 |
 | Needs user attention | Yes |
-| Next action | Choose the Build Round 2 focus |
-| Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation |
+| Next action | Run the Build Round 2 personality smoke test |
+| Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred; personality behavior is local-rule based and needs owner feel-test |
 
 ## Full Board
 
@@ -60,8 +60,12 @@
 | phase-10-debug-collaboration | step-10-01-bug-template | Debug collaboration | Bug feedback template | Make user reports actionable | `docs/bug_feedback_template.md` | step-09-01-uat-scripts | done | none | no | no | none |
 | phase-10-debug-collaboration | step-10-02-debug-next-actions | Debug collaboration | Debug next actions | Turn issues into fixes | `docs/debug_next_actions.md` | step-10-01-bug-template | done | none | no | no | none |
 | phase-11-delivery | step-11-01-delivery-summary | Delivery | Delivery summary | Summarize delivered work | `docs/delivery_summary.md` | step-10-02-debug-next-actions | done | none | no | no | none |
-| phase-11-delivery | step-11-02-handoff-notes | Delivery | Handoff notes | Prepare next-iteration handoff | `docs/handoff_notes.md` | step-11-01-delivery-summary | waiting_user | choose_next_round | yes | no | Needs Build Round 2 focus choice |
+| phase-11-delivery | step-11-02-handoff-notes | Delivery | Handoff notes | Prepare next-iteration handoff | `docs/handoff_notes.md` | step-11-01-delivery-summary | done | none | no | no | none |
+| phase-12-personality-quality | step-12-01-round-2-scope | Build Round 2 personality quality | Confirm personality scope | Choose second-round focus and tone | User chose personality quality, then `刀子嘴豆腐心` | step-11-02-handoff-notes | done | none | no | no | none |
+| phase-12-personality-quality | step-12-02-spec-plan | Build Round 2 personality quality | Write spec and plan | Save behavior design and implementation plan | `docs/superpowers/specs/2026-06-05-personality-quality-round-2-design.md`, `docs/superpowers/plans/2026-06-05-personality-quality-round-2.md` | step-12-01-round-2-scope | done | none | no | no | none |
+| phase-12-personality-quality | step-12-03-personality-engine | Build Round 2 personality quality | Upgrade reply engine | Add scenario-aware `刀子嘴豆腐心` replies | `app/orchestrator.py`, tests | step-12-02-spec-plan | done | none | no | yes | none |
+| phase-12-personality-quality | step-12-04-owner-smoke-test | Build Round 2 personality quality | Owner personality smoke test | Verify feel in local chat simulator | `docs/personality_round_2_smoke_test.md` | step-12-03-personality-engine | ready_for_test | run_user_test | yes | yes | Needs owner feel-test |
 
 ## Current Confirmation Gate
 
-Review `docs/handoff_notes.md`, then choose Build Round 2 focus: real WeChat credentials, real media assets, or personality quality.
+Run `docs/personality_round_2_smoke_test.md` in the local `聊天模拟` tab, then decide whether the `刀子嘴豆腐心` feel passes or needs wording polish.

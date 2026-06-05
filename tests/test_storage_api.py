@@ -112,6 +112,38 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertNotEqual(first["reply_text"], second["reply_text"])
         self.assertEqual(first["repeat_count"] + 1, second["repeat_count"])
 
+    def test_similar_work_rants_vary_across_ten_turns(self):
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        prompts = [
+            "老板又临下班改需求，真的离谱",
+            "老板刚刚又改需求了",
+            "领导又让我背锅，服了",
+            "甲方突然改需求，我人麻了",
+            "老板又塞活，还说很简单",
+            "临下班又来需求，烦死",
+            "领导一句话我今晚又没了",
+            "老板把锅甩给我，真离谱",
+            "甲方需求变来变去",
+            "老板又说这个马上要",
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+
+            plans = [
+                create_chat_response(store, {"user_id": user["id"], "message": prompt})["plan"]
+                for prompt in prompts
+            ]
+
+        replies = [plan["reply_text"] for plan in plans]
+        self.assertEqual(len(set(replies)), len(replies))
+        self.assertTrue(all(plan["scenario"] == "work_boss" for plan in plans))
+        self.assertEqual(plans[-1]["scenario_turn_count"], 9)
+
 
 if __name__ == "__main__":
     unittest.main()

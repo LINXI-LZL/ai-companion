@@ -56,3 +56,22 @@ These items should not block Build Round 1 acceptance:
 | Decision date | 2026-06-05 |
 | Acceptance level | Pass |
 | Notes | Build Round 1 local simulator and admin foundation are accepted. Real WeChat send/receive, real sticker files, real voice synthesis, and deployment remain next-round decisions. |
+
+## Build Round 2 Personality Quality Acceptance
+
+| Area | Pass Criteria | Status |
+|---|---|---|
+| Chosen style | Personality route is `刀子嘴豆腐心`: sharp, teasing, and still on the user's side | Implemented |
+| Work-rant variation | Ten similar work rants do not produce identical answers | Automated pass |
+| Scenario memory feel | Repeated work themes include a sense that the same kind of issue has returned | Automated pass |
+| Self-blame boundary | Self-blame replies separate the user from the problem and avoid attacking the user | Automated pass |
+| Safety override | High-risk messages suppress playful or biting tone | Automated pass |
+| Existing MVP behavior | Safety, memory prefix, sticker intent, voice script, WeChat mock, and status pages keep working | Automated pass |
+
+## Build Round 2 Owner Test
+
+| Field | Value |
+|---|---|
+| Smoke test script | `docs/personality_round_2_smoke_test.md` |
+| Current owner action | Run the personality smoke test in `聊天模拟` |
+| Acceptance level | Ready for owner test |

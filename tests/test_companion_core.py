@@ -52,6 +52,35 @@ class CompanionCoreTests(unittest.TestCase):
         self.assertTrue(any("想我" in reply for reply in replies))
         self.assertTrue(any("深夜损友" in reply for reply in replies))
 
+    def test_self_blame_reply_targets_problem_not_user(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "我真没用，什么都做不好", memories=[])
+
+        self.assertEqual(plan["scenario"], "self_blame")
+        self.assertIn("不打你这个人", plan["reply_text"])
+        self.assertNotIn("你没用", plan["reply_text"])
+
+    def test_high_risk_reply_suppresses_playful_biting_tone(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "我真的撑不下去了，不想继续了", memories=[])
+
+        self.assertTrue(plan["safety_mode"])
+        self.assertEqual(plan["scenario"], "safety")
+        self.assertNotIn("离谱", plan["reply_text"])
+        self.assertNotIn("小剧场", plan["reply_text"])
+
+    def test_biting_friend_work_reply_has_supportive_three_beat_shape(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "老板又临下班改需求，真的离谱", memories=[])
+
+        self.assertEqual(plan["scenario"], "work_boss")
+        self.assertIn("站你这边", plan["reply_text"])
+        self.assertTrue("锅" in plan["reply_text"] or "老板" in plan["reply_text"])
+        self.assertTrue("先" in plan["reply_text"] or "说吧" in plan["reply_text"])
+
 
 if __name__ == "__main__":
     unittest.main()
