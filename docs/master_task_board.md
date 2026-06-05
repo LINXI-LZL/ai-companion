@@ -5,14 +5,14 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | User test guidance |
-| Current step | Owner smoke test |
-| Overall status | Ready for owner test |
+| Current phase | UAT docs |
+| Current step | Acceptance checklist |
+| Overall status | Waiting for acceptance review |
 | Total phases | 11 |
 | Total substeps | 42 |
-| Completed substeps | 37 |
+| Completed substeps | 38 |
 | Needs user attention | Yes |
-| Next action | Run the owner smoke test and review the acceptance checklist |
+| Next action | Review the acceptance checklist |
 | Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation |
 
 ## Full Board
@@ -54,7 +54,7 @@
 | phase-07-development | step-07-13-observability | Development | Observability and audit | Make failures visible | Status API, server log, audit events | step-07-12-wechat-adapter | done | none | no | yes | none |
 | phase-07-development | step-07-14-mvp-integration | Development | End-to-end MVP integration | Connect core flow | Runnable local MVP | step-07-13-observability | done | run_user_test | yes | yes | none |
 | phase-08-user-test-guidance | step-08-01-test-notice | User test guidance | Prepare test notice | Tell user what to test now | `docs/test_intervention_notice.md` | step-07-14-mvp-integration | done | none | no | no | none |
-| phase-08-user-test-guidance | step-08-02-owner-smoke-test | User test guidance | Owner smoke test | Verify core flows with owner | Smoke test result | step-08-01-test-notice | ready_for_test | run_user_test | yes | yes | User must test |
+| phase-08-user-test-guidance | step-08-02-owner-smoke-test | User test guidance | Owner smoke test | Verify core flows with owner | `docs/smoke_test_result.md` | step-08-01-test-notice | done | none | no | yes | none |
 | phase-09-uat-docs | step-09-01-uat-scripts | UAT docs | Write UAT scripts | Give nontechnical test steps | `docs/uat_scripts.md` | step-08-01-test-notice | done | none | no | no | none |
 | phase-09-uat-docs | step-09-02-acceptance-checklist | UAT docs | Acceptance checklist | Define pass/fail criteria | `docs/acceptance_checklist.md` | step-09-01-uat-scripts | waiting_user | review_output | yes | no | Needs owner review |
 | phase-10-debug-collaboration | step-10-01-bug-template | Debug collaboration | Bug feedback template | Make user reports actionable | `docs/bug_feedback_template.md` | step-09-01-uat-scripts | done | none | no | no | none |
@@ -64,4 +64,4 @@
 
 ## Current Confirmation Gate
 
-Open `http://127.0.0.1:8765` and run the owner smoke test from `docs/test_intervention_notice.md`, including the new `WeChat Entry` tab. Then review `docs/acceptance_checklist.md`.
+Review `docs/acceptance_checklist.md`, then decide whether Build Round 1 passes and which next build-round focus to choose.

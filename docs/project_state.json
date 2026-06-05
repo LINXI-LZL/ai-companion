@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-08-user-test-guidance",
-    "current_step_id": "step-08-02-owner-smoke-test",
-    "overall_status": "ready_for_test",
+    "current_phase_id": "phase-09-uat-docs",
+    "current_step_id": "step-09-02-acceptance-checklist",
+    "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 42,
-    "completed_step_count": 37,
+    "completed_step_count": 38,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Run the owner smoke test and review the acceptance checklist.",
+    "next_action_summary": "Review the acceptance checklist and choose the next build-round focus.",
     "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T16:52:52+08:00"
+    "updated_at": "2026-06-05T16:57:24+08:00"
   },
   "phases": [
     {
@@ -200,17 +200,18 @@
       "order": 8,
       "title": "User test intervention guidance",
       "goal": "在可运行版本完成后，引导用户测试核心流程。",
-      "status": "ready_for_test",
+      "status": "done",
       "outputs": [
-        "docs/test_intervention_notice.md"
+        "docs/test_intervention_notice.md",
+        "docs/smoke_test_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
       "step_count": 2,
-      "completed_step_count": 1,
-      "summary": "Owner smoke test notice is ready.",
-      "notes": "The local app is running at http://127.0.0.1:8765.",
-      "user_action": "run_user_test",
+      "completed_step_count": 2,
+      "summary": "Owner smoke test is complete for Build Round 1 local MVP.",
+      "notes": "Owner observed chat, status, and WeChat Entry flows. One display-language issue was found and fixed.",
+      "user_action": "none",
       "acceptance_hint": "用户能按清单验证真实聊天流程。",
       "depends_on_phase_ids": [
         "phase-07-development"
@@ -231,8 +232,8 @@
       "testable": false,
       "step_count": 2,
       "completed_step_count": 1,
-      "summary": "UAT scripts are ready, and the acceptance checklist is waiting for owner review.",
-      "notes": "Prepared before owner smoke completion so the owner can test and review in one pass.",
+      "summary": "UAT scripts are ready, and the acceptance checklist is waiting for owner review after smoke testing.",
+      "notes": "Owner smoke test is complete; acceptance checklist remains the current user review gate.",
       "user_action": "review_output",
       "acceptance_hint": "测试用例应包含目标、前置条件、步骤、预期结果和失败反馈方式。",
       "depends_on_phase_ids": [
@@ -1225,22 +1226,23 @@
       "order": 2,
       "title": "Owner smoke test",
       "goal": "Let the owner verify core flows.",
-      "status": "ready_for_test",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "docs/smoke_test_result.md"
+      ],
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Local app is running at http://127.0.0.1:8765. Owner provided screenshots showing Sample Status and Run Status are reachable; status-page display labels were localized after the feedback.",
+      "notes": "Owner provided screenshots showing Sample Status, Run Status, and WeChat Entry are reachable. Status-page display labels were localized after the feedback.",
       "depends_on": [
         "step-08-01-test-notice"
       ],
-      "user_action": "run_user_test",
+      "user_action": "none",
       "acceptance_hint": "Owner verifies normal rant, sleepy voice intent, safety mode, memory, WeChat entry mock, sample status, and run status.",
-      "progress_summary": "Partially observed: Sample Status and Run Status opened successfully; remaining smoke result still waits for owner confirmation.",
-      "blockers": [
-        "Waiting for owner smoke test result"
-      ],
+      "progress_summary": "Done. Smoke test passed after one display-language fix.",
+      "blockers": [],
       "related_artifact_ids": [
-        "artifact-025"
+        "artifact-025",
+        "artifact-031"
       ],
       "related_decision_ids": []
     },
@@ -1716,6 +1718,17 @@
       "phase_id": "phase-10-debug-collaboration",
       "step_id": "step-10-01-bug-template",
       "created_at": "2026-06-05T16:42:35+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-031",
+      "title": "Owner smoke test result",
+      "artifact_type": "document",
+      "location": "docs/smoke_test_result.md",
+      "summary": "Smoke-test evidence, resolved display issue, and next decision.",
+      "phase_id": "phase-08-user-test-guidance",
+      "step_id": "step-08-02-owner-smoke-test",
+      "created_at": "2026-06-05T16:57:24+08:00",
       "version": "v0.1"
     }
   ],

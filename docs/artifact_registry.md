@@ -32,3 +32,4 @@
 | artifact-028 | UAT scripts | document | `docs/uat_scripts.md` | phase-09-uat-docs | step-09-01-uat-scripts | Nontechnical test scripts for local owner and inner-test validation |
 | artifact-029 | Acceptance checklist | document | `docs/acceptance_checklist.md` | phase-09-uat-docs | step-09-02-acceptance-checklist | Build Round 1 pass/fail criteria and deferred items |
 | artifact-030 | Bug feedback template | document | `docs/bug_feedback_template.md` | phase-10-debug-collaboration | step-10-01-bug-template | Structured issue report format for chat, page, adapter, and safety problems |
+| artifact-031 | Owner smoke test result | document | `docs/smoke_test_result.md` | phase-08-user-test-guidance | step-08-02-owner-smoke-test | Smoke-test evidence, resolved display issue, and next decision |
