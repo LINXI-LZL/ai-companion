@@ -22,4 +22,4 @@
 | artifact-018 | Master task board | task_board | `docs/master_task_board.md` | phase-05-master-task-board | step-05-01-master-board | Full phase and substep task board |
 | artifact-019 | Progress board | task_board | `docs/progress_board.md` | phase-05-master-task-board | step-05-01-master-board | Current status summary |
 | artifact-020 | Artifact registry | task_board | `docs/artifact_registry.md` | phase-05-master-task-board | step-05-01-master-board | Traceable artifact index |
-
+| artifact-021 | Build Round 1 scope | document | `docs/build_scope_current_round.md` | phase-06-build-round-scoping | step-06-01-build-scope-round-1 | Scope for the local companion simulator and admin foundation |

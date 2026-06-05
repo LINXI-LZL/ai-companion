@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Master task board generation |
-| Current step | Confirm master task board |
+| Current phase | Build-round scoping |
+| Current step | Scope Build Round 1 |
 | Overall status | Waiting for user confirmation |
 | Total phases | 11 |
 | Total substeps | 42 |
-| Completed substeps | 18 |
+| Completed substeps | 19 |
 | Needs user attention | Yes |
-| Next action | Confirm this task board before the first build round is scoped |
-| Current risk | WeChat media API, sticker rights, voice provider, and public-data license checks must be resolved before real integration |
+| Next action | Confirm Build Round 1 scope before implementation starts |
+| Current risk | Round 1 avoids real WeChat and real media integration; those API, rights, and provider checks remain tracked for later |
 
 ## Full Board
 
@@ -37,8 +37,8 @@
 | phase-04-architecture | step-04-02-module-boundaries | Architecture | Define module boundaries | Prevent tangled build | `docs/module_boundary.md` | step-04-01-architecture-overview | done | none | no | no | none |
 | phase-04-architecture | step-04-03-implementation-strategy | Architecture | Choose strategy | Pick MVP build route | `docs/implementation_strategy.md` | step-04-02-module-boundaries | done | none | no | no | none |
 | phase-05-master-task-board | step-05-01-master-board | Master task board | Generate master task board | Split project into trackable steps | `docs/master_task_board.md` | step-04-03-implementation-strategy | done | none | no | no | none |
-| phase-05-master-task-board | step-05-02-board-confirmation | Master task board | Confirm master task board | Gate before implementation tracking | `docs/progress_board.md` | step-05-01-master-board | waiting_user | review_output | yes | no | Waiting for user confirmation |
-| phase-06-build-round-scoping | step-06-01-build-scope-round-1 | Build round scoping | Scope build round 1 | Define first implementation slice | `docs/build_scope_current_round.md` | step-05-02-board-confirmation | not_started | none | yes | no | Board must be confirmed first |
+| phase-05-master-task-board | step-05-02-board-confirmation | Master task board | Confirm master task board | Gate before implementation tracking | User confirmed master board | step-05-01-master-board | done | none | no | no | none |
+| phase-06-build-round-scoping | step-06-01-build-scope-round-1 | Build round scoping | Scope build round 1 | Define first implementation slice | `docs/build_scope_current_round.md` | step-05-02-board-confirmation | waiting_user | review_output | yes | no | Waiting for Build Round 1 scope confirmation |
 | phase-07-development | step-07-01-project-scaffold | Development | Project scaffold | Create runnable app foundation | Source scaffold | step-06-01-build-scope-round-1 | not_started | none | no | yes | none |
 | phase-07-development | step-07-02-database-schema | Development | Database schema | Store users, settings, memory, logs | Migrations/schema | step-07-01-project-scaffold | not_started | none | no | yes | none |
 | phase-07-development | step-07-03-admin-shell | Development | Admin console shell | Match confirmed prototype structure | Admin pages | step-07-01-project-scaffold | not_started | none | no | yes | none |
@@ -64,5 +64,4 @@
 
 ## Current Confirmation Gate
 
-Confirm whether this task split feels right. Once confirmed, the next step is to scope Build Round 1.
-
+Confirm whether Build Round 1 should start with the local companion simulator and admin foundation.

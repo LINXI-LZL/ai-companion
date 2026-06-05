@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-05-master-task-board",
-    "current_step_id": "step-05-02-board-confirmation",
+    "current_phase_id": "phase-06-build-round-scoping",
+    "current_step_id": "step-06-01-build-scope-round-1",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 42,
-    "completed_step_count": 18,
+    "completed_step_count": 19,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Confirm the master task board before scoping Build Round 1.",
-    "current_risk_summary": "WeChat media APIs, sticker rights, voice provider, and public-data license checks still need confirmation before real integration. The master board tracks these risks as later steps.",
+    "next_action_summary": "Confirm Build Round 1 scope before implementation starts.",
+    "current_risk_summary": "Round 1 avoids real WeChat and real media integration; API, rights, voice provider, and public-data license checks remain tracked for later steps.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T15:00:00+08:00"
+    "updated_at": "2026-06-05T15:20:00+08:00"
   },
   "phases": [
     {
@@ -129,20 +129,20 @@
       "order": 5,
       "title": "Master task board generation",
       "goal": "把项目拆成可追踪的小步骤，并生成用户可读和机器可读的任务状态。",
-      "status": "waiting_user",
+      "status": "done",
       "outputs": [
         "docs/master_task_board.md",
         "docs/progress_board.md",
         "docs/artifact_registry.md",
         "docs/project_state.json"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": false,
       "step_count": 2,
-      "completed_step_count": 1,
-      "summary": "Master board, progress board, and artifact registry are ready for review.",
-      "notes": "After confirmation, the project moves to build round 1 scoping.",
-      "user_action": "review_output",
+      "completed_step_count": 2,
+      "summary": "Master task board confirmed by the user.",
+      "notes": "Project moved to Build Round 1 scoping.",
+      "user_action": "none",
       "acceptance_hint": "The user should be able to see total steps, completed steps, and each step output.",
       "depends_on_phase_ids": [
         "phase-04-architecture"
@@ -154,16 +154,18 @@
       "order": 6,
       "title": "Build-round scoping",
       "goal": "在每轮开发前明确本轮做什么、不做什么、完成后用户能验证什么。",
-      "status": "not_started",
-      "outputs": [],
+      "status": "waiting_user",
+      "outputs": [
+        "docs/build_scope_current_round.md"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
       "step_count": 1,
       "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "Waiting for master board confirmation.",
-      "user_action": "none",
-      "acceptance_hint": "用户应知道每轮建设的边界和可验收结果。",
+      "summary": "Build Round 1 scope drafted and waiting for confirmation.",
+      "notes": "Recommended Round 1 is a local companion simulator and admin foundation.",
+      "user_action": "review_output",
+      "acceptance_hint": "The user can confirm the first implementation slice.",
       "depends_on_phase_ids": [
         "phase-05-master-task-board"
       ]
@@ -752,20 +754,20 @@
       "order": 2,
       "title": "Confirm master task board",
       "goal": "Confirm the project split before implementation tracking starts.",
-      "status": "waiting_user",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "User confirmed master task board in chat."
+      ],
+      "requires_user_confirmation": false,
       "testable": false,
-      "notes": "Waiting for user confirmation.",
+      "notes": "Confirmed by user.",
       "depends_on": [
         "step-05-01-master-board"
       ],
-      "user_action": "review_output",
-      "acceptance_hint": "After confirmation, scope build round 1.",
-      "progress_summary": "Waiting for master board confirmation.",
-      "blockers": [
-        "Waiting for user confirmation"
-      ],
+      "user_action": "none",
+      "acceptance_hint": "Project can move to Build Round 1 scoping.",
+      "progress_summary": "Done.",
+      "blockers": [],
       "related_artifact_ids": [
         "artifact-018",
         "artifact-019",
@@ -779,22 +781,28 @@
       "order": 1,
       "title": "Scope build round 1",
       "goal": "Define what build round 1 includes, excludes, and makes testable.",
-      "status": "not_started",
-      "output": [],
+      "status": "waiting_user",
+      "output": [
+        "docs/build_scope_current_round.md"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
-      "notes": "Waiting for board confirmation.",
+      "notes": "Scope document drafted for review.",
       "depends_on": [
         "step-05-02-board-confirmation"
       ],
-      "user_action": "none",
-      "acceptance_hint": "The user understands round 1 boundaries.",
-      "progress_summary": "Not started.",
+      "user_action": "review_output",
+      "acceptance_hint": "After confirmation, implementation starts with the project scaffold.",
+      "progress_summary": "Waiting for Build Round 1 scope confirmation.",
       "blockers": [
-        "Master board not confirmed"
+        "Waiting for Build Round 1 scope confirmation"
       ],
-      "related_artifact_ids": [],
-      "related_decision_ids": []
+      "related_artifact_ids": [
+        "artifact-021"
+      ],
+      "related_decision_ids": [
+        "decision-009"
+      ]
     },
     {
       "id": "step-07-01-project-scaffold",
@@ -1487,6 +1495,17 @@
       "step_id": "step-05-01-master-board",
       "created_at": "2026-06-05T15:00:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-021",
+      "title": "Build Round 1 scope",
+      "artifact_type": "document",
+      "location": "docs/build_scope_current_round.md",
+      "summary": "Scope for the local companion simulator and admin foundation.",
+      "phase_id": "phase-06-build-round-scoping",
+      "step_id": "step-06-01-build-scope-round-1",
+      "created_at": "2026-06-05T15:20:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -1689,6 +1708,32 @@
       "user_decision": "Confirmed architecture route",
       "recommendation_reason": "对你和少数朋友内测来说，这条路线最快、最容易调试，也能保持后续拆分空间。",
       "notes": "User confirmed modular monolith with background worker and one database; project moved to master board confirmation."
+    },
+    {
+      "id": "decision-009",
+      "title": "Build Round 1 scope",
+      "context": "The master task board is confirmed, so the first implementation slice must be confirmed before coding starts.",
+      "status": "waiting_user",
+      "recommended_option_id": "option-local-simulator-admin",
+      "related_phase_id": "phase-06-build-round-scoping",
+      "related_step_id": "step-06-01-build-scope-round-1",
+      "options": [
+        {
+          "id": "option-local-simulator-admin",
+          "label": "Local simulator and admin foundation first"
+        },
+        {
+          "id": "option-wechat-first",
+          "label": "Real WeChat integration first"
+        },
+        {
+          "id": "option-media-first",
+          "label": "Sticker and voice assets first"
+        }
+      ],
+      "user_decision": "",
+      "recommendation_reason": "It lets the owner verify the core companion experience before platform credentials, media rights, and voice-provider choices slow the build down.",
+      "notes": "Waiting for user confirmation of Build Round 1 scope."
     }
   ]
 }
