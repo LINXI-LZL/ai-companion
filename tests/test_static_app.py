@@ -53,6 +53,15 @@ class StaticAppTests(unittest.TestCase):
         ]:
             self.assertIn(renderer, script)
 
+    def test_wechat_entry_contains_live_credential_self_check(self):
+        index = (ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("真实接入自检", index)
+        self.assertIn("wecom-live-status", index)
+        self.assertIn("/api/wecom-live/status", script)
+        self.assertIn("renderWecomLiveStatus", script)
+
 
 if __name__ == "__main__":
     unittest.main()

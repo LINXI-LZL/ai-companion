@@ -1,6 +1,7 @@
 import argparse
 import json
 import mimetypes
+import os
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -8,6 +9,12 @@ from urllib.parse import parse_qs, urlparse
 from .orchestrator import plan_reply
 from .sample_sources import load_source_status
 from .storage import DEFAULT_DB, Storage
+from .wecom_live import (
+    build_text_send_payload,
+    handle_callback_validation,
+    load_wecom_config_from_env,
+    normalize_live_event,
+)
 from .wechat_adapter import build_outbound_message, normalize_inbound_event, resolve_mock_user
 
 
@@ -65,6 +72,33 @@ def create_mock_wechat_response(store, payload):
     }
 
 
+def handle_wecom_live_callback_validation(config, query):
+    return handle_callback_validation(config, query)
+
+
+def create_wecom_live_dev_response(store, payload):
+    inbound = normalize_live_event(payload)
+    user = resolve_mock_user(store, {"external_user_id": inbound["external_user_id"]})
+    chat = create_chat_response(store, {"user_id": user["id"], "message": inbound["content"]})
+    outbound_payload = build_text_send_payload(inbound, chat["plan"]["reply_text"])
+    store.record_audit(
+        "wecom_live_dev_response",
+        {
+            "user_id": user["id"],
+            "external_user_id": inbound["external_user_id"],
+            "open_kfid": inbound["open_kfid"],
+            "mode": chat["plan"]["mode"],
+        },
+    )
+    return {
+        "inbound": inbound,
+        "user": user,
+        "chat": chat,
+        "outbound_payload": outbound_payload,
+        "send_policy": "payload_only",
+    }
+
+
 def _extract_memory(message):
     text = message.strip()
     prefixes = ("记住：", "记住:", "帮我记住", "你记一下")
@@ -99,6 +133,17 @@ class CompanionRequestHandler(SimpleHTTPRequestHandler):
             return
         if parsed.path == "/api/media":
             self._send_json({"assets": self.store.list_media_assets()})
+            return
+        if parsed.path == "/api/wecom-live/status":
+            self._send_json({"status": load_wecom_config_from_env(os.environ).to_status()})
+            return
+        if parsed.path == "/api/wecom-live/callback":
+            query = {key: values[0] for key, values in parse_qs(parsed.query).items()}
+            result = handle_wecom_live_callback_validation(load_wecom_config_from_env(os.environ), query)
+            if result.get("reply_text"):
+                self._send_text(result["reply_text"], status=result["http_status"])
+            else:
+                self._send_json(result, status=result["http_status"])
             return
         if parsed.path == "/api/memories":
             user_id = parse_qs(parsed.query).get("user_id", [None])[0]
@@ -135,6 +180,9 @@ class CompanionRequestHandler(SimpleHTTPRequestHandler):
                 return
             if parsed.path == "/api/wechat/mock-inbound":
                 self._send_json(create_mock_wechat_response(self.store, payload), status=201)
+                return
+            if parsed.path == "/api/wecom-live/dev-inbound":
+                self._send_json(create_wecom_live_dev_response(self.store, payload), status=201)
                 return
             self._send_json({"error": "not found"}, status=404)
         except PermissionError as exc:
@@ -195,6 +243,14 @@ class CompanionRequestHandler(SimpleHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_text(self, text, status=200):
+        body = str(text).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)

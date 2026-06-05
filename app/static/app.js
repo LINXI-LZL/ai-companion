@@ -120,6 +120,8 @@ function bindForms() {
     refreshMessages();
     refreshMemories();
   });
+
+  document.getElementById("refresh-wecom-live").addEventListener("click", refreshWecomLiveStatus);
 }
 
 async function refreshAll() {
@@ -127,6 +129,7 @@ async function refreshAll() {
   await refreshUsers();
   await refreshSources();
   await refreshMedia();
+  await refreshWecomLiveStatus();
   await refreshMessages();
   await refreshMemories();
 }
@@ -248,6 +251,22 @@ async function refreshMedia() {
     .join("");
 }
 
+async function refreshWecomLiveStatus() {
+  const data = await api("/api/wecom-live/status");
+  renderWecomLiveStatus(data.status);
+}
+
+function renderWecomLiveStatus(status) {
+  document.getElementById("wecom-live-channel").textContent = displayLabel(status.channel);
+  document.getElementById("wecom-live-status").textContent = status.configured ? "配置已填写" : "缺少配置";
+  document.getElementById("wecom-live-crypto").textContent = wecomCryptoLabel(status.crypto_status);
+  document.getElementById("wecom-live-send-mode").textContent = displayLabel(status.send_mode);
+  document.getElementById("wecom-live-callback-url").textContent = status.public_callback_url || "未配置";
+  document.getElementById("wecom-live-missing").textContent =
+    status.missing_fields.length === 0 ? "无" : status.missing_fields.map(wecomFieldLabel).join("、");
+  document.getElementById("wecom-live-next").textContent = wecomNextAction(status);
+}
+
 function renderPlan(response) {
   const plan = response.plan;
   document.getElementById("plan-mode").textContent = displayLabel(plan.mode);
@@ -317,8 +336,36 @@ function displayLabel(value) {
     voice_sleepy_companion: "困倦陪伴语音",
     voice_serious_grounding: "严肃安抚语音",
     local_mock_only: "仅本地模拟",
+    wecom_live: "企业微信客服真实通道",
+    payload_only: "仅生成发送载荷",
   };
   return labels[value] || value || "-";
+}
+
+function wecomCryptoLabel(value) {
+  const labels = {
+    missing_wxbizmsgcrypt: "缺少官方加解密库",
+    ready: "可解密",
+  };
+  return labels[value] || value || "-";
+}
+
+function wecomFieldLabel(value) {
+  const labels = {
+    WECOM_CORP_ID: "CorpID",
+    WECOM_KF_SECRET: "微信客服 Secret",
+    WECOM_KF_TOKEN: "Token",
+    WECOM_KF_ENCODING_AES_KEY: "EncodingAESKey",
+    WECOM_OPEN_KFID: "open_kfid",
+    WECOM_CALLBACK_PUBLIC_URL: "公网回调 URL",
+  };
+  return labels[value] || value;
+}
+
+function wecomNextAction(status) {
+  if (!status.configured) return "先在本机环境变量里补齐企业微信客服配置。";
+  if (status.crypto_status === "missing_wxbizmsgcrypt") return "配置已具备骨架验证，真实 URL 验证还需要接入官方加解密库。";
+  return "可以进入真实回调联调。";
 }
 
 function sourceStatusLabel(value) {

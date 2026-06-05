@@ -13,7 +13,7 @@
           <div class="brand-mark">树</div>
           <div>
             <h1>微信树洞智能体</h1>
-            <p>第 1 轮本地版</p>
+            <p>第 3 轮接入骨架</p>
           </div>
         </div>
         <nav class="nav-tabs" aria-label="主导航">
@@ -141,6 +141,24 @@
               </div>
             </section>
           </div>
+
+          <section class="panel live-check-panel">
+            <div class="panel-header">
+              <h3>真实接入自检</h3>
+              <button type="button" class="secondary" id="refresh-wecom-live">刷新</button>
+            </div>
+            <div class="metrics">
+              <div><span>通道</span><strong id="wecom-live-channel">-</strong></div>
+              <div><span>配置状态</span><strong id="wecom-live-status">-</strong></div>
+              <div><span>回调解密</span><strong id="wecom-live-crypto">-</strong></div>
+              <div><span>发送模式</span><strong id="wecom-live-send-mode">-</strong></div>
+            </div>
+            <dl class="kv">
+              <div><dt>公网回调 URL</dt><dd id="wecom-live-callback-url">-</dd></div>
+              <div><dt>缺失配置</dt><dd id="wecom-live-missing">-</dd></div>
+              <div><dt>下一步</dt><dd id="wecom-live-next">-</dd></div>
+            </dl>
+          </section>
         </section>
 
         <section class="view" data-view="sources">

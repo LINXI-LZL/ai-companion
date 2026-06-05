@@ -84,3 +84,22 @@ These items should not block Build Round 1 acceptance:
 | Decision date | 2026-06-05 |
 | Acceptance level | Pass |
 | Notes | Build Round 2 `刀子嘴豆腐心` personality upgrade is accepted. Real WeChat send/receive, real sticker files, real voice synthesis, and wider friend testing remain next-round choices. |
+
+## Build Round 3 WeCom Live Route Acceptance
+
+| Area | Pass Criteria | Status |
+|---|---|---|
+| Live config self-check | Admin can see whether required WeCom credential fields are present without exposing secret values | Automated pass |
+| Signature check | SHA1 signature uses sorted Token, timestamp, nonce, and encrypted string | Automated pass |
+| Callback boundary | Valid signed callback GET returns a clear `crypto_not_configured` state until official crypto support is added | Automated pass |
+| Dev live inbound | Plaintext/dev `wecom_live` events route through the companion engine | Automated pass |
+| Send payload | Text send envelope includes `touser`, `open_kfid`, `msgtype`, and `text.content` | Automated pass |
+| Local mock preservation | Existing local WeChat mock keeps working | Automated pass |
+
+## Build Round 3 Owner Test
+
+| Field | Value |
+|---|---|
+| Smoke test script | `docs/wecom_live_round_3_smoke_test.md` |
+| Current owner action | Run the WeCom live route smoke test in `微信入口` |
+| Acceptance level | Ready for owner test |

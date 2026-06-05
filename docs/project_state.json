@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-12-personality-quality",
-    "current_step_id": "step-12-04-owner-smoke-test",
-    "overall_status": "waiting_user",
+    "current_phase_id": "phase-13-wecom-live-route",
+    "current_step_id": "step-13-05-owner-smoke-test",
+    "overall_status": "ready_for_test",
     "strategy": "hybrid",
-    "total_phase_count": 12,
-    "total_step_count": 46,
-    "completed_step_count": 46,
+    "total_phase_count": 13,
+    "total_step_count": 51,
+    "completed_step_count": 50,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Choose the Build Round 3 focus: real WeChat credentials, real media assets, or wider personality feedback.",
-    "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, real voice synthesis, and wider friend testing remain deferred.",
+    "next_action_summary": "Run the Build Round 3 WeCom live route smoke test and decide whether the credential-route skeleton passes.",
+    "current_risk_summary": "Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T17:54:27+08:00"
+    "updated_at": "2026-06-05T18:20:00+08:00"
   },
   "phases": [
     {
@@ -310,6 +310,34 @@
       "acceptance_hint": "用户在本地聊天模拟里跑烟测，判断嘴欠损友感是否通过。",
       "depends_on_phase_ids": [
         "phase-11-delivery"
+      ]
+    },
+    {
+      "id": "phase-13-wecom-live-route",
+      "project_id": "wechat-vent-ai",
+      "order": 13,
+      "title": "Build Round 3 WeCom live credential route",
+      "goal": "??? mock ??????/??????????????????????????????",
+      "status": "ready_for_test",
+      "outputs": [
+        "docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md",
+        "docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md",
+        "app/wecom_live.py",
+        "app/server.py",
+        "app/static/index.html",
+        "app/static/app.js",
+        "docs/wecom_live_round_3_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "step_count": 5,
+      "completed_step_count": 4,
+      "summary": "WeCom live credential-route skeleton is implemented and ready for owner smoke test.",
+      "notes": "This round does not finish encrypted echostr decryption or real outbound network sending.",
+      "user_action": "run_user_test",
+      "acceptance_hint": "???????????????????????????????????",
+      "depends_on_phase_ids": [
+        "phase-12-personality-quality"
       ]
     }
   ],
@@ -1539,6 +1567,148 @@
         "decision-010",
         "decision-011"
       ]
+    },
+    {
+      "id": "step-13-01-round-3-scope",
+      "phase_id": "phase-13-wecom-live-route",
+      "order": 1,
+      "title": "Confirm Round 3 real credential route",
+      "goal": "Choose real WeCom credential path as the third build-round focus.",
+      "status": "done",
+      "output": [
+        "User chose A and confirmed the real credential-route skeleton scope."
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Real secrets stay outside chat and source code.",
+      "depends_on": [
+        "step-12-04-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Round 3 scope is clear.",
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-012"
+      ]
+    },
+    {
+      "id": "step-13-02-spec-plan",
+      "phase_id": "phase-13-wecom-live-route",
+      "order": 2,
+      "title": "Write WeCom live spec and plan",
+      "goal": "Save real credential-route design and implementation plan.",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md",
+        "docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Spec explicitly excludes personal WeChat automation and source-code secrets.",
+      "depends_on": [
+        "step-13-01-round-3-scope"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Spec and plan can guide implementation without chat history.",
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-041",
+        "artifact-042"
+      ],
+      "related_decision_ids": [
+        "decision-012"
+      ]
+    },
+    {
+      "id": "step-13-03-live-adapter",
+      "phase_id": "phase-13-wecom-live-route",
+      "order": 3,
+      "title": "Build WeCom live adapter skeleton",
+      "goal": "Add config self-check, signature validation, callback preflight, dev inbound, and text payload builder.",
+      "status": "done",
+      "output": [
+        "app/wecom_live.py",
+        "app/server.py",
+        "tests/test_wechat_adapter.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Real encrypted callback verification waits for WXBizMsgCrypt-compatible support.",
+      "depends_on": [
+        "step-13-02-spec-plan"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Automated tests cover live config, signature, callback boundary, dev inbound, and send payload.",
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-043",
+        "artifact-044"
+      ],
+      "related_decision_ids": [
+        "decision-012"
+      ]
+    },
+    {
+      "id": "step-13-04-admin-self-check",
+      "phase_id": "phase-13-wecom-live-route",
+      "order": 4,
+      "title": "Add WeCom live admin self-check",
+      "goal": "Show live credential readiness in the WeChat Entry page.",
+      "status": "done",
+      "output": [
+        "app/static/index.html",
+        "app/static/app.js",
+        "tests/test_static_app.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "UI shows missing configuration, callback URL, crypto state, and next action.",
+      "depends_on": [
+        "step-13-03-live-adapter"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Owner can inspect the live route without reading logs.",
+      "progress_summary": "Done.",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-045"
+      ],
+      "related_decision_ids": [
+        "decision-012"
+      ]
+    },
+    {
+      "id": "step-13-05-owner-smoke-test",
+      "phase_id": "phase-13-wecom-live-route",
+      "order": 5,
+      "title": "Owner WeCom route smoke test",
+      "goal": "Let the owner verify the live credential-route skeleton and its boundaries.",
+      "status": "ready_for_test",
+      "output": [
+        "docs/wecom_live_round_3_smoke_test.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Owner should inspect the WeChat Entry self-check and status API.",
+      "depends_on": [
+        "step-13-04-admin-self-check"
+      ],
+      "user_action": "run_user_test",
+      "acceptance_hint": "Owner can mark Round 3 accepted or request wording/route polish.",
+      "progress_summary": "Ready for owner test.",
+      "blockers": [
+        "Waiting for owner smoke-test feedback"
+      ],
+      "related_artifact_ids": [
+        "artifact-046"
+      ],
+      "related_decision_ids": [
+        "decision-012"
+      ]
     }
   ],
   "artifacts": [
@@ -1981,6 +2151,72 @@
       "step_id": "step-12-04-owner-smoke-test",
       "created_at": "2026-06-05T17:54:27+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-041",
+      "title": "Build Round 3 WeCom live design",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md",
+      "summary": "Confirmed real credential-route scope, boundaries, and acceptance criteria.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-02-spec-plan",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-042",
+      "title": "Build Round 3 implementation plan",
+      "artifact_type": "implementation_plan",
+      "location": "docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md",
+      "summary": "Test-first plan for live credential route skeleton.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-02-spec-plan",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-043",
+      "title": "WeCom live adapter skeleton",
+      "artifact_type": "source_code",
+      "location": "app/wecom_live.py",
+      "summary": "Environment config self-check, signature validation, callback preflight, dev inbound, and text payload builder.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-03-live-adapter",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-044",
+      "title": "WeCom live server endpoints",
+      "artifact_type": "source_code",
+      "location": "app/server.py",
+      "summary": "/api/wecom-live/status, /api/wecom-live/callback, and /api/wecom-live/dev-inbound.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-03-live-adapter",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-045",
+      "title": "WeCom live admin self-check",
+      "artifact_type": "source_code",
+      "location": "app/static/index.html, app/static/app.js",
+      "summary": "Visible live credential readiness panel in WeChat Entry.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-04-admin-self-check",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-046",
+      "title": "WeCom live route smoke test",
+      "artifact_type": "document",
+      "location": "docs/wecom_live_round_3_smoke_test.md",
+      "summary": "Owner smoke test for live self-check, status API, local mock preservation, and callback boundary.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-05-owner-smoke-test",
+      "created_at": "2026-06-05T18:20:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -2261,6 +2497,32 @@
       "user_decision": "第二轮通过",
       "recommendation_reason": "Owner confirmed the personality quality round meets the feel-test bar.",
       "notes": "Project now waits for Build Round 3 focus choice."
+    },
+    {
+      "id": "decision-012",
+      "title": "Build Round 3 WeCom live credential route",
+      "context": "Build Round 2 was accepted and the owner chose the next focus.",
+      "status": "resolved",
+      "recommended_option_id": "option-real-wechat-credentials",
+      "related_phase_id": "phase-13-wecom-live-route",
+      "related_step_id": "step-13-01-round-3-scope",
+      "options": [
+        {
+          "id": "option-real-wechat-credentials",
+          "label": "??????????"
+        },
+        {
+          "id": "option-real-media-assets",
+          "label": "?????/??????"
+        },
+        {
+          "id": "option-wider-personality-feedback",
+          "label": "????????"
+        }
+      ],
+      "user_decision": "A, then confirmed: real WeCom credential-route skeleton.",
+      "recommendation_reason": "The local personality quality is accepted, so the next highest-value step is moving toward a real WeChat-side entry without exposing secrets.",
+      "notes": "Round 3 builds the route skeleton; real encrypted callback verification and public HTTPS remain next steps."
     }
   ]
 }

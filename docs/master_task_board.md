@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Build Round 2 personality quality |
-| Current step | Owner personality smoke test |
-| Overall status | Waiting for Build Round 3 direction |
-| Total phases | 12 |
-| Total substeps | 46 |
-| Completed substeps | 46 |
+| Current phase | Build Round 3 WeCom live credential route |
+| Current step | Owner WeCom route smoke test |
+| Overall status | Ready for owner test |
+| Total phases | 13 |
+| Total substeps | 51 |
+| Completed substeps | 50 |
 | Needs user attention | Yes |
-| Next action | Choose the Build Round 3 focus |
-| Current risk | Real credentialed WeChat integration, real sticker assets, real voice synthesis, and wider friend testing remain next-round choices |
+| Next action | Run the Build Round 3 WeCom route smoke test |
+| Current risk | Real encrypted callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS |
 
 ## Full Board
 
@@ -65,7 +65,12 @@
 | phase-12-personality-quality | step-12-02-spec-plan | Build Round 2 personality quality | Write spec and plan | Save behavior design and implementation plan | `docs/superpowers/specs/2026-06-05-personality-quality-round-2-design.md`, `docs/superpowers/plans/2026-06-05-personality-quality-round-2.md` | step-12-01-round-2-scope | done | none | no | no | none |
 | phase-12-personality-quality | step-12-03-personality-engine | Build Round 2 personality quality | Upgrade reply engine | Add scenario-aware `刀子嘴豆腐心` replies | `app/orchestrator.py`, tests | step-12-02-spec-plan | done | none | no | yes | none |
 | phase-12-personality-quality | step-12-04-owner-smoke-test | Build Round 2 personality quality | Owner personality smoke test | Verify feel in local chat simulator | `docs/personality_round_2_smoke_test.md`, `docs/personality_round_2_result.md` | step-12-03-personality-engine | done | none | no | yes | none |
+| phase-13-wecom-live-route | step-13-01-round-3-scope | Build Round 3 WeCom live credential route | Confirm real credential path | Choose WeCom live credential route | User chose A and confirmed scope | step-12-04-owner-smoke-test | done | none | no | no | none |
+| phase-13-wecom-live-route | step-13-02-spec-plan | Build Round 3 WeCom live credential route | Write spec and plan | Save live route design and implementation plan | `docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md`, `docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md` | step-13-01-round-3-scope | done | none | no | no | none |
+| phase-13-wecom-live-route | step-13-03-live-adapter | Build Round 3 WeCom live credential route | Build live adapter skeleton | Add config self-check, signature validation, callback preflight, dev inbound, and text payloads | `app/wecom_live.py`, `app/server.py`, tests | step-13-02-spec-plan | done | none | no | yes | Real encrypted callback still needs WXBizMsgCrypt-compatible library |
+| phase-13-wecom-live-route | step-13-04-admin-self-check | Build Round 3 WeCom live credential route | Add admin self-check UI | Show live channel readiness in WeChat Entry | `app/static/index.html`, `app/static/app.js` | step-13-03-live-adapter | done | none | no | yes | none |
+| phase-13-wecom-live-route | step-13-05-owner-smoke-test | Build Round 3 WeCom live credential route | Owner WeCom route smoke test | Verify status panel, local mock preservation, and live boundary | `docs/wecom_live_round_3_smoke_test.md` | step-13-04-admin-self-check | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 
 ## Current Confirmation Gate
 
-Choose the Build Round 3 focus: real WeChat credentials, real media assets, or wider personality feedback.
+Run `docs/wecom_live_round_3_smoke_test.md` in the local app, then decide whether the third-round live route skeleton passes.
