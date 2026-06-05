@@ -6,10 +6,10 @@
 |---|---|
 | Current phase | Auto lightweight memory polish |
 | Current step | Owner auto memory smoke test |
-| Overall status | ready_for_test |
-| Completed substeps | 54 / 55 |
-| User action needed | Run the automatic memory smoke test |
-| Next step after confirmation | Accept auto memory polish or request memory-rule tuning |
+| Overall status | ready_for_next_round_scope |
+| Completed substeps | 55 / 55 |
+| User action needed | Choose the next build-round focus |
+| Next step after confirmation | Scope the next implementation round |
 
 ## Completed Outputs
 
@@ -28,14 +28,14 @@
 | Delivery | 2 / 2 | `docs/delivery_summary.md`, `docs/handoff_notes.md` |
 | Build Round 2 personality quality | 4 / 4 | personality design spec, implementation plan, scenario-aware reply engine, smoke test script, acceptance result |
 | Build Round 3 WeCom live credential route | 4 / 5 | live route design spec, implementation plan, `wecom_live` adapter, server endpoints, admin self-check |
-| Auto lightweight memory polish | 3 / 4 | automatic memory design spec, implementation plan, auto memory extractor, server wiring, automatic memory UI |
+| Auto lightweight memory polish | 4 / 4 | automatic memory design spec, implementation plan, auto memory extractor, server wiring, automatic memory UI, acceptance result |
 
 ## Ready For Test
 
 | Flow | Where | Status |
 |---|---|---|
 | Local app | `http://127.0.0.1:8765` | running |
-| Automated tests | `tests/` | 27 passing |
+| Automated tests | `tests/` | 32 passing |
 | Owner smoke test | `docs/smoke_test_result.md` | passed after one wording fix |
 | WeChat entry mock | `WeChat Entry` tab | ready for local simulation |
 | UAT scripts | `docs/uat_scripts.md` | ready to use |
@@ -45,14 +45,15 @@
 | Personality smoke test | `docs/personality_round_2_smoke_test.md` | passed |
 | Personality result | `docs/personality_round_2_result.md` | accepted |
 | WeCom live route smoke test | `docs/wecom_live_round_3_smoke_test.md` | ready for owner test |
-| Automatic memory smoke test | `docs/auto_memory_smoke_test.md` | ready for owner test |
+| Automatic memory smoke test | `docs/auto_memory_smoke_test.md` | passed |
+| Automatic memory result | `docs/auto_memory_result.md` | accepted |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Owner acceptance | Run the automatic memory smoke test and decide whether the automatic memory behavior passes |
+| Next build round | Choose the next focus: real WeCom crypto/public HTTPS, real sticker/voice assets, or wider friend testing |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner smoke-test feedback on automatic lightweight memory. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. Automatic lightweight memory is accepted. The project is ready for the next build-round focus choice; real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.

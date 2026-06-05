@@ -7,13 +7,13 @@
 | Project | 微信树洞 AI |
 | Current phase | Auto lightweight memory polish |
 | Current step | Owner auto memory smoke test |
-| Overall status | Ready for owner test |
+| Overall status | Ready for next build-round choice |
 | Total phases | 14 |
 | Total substeps | 55 |
-| Completed substeps | 54 |
+| Completed substeps | 55 |
 | Needs user attention | Yes |
-| Next action | Run the automatic memory smoke test |
-| Current risk | Automatic memory is intentionally conservative and rule-based; real WeCom encrypted callback verification remains deferred |
+| Next action | Choose the next build-round focus |
+| Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
 
@@ -73,8 +73,8 @@
 | phase-14-auto-memory-polish | step-14-01-auto-memory-scope | Auto lightweight memory polish | Confirm auto memory scope | Move memory capture out of manual user entry | User chose automatic lightweight memory | step-13-05-owner-smoke-test | done | none | no | no | none |
 | phase-14-auto-memory-polish | step-14-02-spec-plan | Auto lightweight memory polish | Write spec and plan | Save automatic memory rules and implementation route | `docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md`, `docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md` | step-14-01-auto-memory-scope | done | none | no | no | none |
 | phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Auto lightweight memory polish | Build auto memory engine | Infer safe lightweight preferences from chat and remove manual add UI | `app/auto_memory.py`, `app/server.py`, `app/static/index.html`, `app/static/app.js`, tests | step-14-02-spec-plan | done | none | no | yes | none |
-| phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Auto lightweight memory polish | Owner auto memory smoke test | Verify memory is added automatically, deduped, and sensitive content is skipped | `docs/auto_memory_smoke_test.md` | step-14-03-auto-memory-engine | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Auto lightweight memory polish | Owner auto memory smoke test | Verify memory is added automatically, deduped, and sensitive content is skipped | `docs/auto_memory_smoke_test.md`, `docs/auto_memory_result.md` | step-14-03-auto-memory-engine | done | none | no | yes | none |
 
 ## Current Confirmation Gate
 
-Run `docs/auto_memory_smoke_test.md` in the local app, then decide whether automatic memory behavior passes.
+Automatic lightweight memory is accepted. Next gate is choosing the next build-round focus.

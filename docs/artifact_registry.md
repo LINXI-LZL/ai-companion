@@ -53,3 +53,4 @@
 | artifact-049 | Auto memory extractor | source_code | `app/auto_memory.py` | phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Conservative rule-based memory inference with safety and sensitive-content suppression |
 | artifact-050 | Automatic memory UI | source_code | `app/static/index.html`, `app/static/app.js`, `app/static/styles.css` | phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Memory page changed from manual add to automatic memory review and clear controls |
 | artifact-051 | Auto memory smoke test | document | `docs/auto_memory_smoke_test.md` | phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Owner smoke test for automatic add, dedupe, sensitive skip, and Chinese-only memory UI |
+| artifact-052 | Auto memory acceptance result | document | `docs/auto_memory_result.md` | phase-14-auto-memory-polish | step-14-04-owner-smoke-test | Owner accepted automatic lightweight memory polish |

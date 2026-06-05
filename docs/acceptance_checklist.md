@@ -119,5 +119,14 @@ These items should not block Build Round 1 acceptance:
 | Field | Value |
 |---|---|
 | Smoke test script | `docs/auto_memory_smoke_test.md` |
-| Current owner action | Run the auto memory smoke test in `聊天模拟` and `记忆` |
-| Acceptance level | Ready for owner test |
+| Current owner action | none |
+| Acceptance level | Pass |
+
+## Final Auto Memory Decision
+
+| Field | Decision |
+|---|---|
+| Owner decision | 验收通过 |
+| Decision date | 2026-06-05 |
+| Acceptance level | Pass |
+| Notes | Automatic lightweight memory is accepted. The agent now auto-saves safe stable preferences and repeated themes, while skipping sensitive or high-risk content. |
