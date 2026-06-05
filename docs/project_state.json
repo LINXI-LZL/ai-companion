@@ -16,7 +16,7 @@
     "next_action_summary": "Run the owner smoke test and review the acceptance checklist.",
     "current_risk_summary": "Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred after local flow validation.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T16:42:35+08:00"
+    "updated_at": "2026-06-05T16:52:52+08:00"
   },
   "phases": [
     {
@@ -1229,13 +1229,13 @@
       "output": [],
       "requires_user_confirmation": true,
       "testable": true,
-      "notes": "Local app is running at http://127.0.0.1:8765.",
+      "notes": "Local app is running at http://127.0.0.1:8765. Owner provided screenshots showing Sample Status and Run Status are reachable; status-page display labels were localized after the feedback.",
       "depends_on": [
         "step-08-01-test-notice"
       ],
       "user_action": "run_user_test",
-      "acceptance_hint": "Owner verifies normal rant, sleepy voice intent, safety mode, memory, sample status, and run status.",
-      "progress_summary": "Ready for owner smoke test.",
+      "acceptance_hint": "Owner verifies normal rant, sleepy voice intent, safety mode, memory, WeChat entry mock, sample status, and run status.",
+      "progress_summary": "Partially observed: Sample Status and Run Status opened successfully; remaining smoke result still waits for owner confirmation.",
       "blockers": [
         "Waiting for owner smoke test result"
       ],

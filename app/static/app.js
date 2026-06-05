@@ -5,12 +5,12 @@ const state = {
 };
 
 const subtitles = {
-  chat: "Local companion flow before real WeChat integration.",
-  users: "Inner-test whitelist and user state.",
-  memory: "Lightweight preferences the agent can use or forget.",
-  wechat: "Local adapter contract for the future WeChat-side entry.",
-  sources: "Public distillation sources without large media downloads.",
-  status: "Local service, database, and deferred media assets.",
+  chat: "真实接入微信前，先在本地验证陪聊流程。",
+  users: "管理内测名单和访问状态。",
+  memory: "保存或清空智能体可以使用的轻量偏好。",
+  wechat: "真实微信接入前的本地入口契约。",
+  sources: "查看公开样本蒸馏来源，不下载大文件。",
+  status: "查看本地服务、数据库和暂缓接入的素材。",
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -133,8 +133,8 @@ async function refreshAll() {
 
 async function refreshStatus() {
   const data = await api("/api/status");
-  document.getElementById("status-pill").textContent = data.status === "ok" ? "Running" : "Issue";
-  document.getElementById("service-status").textContent = data.status;
+  document.getElementById("status-pill").textContent = data.status === "ok" ? "运行中" : "异常";
+  document.getElementById("service-status").textContent = data.status === "ok" ? "正常" : "异常";
   document.getElementById("database-path").textContent = data.database;
 }
 
@@ -169,7 +169,7 @@ function renderUsersTable() {
           <td>
             <label class="toggle">
               <input type="checkbox" ${user.allowed ? "checked" : ""} onchange="toggleUser('${escapeHtml(user.id)}', this.checked)">
-              <span>${user.allowed ? "allowed" : "blocked"}</span>
+              <span>${user.allowed ? "允许" : "已阻止"}</span>
             </label>
           </td>
           <td>${formatDate(user.created_at)}</td>
@@ -203,7 +203,7 @@ async function refreshMemories() {
   const data = await api(`/api/memories?user_id=${encodeURIComponent(state.selectedUserId)}`);
   document.getElementById("memory-list").innerHTML =
     data.memories.length === 0
-      ? `<div class="list-item"><strong>No active memory</strong><p>Memory is optional in Round 1.</p></div>`
+      ? `<div class="list-item"><strong>暂无启用记忆</strong><p>第 1 轮里记忆是可选能力。</p></div>`
       : data.memories
           .map(
             (memory) => `
@@ -218,16 +218,16 @@ async function refreshMemories() {
 
 async function refreshSources() {
   const data = await api("/api/sources");
-  document.getElementById("source-count").textContent = `${data.sources.length} sources`;
+  document.getElementById("source-count").textContent = `${data.sources.length} 个来源`;
   document.getElementById("sources-table").innerHTML = data.sources
     .map(
       (source) => `
         <tr>
           <td><strong>${escapeHtml(source.name)}</strong><br><span class="small">${escapeHtml(source.id)}</span></td>
-          <td>${escapeHtml(source.status)}</td>
-          <td>${escapeHtml(source.license)}</td>
-          <td>${escapeHtml(source.download_policy)}</td>
-          <td>${escapeHtml(source.traffic_level)}</td>
+          <td>${escapeHtml(sourceStatusLabel(source.status))}</td>
+          <td>${escapeHtml(licenseLabel(source.license))}</td>
+          <td>${escapeHtml(downloadPolicyLabel(source.download_policy))}</td>
+          <td>${escapeHtml(trafficLabel(source.traffic_level))}</td>
         </tr>
       `
     )
@@ -240,8 +240,8 @@ async function refreshMedia() {
     .map(
       (asset) => `
         <div class="list-item">
-          <strong>${escapeHtml(asset.intent)}</strong>
-          <p>${escapeHtml(asset.asset_type)} · ${escapeHtml(asset.status)} · ${escapeHtml(asset.note)}</p>
+          <strong>${escapeHtml(displayLabel(asset.intent))}</strong>
+          <p>${escapeHtml(assetTypeLabel(asset.asset_type))} · ${escapeHtml(assetStatusLabel(asset.status))} · ${escapeHtml(assetNoteLabel(asset.note))}</p>
         </div>
       `
     )
@@ -260,7 +260,7 @@ function renderPlan(response) {
 
 function renderWechatResult(response) {
   document.getElementById("wechat-channel").textContent = response.inbound.channel;
-  document.getElementById("wechat-content-type").textContent = response.inbound.content_type;
+  document.getElementById("wechat-content-type").textContent = contentTypeLabel(response.inbound.content_type);
   document.getElementById("wechat-mode").textContent = displayLabel(response.outbound.mode);
   document.getElementById("wechat-send-policy").textContent = displayLabel(response.outbound.send_policy);
   document.getElementById("wechat-outbound-text").textContent = response.outbound.text;
@@ -317,6 +317,81 @@ function displayLabel(value) {
     voice_sleepy_companion: "困倦陪伴语音",
     voice_serious_grounding: "严肃安抚语音",
     local_mock_only: "仅本地模拟",
+  };
+  return labels[value] || value || "-";
+}
+
+function sourceStatusLabel(value) {
+  const labels = {
+    candidate: "候选",
+    candidate_metadata_only: "候选，仅元数据",
+    research_reference: "研究参考",
+    method_reference: "方法参考",
+  };
+  return labels[value] || value || "-";
+}
+
+function licenseLabel(value) {
+  const labels = {
+    academic_research_only: "仅学术研究",
+    check_dataset_card_and_files_before_product_use: "产品使用前需检查数据卡和文件授权",
+    check_repository_license_before_reuse: "复用前需检查仓库授权",
+    paper_reference_only: "仅论文参考",
+  };
+  return labels[value] || value || "-";
+}
+
+function downloadPolicyLabel(value) {
+  const labels = {
+    metadata_now_dataset_later: "先看元数据，数据集稍后",
+    metadata_now_assets_later: "先看元数据，素材稍后",
+    metadata_only: "仅元数据",
+    paper_reference_only: "仅论文参考",
+  };
+  return labels[value] || value || "-";
+}
+
+function trafficLabel(value) {
+  const labels = {
+    low: "低",
+    medium: "中",
+    high: "高",
+    very_high: "很高",
+  };
+  return labels[value] || value || "-";
+}
+
+function assetTypeLabel(value) {
+  const labels = {
+    sticker: "表情包",
+    voice: "语音",
+    text: "文字",
+    safety: "安全回应",
+  };
+  return labels[value] || value || "-";
+}
+
+function assetStatusLabel(value) {
+  const labels = {
+    deferred: "暂缓接入",
+    ready: "可用",
+    disabled: "停用",
+  };
+  return labels[value] || value || "-";
+}
+
+function assetNoteLabel(value) {
+  const labels = {
+    "Real sticker files wait for rights review.": "真实表情包文件等待版权和使用权确认。",
+    "Use text fallback for now.": "当前先用文字兜底。",
+    "Voice provider is not chosen yet.": "语音服务商尚未选择。",
+  };
+  return labels[value] || value || "-";
+}
+
+function contentTypeLabel(value) {
+  const labels = {
+    text: "文字",
   };
   return labels[value] || value || "-";
 }

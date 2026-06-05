@@ -32,7 +32,7 @@
 |---|---|---|
 | Local app | `http://127.0.0.1:8765` | running |
 | Automated tests | `tests/` | 15 passing |
-| Owner smoke test | `docs/test_intervention_notice.md` | waiting for user |
+| Owner smoke test | `docs/test_intervention_notice.md` | partially observed; waiting for final user confirmation |
 | WeChat entry mock | `WeChat Entry` tab | ready for local simulation |
 | UAT scripts | `docs/uat_scripts.md` | ready to use |
 | Acceptance checklist | `docs/acceptance_checklist.md` | waiting for user review |

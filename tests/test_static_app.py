@@ -11,12 +11,12 @@ class StaticAppTests(unittest.TestCase):
         script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
 
         for label in [
-            "Chat Simulator",
-            "Users",
-            "Memory",
-            "WeChat Entry",
-            "Sample Status",
-            "Run Status",
+            "聊天模拟",
+            "用户",
+            "记忆",
+            "微信入口",
+            "样本状态",
+            "运行状态",
         ]:
             self.assertIn(label, index)
 
@@ -35,6 +35,23 @@ class StaticAppTests(unittest.TestCase):
 
         self.assertNotIn("<small>", script)
         self.assertNotIn("response.media.notice", script)
+
+    def test_status_pages_render_human_readable_chinese_labels(self):
+        index = (ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        for label in ["来源", "授权", "下载策略", "流量", "服务", "素材状态"]:
+            self.assertIn(label, index)
+
+        for renderer in [
+            "sourceStatusLabel(source.status)",
+            "downloadPolicyLabel(source.download_policy)",
+            "trafficLabel(source.traffic_level)",
+            "assetTypeLabel(asset.asset_type)",
+            "assetStatusLabel(asset.status)",
+            "assetNoteLabel(asset.note)",
+        ]:
+            self.assertIn(renderer, script)
 
 
 if __name__ == "__main__":
