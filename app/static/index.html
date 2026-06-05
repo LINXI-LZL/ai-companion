@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>微信树洞 AI Local Console</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">AI</div>
+          <div>
+            <h1>微信树洞 AI</h1>
+            <p>Local Round 1</p>
+          </div>
+        </div>
+        <nav class="nav-tabs" aria-label="Primary">
+          <button class="tab-button active" data-tab="chat">Chat Simulator</button>
+          <button class="tab-button" data-tab="users">Users</button>
+          <button class="tab-button" data-tab="memory">Memory</button>
+          <button class="tab-button" data-tab="sources">Sample Status</button>
+          <button class="tab-button" data-tab="status">Run Status</button>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <section class="topbar">
+          <div>
+            <h2 id="view-title">Chat Simulator</h2>
+            <p id="view-subtitle">Local companion flow before real WeChat integration.</p>
+          </div>
+          <div class="status-pill" id="status-pill">Checking</div>
+        </section>
+
+        <section class="view active" data-view="chat">
+          <div class="split">
+            <section class="panel chat-panel">
+              <div class="panel-header">
+                <h3>Conversation</h3>
+                <select id="chat-user"></select>
+              </div>
+              <div class="message-list" id="message-list"></div>
+              <form class="composer" id="chat-form">
+                <textarea id="chat-input" rows="3" placeholder="今晚想吐槽点什么？"></textarea>
+                <button type="submit">Send</button>
+              </form>
+            </section>
+
+            <section class="panel inspect-panel">
+              <h3>Latest Plan</h3>
+              <div class="metrics">
+                <div><span>Mode</span><strong id="plan-mode">-</strong></div>
+                <div><span>Safety</span><strong id="plan-safety">-</strong></div>
+                <div><span>Sticker</span><strong id="plan-sticker">-</strong></div>
+                <div><span>Voice</span><strong id="plan-voice">-</strong></div>
+              </div>
+              <div class="voice-box">
+                <span>Voice Script</span>
+                <p id="voice-script">-</p>
+              </div>
+              <div class="voice-box">
+                <span>Media Fallback</span>
+                <p id="media-notice">-</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="users">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Inner Test Users</h3>
+              <form class="inline-form" id="user-form">
+                <input id="user-handle" placeholder="handle">
+                <input id="user-name" placeholder="display name">
+                <button type="submit">Add</button>
+              </form>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Handle</th>
+                    <th>Name</th>
+                    <th>Allowed</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" data-view="memory">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>User Memory</h3>
+              <select id="memory-user"></select>
+            </div>
+            <form class="inline-form wide" id="memory-form">
+              <input id="memory-content" placeholder="例如：用户喜欢短回复">
+              <button type="submit">Save</button>
+              <button type="button" class="secondary" id="clear-memory">Clear</button>
+            </form>
+            <div class="list-stack" id="memory-list"></div>
+          </section>
+        </section>
+
+        <section class="view" data-view="sources">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Public Sources</h3>
+              <span class="small" id="source-count">0 sources</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th>Status</th>
+                    <th>License</th>
+                    <th>Download</th>
+                    <th>Traffic</th>
+                  </tr>
+                </thead>
+                <tbody id="sources-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" data-view="status">
+          <div class="split">
+            <section class="panel">
+              <h3>Service</h3>
+              <dl class="kv">
+                <div><dt>Status</dt><dd id="service-status">-</dd></div>
+                <div><dt>Database</dt><dd id="database-path">-</dd></div>
+              </dl>
+            </section>
+            <section class="panel">
+              <h3>Media Assets</h3>
+              <div class="list-stack" id="media-list"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>

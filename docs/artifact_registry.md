@@ -23,3 +23,8 @@
 | artifact-019 | Progress board | task_board | `docs/progress_board.md` | phase-05-master-task-board | step-05-01-master-board | Current status summary |
 | artifact-020 | Artifact registry | task_board | `docs/artifact_registry.md` | phase-05-master-task-board | step-05-01-master-board | Traceable artifact index |
 | artifact-021 | Build Round 1 scope | document | `docs/build_scope_current_round.md` | phase-06-build-round-scoping | step-06-01-build-scope-round-1 | Scope for the local companion simulator and admin foundation |
+| artifact-022 | Build Round 1 implementation plan | implementation_plan | `docs/superpowers/plans/2026-06-05-build-round-1-local-companion.md` | phase-07-development | step-07-01-project-scaffold | Implementation plan for the local companion simulator |
+| artifact-023 | Local companion app source | source_code | `app/` | phase-07-development | step-07-14-mvp-integration | Python, SQLite, and static frontend source for the local app |
+| artifact-024 | Automated tests | test | `tests/` | phase-07-development | step-07-14-mvp-integration | Unit and smoke tests for core behavior, storage, API, and static app wiring |
+| artifact-025 | Test intervention notice | document | `docs/test_intervention_notice.md` | phase-08-user-test-guidance | step-08-01-test-notice | Owner testing guide for Build Round 1 |
+| artifact-026 | Local run instructions | document | `README.md` | phase-07-development | step-07-01-project-scaffold | Local run and test commands |

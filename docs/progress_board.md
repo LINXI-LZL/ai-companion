@@ -4,12 +4,12 @@
 
 | Field | Content |
 |---|---|
-| Current phase | Build-round scoping |
-| Current step | Scope Build Round 1 |
-| Overall status | waiting_user |
-| Completed substeps | 19 / 42 |
-| User action needed | Review and confirm Build Round 1 scope |
-| Next step after confirmation | Start implementation with the project scaffold |
+| Current phase | User test guidance |
+| Current step | Owner smoke test |
+| Overall status | ready_for_test |
+| Completed substeps | 34 / 42 |
+| User action needed | Open the local app and run the owner smoke test |
+| Next step after confirmation | Record smoke-test result and decide whether to continue WeChat adapter work |
 
 ## Completed Outputs
 
@@ -20,23 +20,28 @@
 | Static prototype | 4 / 4 | `web_prototype/index.html`, `docs/screen_specs.md`, `docs/ui_preview.md` |
 | Architecture | 3 / 3 | `docs/architecture_overview.md`, `docs/module_boundary.md`, `docs/implementation_strategy.md` |
 | Master task board | 2 / 2 | `docs/master_task_board.md`, `docs/progress_board.md`, `docs/artifact_registry.md` |
+| Build round scoping | 1 / 1 | `docs/build_scope_current_round.md` |
+| Development | 13 / 14 | `app/`, `tests/`, `README.md`, local app at `http://127.0.0.1:8765` |
+| User testing | 1 / 2 | `docs/test_intervention_notice.md` |
 
-## In Review
+## Ready For Test
 
-| Phase | Current Output | Decision Needed |
+| Flow | Where | Status |
 |---|---|---|
-| Build round scoping | `docs/build_scope_current_round.md` | Confirm whether Build Round 1 should start with the local companion simulator and admin foundation |
+| Local app | `http://127.0.0.1:8765` | running |
+| Automated tests | `tests/` | 9 passing |
+| Owner smoke test | `docs/test_intervention_notice.md` | waiting for user |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Development | Build the app foundation, admin, simulator, safety, memory, AI orchestration, multimodal decisions, WeChat adapter, and observability |
-| User testing | Run owner smoke tests once the MVP is runnable |
+| Development | Real WeChat adapter remains unstarted until API credentials and current docs are reviewed |
+| User testing | Owner smoke test is ready now |
 | UAT docs | Produce nontechnical testing scripts and acceptance checklist |
 | Debug collaboration | Convert user-found issues into repair actions |
 | Delivery | Summarize delivered source, docs, known issues, and next iteration |
 
 ## Current Blocker
 
-The project is waiting for user confirmation of Build Round 1 scope. Formal implementation should start only after this scope is confirmed.
+The project is waiting for the owner smoke test. Real WeChat integration, real sticker assets, and real voice synthesis are still deferred.
