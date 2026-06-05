@@ -73,5 +73,14 @@ These items should not block Build Round 1 acceptance:
 | Field | Value |
 |---|---|
 | Smoke test script | `docs/personality_round_2_smoke_test.md` |
-| Current owner action | Run the personality smoke test in `聊天模拟` |
-| Acceptance level | Ready for owner test |
+| Current owner action | none |
+| Acceptance level | Pass |
+
+## Final Round 2 Decision
+
+| Field | Decision |
+|---|---|
+| Owner decision | 第二轮通过 |
+| Decision date | 2026-06-05 |
+| Acceptance level | Pass |
+| Notes | Build Round 2 `刀子嘴豆腐心` personality upgrade is accepted. Real WeChat send/receive, real sticker files, real voice synthesis, and wider friend testing remain next-round choices. |

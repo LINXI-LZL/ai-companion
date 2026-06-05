@@ -6,10 +6,10 @@
 |---|---|
 | Current phase | Build Round 2 personality quality |
 | Current step | Owner personality smoke test |
-| Overall status | ready_for_test |
-| Completed substeps | 45 / 46 |
-| User action needed | Run the Build Round 2 personality smoke test |
-| Next step after confirmation | Accept Round 2 or request wording polish |
+| Overall status | waiting_user |
+| Completed substeps | 46 / 46 |
+| User action needed | Choose the Build Round 3 focus |
+| Next step after confirmation | Scope Build Round 3 |
 
 ## Completed Outputs
 
@@ -26,28 +26,29 @@
 | UAT docs | 2 / 2 | `docs/uat_scripts.md`, `docs/acceptance_checklist.md` |
 | Debug collaboration | 2 / 2 | `docs/bug_feedback_template.md`, `docs/debug_next_actions.md` |
 | Delivery | 2 / 2 | `docs/delivery_summary.md`, `docs/handoff_notes.md` |
-| Build Round 2 personality quality | 3 / 4 | personality design spec, implementation plan, scenario-aware reply engine, smoke test script |
+| Build Round 2 personality quality | 4 / 4 | personality design spec, implementation plan, scenario-aware reply engine, smoke test script, acceptance result |
 
 ## Ready For Test
 
 | Flow | Where | Status |
 |---|---|---|
 | Local app | `http://127.0.0.1:8765` | running |
-| Automated tests | `tests/` | 16 passing |
+| Automated tests | `tests/` | 20 passing |
 | Owner smoke test | `docs/smoke_test_result.md` | passed after one wording fix |
 | WeChat entry mock | `WeChat Entry` tab | ready for local simulation |
 | UAT scripts | `docs/uat_scripts.md` | ready to use |
 | Acceptance checklist | `docs/acceptance_checklist.md` | accepted |
 | Delivery summary | `docs/delivery_summary.md` | ready |
 | Handoff notes | `docs/handoff_notes.md` | done |
-| Personality smoke test | `docs/personality_round_2_smoke_test.md` | ready for owner test |
+| Personality smoke test | `docs/personality_round_2_smoke_test.md` | passed |
+| Personality result | `docs/personality_round_2_result.md` | accepted |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Owner acceptance | Run the Round 2 personality smoke test and decide whether the feel passes |
+| Next round | Choose whether Build Round 3 starts with real WeChat credentials, real media assets, or wider personality feedback |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner feel-test feedback on the `刀子嘴豆腐心` personality upgrade. Real credentialed WeChat integration, real sticker assets, and real voice synthesis are still deferred.
+No engineering blocker is active. Build Round 2 is accepted. The project is waiting for the Build Round 3 focus choice. Real credentialed WeChat integration, real sticker assets, real voice synthesis, and wider friend testing are still deferred.

@@ -7,13 +7,13 @@
 | Project | 微信树洞 AI |
 | Current phase | Build Round 2 personality quality |
 | Current step | Owner personality smoke test |
-| Overall status | Ready for owner test |
+| Overall status | Waiting for Build Round 3 direction |
 | Total phases | 12 |
 | Total substeps | 46 |
-| Completed substeps | 45 |
+| Completed substeps | 46 |
 | Needs user attention | Yes |
-| Next action | Run the Build Round 2 personality smoke test |
-| Current risk | Real credentialed WeChat integration, real sticker assets, and real voice synthesis remain deferred; personality behavior is local-rule based and needs owner feel-test |
+| Next action | Choose the Build Round 3 focus |
+| Current risk | Real credentialed WeChat integration, real sticker assets, real voice synthesis, and wider friend testing remain next-round choices |
 
 ## Full Board
 
@@ -64,8 +64,8 @@
 | phase-12-personality-quality | step-12-01-round-2-scope | Build Round 2 personality quality | Confirm personality scope | Choose second-round focus and tone | User chose personality quality, then `刀子嘴豆腐心` | step-11-02-handoff-notes | done | none | no | no | none |
 | phase-12-personality-quality | step-12-02-spec-plan | Build Round 2 personality quality | Write spec and plan | Save behavior design and implementation plan | `docs/superpowers/specs/2026-06-05-personality-quality-round-2-design.md`, `docs/superpowers/plans/2026-06-05-personality-quality-round-2.md` | step-12-01-round-2-scope | done | none | no | no | none |
 | phase-12-personality-quality | step-12-03-personality-engine | Build Round 2 personality quality | Upgrade reply engine | Add scenario-aware `刀子嘴豆腐心` replies | `app/orchestrator.py`, tests | step-12-02-spec-plan | done | none | no | yes | none |
-| phase-12-personality-quality | step-12-04-owner-smoke-test | Build Round 2 personality quality | Owner personality smoke test | Verify feel in local chat simulator | `docs/personality_round_2_smoke_test.md` | step-12-03-personality-engine | ready_for_test | run_user_test | yes | yes | Needs owner feel-test |
+| phase-12-personality-quality | step-12-04-owner-smoke-test | Build Round 2 personality quality | Owner personality smoke test | Verify feel in local chat simulator | `docs/personality_round_2_smoke_test.md`, `docs/personality_round_2_result.md` | step-12-03-personality-engine | done | none | no | yes | none |
 
 ## Current Confirmation Gate
 
-Run `docs/personality_round_2_smoke_test.md` in the local `聊天模拟` tab, then decide whether the `刀子嘴豆腐心` feel passes or needs wording polish.
+Choose the Build Round 3 focus: real WeChat credentials, real media assets, or wider personality feedback.
