@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-03-static-prototype",
-    "current_step_id": "step-03-04-ui-confirmation",
+    "current_phase_id": "phase-04-architecture",
+    "current_step_id": "step-04-03-implementation-strategy",
     "overall_status": "waiting_user",
     "strategy": "hybrid",
     "total_phase_count": 11,
     "total_step_count": 27,
-    "completed_step_count": 13,
+    "completed_step_count": 17,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "请打开并确认 Web 静态原型：页面是否正确、主流程是否顺、信息摆放是否合适；确认后进入架构规划。",
-    "current_risk_summary": "内置浏览器工具本轮未暴露可执行入口，因此原型已完成静态检查但未完成浏览器截图验证；微信媒体 API、表情包素材、语音素材和公开数据许可仍需在架构阶段逐项核准。",
+    "next_action_summary": "请确认是否采用“模块化单体 + 后台任务 + 一个数据库”的 MVP 架构路线；确认后进入主任务板生成。",
+    "current_risk_summary": "微信媒体 API、表情包素材、语音素材和公开数据许可仍需在实现前逐项核准；架构建议已把这些风险隔离在 WeChat Adapter、Media Asset Layer 和 Public Sample Distillation 中。",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T14:47:22+08:00"
+    "updated_at": "2026-06-05T14:52:45+08:00"
   },
   "phases": [
     {
@@ -79,7 +79,7 @@
       "order": 3,
       "title": "Web static prototype confirmation",
       "goal": "在正式编码前，用可查看的静态原型确认聊天体验、管理后台和主要页面结构。",
-      "status": "waiting_user",
+      "status": "done",
       "outputs": [
         "docs/screen_specs.md",
         "docs/ui_preview.md",
@@ -87,13 +87,13 @@
         "web_prototype/styles.css",
         "web_prototype/app.js"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
       "step_count": 4,
-      "completed_step_count": 3,
-      "summary": "Web 静态原型已创建，等待用户确认页面、主流程和信息摆放。",
-      "notes": "只有原型确认后才进入架构和正式开发规划。本轮已做静态文件检查；浏览器截图验证因工具入口不可用而未完成。",
-      "user_action": "confirm_ui",
+      "completed_step_count": 4,
+      "summary": "Web 静态原型已由用户确认。",
+      "notes": "原型确认后已进入架构规划。本轮已做静态文件检查；浏览器截图验证因工具入口不可用而未完成，但用户在应用内浏览器打开后确认。",
+      "user_action": "none",
       "acceptance_hint": "用户应能看懂页面、入口、主要流程和信息摆放。",
       "depends_on_phase_ids": [
         "phase-02-blueprint"
@@ -105,15 +105,19 @@
       "order": 4,
       "title": "Architecture and module-boundary planning",
       "goal": "把确认后的产品和原型翻译成稳定、可迭代的技术结构。",
-      "status": "not_started",
-      "outputs": [],
+      "status": "waiting_user",
+      "outputs": [
+        "docs/architecture_overview.md",
+        "docs/module_boundary.md",
+        "docs/implementation_strategy.md"
+      ],
       "requires_user_confirmation": true,
       "testable": false,
       "step_count": 3,
-      "completed_step_count": 0,
-      "summary": "尚未开始。",
-      "notes": "需要等待静态原型确认。",
-      "user_action": "none",
+      "completed_step_count": 3,
+      "summary": "架构概览、模块边界和实施策略已起草，等待用户确认推荐架构路线。",
+      "notes": "推荐 MVP 使用模块化单体 + 后台任务 + 一个数据库，后续可拆分为独立服务。",
+      "user_action": "confirm_product_rule",
       "acceptance_hint": "用户应能理解每个模块为什么存在，以及它如何支撑产品稳定上线。",
       "depends_on_phase_ids": [
         "phase-03-static-prototype"
@@ -610,26 +614,105 @@
       "order": 4,
       "title": "Confirm static prototype",
       "goal": "在正式编码前确认页面、主流程和信息摆放。",
-      "status": "waiting_user",
-      "output": [],
-      "requires_user_confirmation": true,
+      "status": "done",
+      "output": [
+        "用户在应用内浏览器查看后回复“确认”。"
+      ],
+      "requires_user_confirmation": false,
       "testable": true,
       "notes": "确认后才进入架构阶段。",
       "depends_on": [
         "step-03-03-static-prototype"
       ],
-      "user_action": "confirm_ui",
+      "user_action": "none",
       "acceptance_hint": "用户明确同意原型可以进入正式实现规划。",
-      "progress_summary": "等待用户确认静态原型。",
-      "blockers": [
-        "等待用户确认页面、主流程和信息摆放"
-      ],
+      "progress_summary": "已完成。",
+      "blockers": [],
       "related_artifact_ids": [
         "artifact-012",
         "artifact-013",
         "artifact-014"
       ],
       "related_decision_ids": []
+    },
+    {
+      "id": "step-04-01-architecture-overview",
+      "phase_id": "phase-04-architecture",
+      "order": 1,
+      "title": "Create architecture overview",
+      "goal": "把确认后的产品和原型翻译成稳定、可迭代的整体系统结构。",
+      "status": "done",
+      "output": [
+        "docs/architecture_overview.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "架构将微信、AI、多模态、记忆、安全、样本蒸馏和后台拆成清楚模块。",
+      "depends_on": [
+        "step-03-04-ui-confirmation"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "用户能理解系统主要部分如何协作。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-015"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-04-02-module-boundaries",
+      "phase_id": "phase-04-architecture",
+      "order": 2,
+      "title": "Define module boundaries",
+      "goal": "明确各模块负责什么、不负责什么，降低后续开发混乱和返工。",
+      "status": "done",
+      "output": [
+        "docs/module_boundary.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "模块包括 WeChat Adapter、Message Inbox、Safety Guard、Memory、Orchestrator、Multimodal、Media、Distillation、Admin 和 Observability。",
+      "depends_on": [
+        "step-04-01-architecture-overview"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "每个模块边界都能对应到产品稳定性或后续迭代速度。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-016"
+      ],
+      "related_decision_ids": []
+    },
+    {
+      "id": "step-04-03-implementation-strategy",
+      "phase_id": "phase-04-architecture",
+      "order": 3,
+      "title": "Choose implementation strategy",
+      "goal": "在速度、稳定性、成本和未来扩展之间选择 MVP 技术路线。",
+      "status": "waiting_user",
+      "output": [
+        "docs/implementation_strategy.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "推荐模块化单体 + 后台任务 + 一个数据库。",
+      "depends_on": [
+        "step-04-02-module-boundaries"
+      ],
+      "user_action": "confirm_product_rule",
+      "acceptance_hint": "用户确认推荐路线后即可生成主任务板。",
+      "progress_summary": "等待用户确认架构路线。",
+      "blockers": [
+        "等待用户确认 MVP 架构路线"
+      ],
+      "related_artifact_ids": [
+        "artifact-017"
+      ],
+      "related_decision_ids": [
+        "decision-008"
+      ]
     }
   ],
   "artifacts": [
@@ -785,6 +868,39 @@
       "phase_id": "phase-03-static-prototype",
       "step_id": "step-03-03-static-prototype",
       "created_at": "2026-06-05T14:47:22+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-015",
+      "title": "Architecture overview",
+      "artifact_type": "architecture_doc",
+      "location": "docs/architecture_overview.md",
+      "summary": "整体架构说明，覆盖微信入口、AI 编排、多模态、记忆、安全、样本蒸馏和后台。",
+      "phase_id": "phase-04-architecture",
+      "step_id": "step-04-01-architecture-overview",
+      "created_at": "2026-06-05T14:52:45+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-016",
+      "title": "Module boundary",
+      "artifact_type": "architecture_doc",
+      "location": "docs/module_boundary.md",
+      "summary": "模块边界说明，定义每个模块负责什么、不负责什么和测试边界。",
+      "phase_id": "phase-04-architecture",
+      "step_id": "step-04-02-module-boundaries",
+      "created_at": "2026-06-05T14:52:45+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-017",
+      "title": "Implementation strategy",
+      "artifact_type": "architecture_doc",
+      "location": "docs/implementation_strategy.md",
+      "summary": "实施策略和技术路线决策表，推荐模块化单体 MVP 路线。",
+      "phase_id": "phase-04-architecture",
+      "step_id": "step-04-03-implementation-strategy",
+      "created_at": "2026-06-05T14:52:45+08:00",
       "version": "v0.1"
     }
   ],
@@ -962,6 +1078,32 @@
       "user_decision": "先节省 VPN 流量，等关闭 VPN 后再下载表情包文件",
       "recommendation_reason": "先把行为逻辑做清楚，避免大文件流量、版权和 API 细节拖慢产品设计。",
       "notes": "架构阶段继续确认微信媒体能力、素材版权和语音合成路线。"
+    },
+    {
+      "id": "decision-008",
+      "title": "MVP architecture route",
+      "context": "原型已确认，需要选择第一版实现方式，影响开发速度、调试难度和未来扩展。",
+      "status": "waiting_user",
+      "recommended_option_id": "option-modular-monolith",
+      "related_phase_id": "phase-04-architecture",
+      "related_step_id": "step-04-03-implementation-strategy",
+      "options": [
+        {
+          "id": "option-modular-monolith",
+          "label": "模块化单体 + 后台任务 + 一个数据库"
+        },
+        {
+          "id": "option-serverless",
+          "label": "Serverless 函数组合"
+        },
+        {
+          "id": "option-microservices",
+          "label": "一开始就微服务"
+        }
+      ],
+      "user_decision": "",
+      "recommendation_reason": "对你和少数朋友内测来说，这条路线最快、最容易调试，也能保持后续拆分空间。",
+      "notes": "等待用户确认后进入主任务板生成。"
     }
   ]
 }
