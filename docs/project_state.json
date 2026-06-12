@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-13-wecom-live-route",
-    "current_step_id": "step-13-05-owner-smoke-test",
-    "overall_status": "ready_for_test",
+    "current_phase_id": "phase-19-wecom-real-callback",
+    "current_step_id": "step-19-04-owner-smoke-test",
+    "overall_status": "ready_for_owner_test",
     "strategy": "hybrid",
-    "total_phase_count": 18,
-    "total_step_count": 74,
-    "completed_step_count": 71,
+    "total_phase_count": 19,
+    "total_step_count": 78,
+    "completed_step_count": 77,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Choose the next pending verification: WeCom live route, expression logic, multi-model router, or next build-round scope.",
-    "current_risk_summary": "Dify provider is accepted; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
+    "next_action_summary": "Set real WeCom env vars, expose a public HTTPS callback URL, then run docs/wecom_real_callback_smoke_test.md for quick ACK, async receive, dedupe, and text send.",
+    "current_risk_summary": "Real callback quick ACK, async text send, and dedupe are implemented locally; public HTTPS reachability and real Enterprise WeChat smoke testing remain owner-side.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-12T23:55:00+08:00"
+    "updated_at": "2026-06-13T02:00:00+08:00"
   },
   "phases": [
     {
@@ -318,7 +318,7 @@
       "order": 13,
       "title": "Build Round 3 WeCom live credential route",
       "goal": "从本地 mock 过渡到真实企业微信凭证路线的本地骨架，支持配置自检和回调预检。",
-      "status": "ready_for_test",
+      "status": "done",
       "outputs": [
         "docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md",
         "docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md",
@@ -326,15 +326,16 @@
         "app/server.py",
         "app/static/index.html",
         "app/static/app.js",
-        "docs/wecom_live_round_3_smoke_test.md"
+        "docs/wecom_live_round_3_smoke_test.md",
+        "docs/wecom_live_round_3_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
       "step_count": 5,
-      "completed_step_count": 4,
-      "summary": "WeCom live credential-route skeleton is implemented and ready for owner smoke test.",
-      "notes": "This round does not finish encrypted echostr decryption or real outbound network sending.",
-      "user_action": "run_user_test",
+      "completed_step_count": 5,
+      "summary": "WeCom live credential-route skeleton passed smoke testing.",
+      "notes": "This round does not finish encrypted echostr decryption or real outbound network sending; those remain deferred.",
+      "user_action": "none",
       "acceptance_hint": "用户能在本地页面看懂真实接入准备状态和仍然延期的边界。",
       "depends_on_phase_ids": [
         "phase-12-personality-quality"
@@ -377,19 +378,20 @@
       "order": 15,
       "title": "Expression logic polish",
       "goal": "修复回复像模板拼接、逻辑跳跃的问题，让普通聊天、AI 反馈和重复主题各自使用合适表达。",
-      "status": "ready_for_test",
+      "status": "done",
       "outputs": [
         "app/orchestrator.py",
         "tests/test_companion_core.py",
-        "docs/expression_logic_smoke_test.md"
+        "docs/expression_logic_smoke_test.md",
+        "docs/expression_logic_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
       "step_count": 4,
-      "completed_step_count": 3,
-      "summary": "Expression logic is polished and ready for owner smoke test.",
-      "notes": "This round adds meta-feedback handling and stops generic messages from receiving unrelated repeated-theme suffixes.",
-      "user_action": "run_user_test",
+      "completed_step_count": 4,
+      "summary": "Expression logic polish passed smoke testing.",
+      "notes": "This round adds meta-feedback handling, stops generic messages from receiving unrelated repeated-theme suffixes, and protects key expression shapes from Dify drift.",
+      "user_action": "none",
       "acceptance_hint": "用户在聊天模拟里验证回复是否更顺、更符合当前句子。",
       "depends_on_phase_ids": [
         "phase-14-auto-memory-polish"
@@ -402,7 +404,7 @@
       "order": 16,
       "title": "External multi-model router",
       "goal": "把外部大模型 API 作为可切换主脑接入设计清楚，同时保留本地安全、记忆、多模态意图和失败兜底。",
-      "status": "ready_for_test",
+      "status": "done",
       "outputs": [
         "docs/superpowers/specs/2026-06-12-multi-model-router-design.md",
         "docs/superpowers/plans/2026-06-12-multi-model-router.md",
@@ -411,15 +413,16 @@
         "app/static/index.html",
         "app/static/app.js",
         "tests/test_llm_router.py",
-        "docs/multi_model_router_smoke_test.md"
+        "docs/multi_model_router_smoke_test.md",
+        "docs/multi_model_router_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
       "step_count": 7,
-      "completed_step_count": 6,
-      "summary": "Multi-model router skeleton is implemented and ready for owner smoke test.",
-      "notes": "The app remains runnable without real API keys. Real paid credentials remain an owner setup step.",
-      "user_action": "run_user_test",
+      "completed_step_count": 7,
+      "summary": "Multi-model router skeleton passed smoke testing.",
+      "notes": "The app remains runnable without real API keys. Real paid credentials remain an owner setup step; Dify is currently configured as the active external provider.",
+      "user_action": "none",
       "acceptance_hint": "用户能在运行状态页看到外部主脑状态，并确认无 Key 时仍回到本地回复。",
       "depends_on_phase_ids": [
         "phase-15-expression-logic-polish"
@@ -483,6 +486,39 @@
         "phase-17-open-source-radar"
       ],
       "started_at": "2026-06-12T21:45:00+08:00"
+    },
+    {
+      "id": "phase-19-wecom-real-callback",
+      "project_id": "wechat-vent-ai",
+      "order": 19,
+      "title": "Build Round 4 WeCom real callback and text send",
+      "goal": "打通真实企业微信回调 URL 验证、快速 ACK、加密文本回调入队、后台 sync_msg 正文拉取、send_msg 文本发送和去重，让平台消息可以进入并返回陪聊链路。",
+      "status": "ready_for_owner_test",
+      "outputs": [
+        "docs/superpowers/specs/2026-06-13-wecom-real-callback-design.md",
+        "docs/superpowers/plans/2026-06-13-wecom-real-callback.md",
+        "app/wecom_live.py",
+        "app/wecom_kf_api.py",
+        "app/storage.py",
+        "app/server.py",
+        "app/static/app.js",
+        "README.md",
+        "tests/test_wechat_adapter.py",
+        "docs/wecom_real_callback_smoke_test.md",
+        "docs/wecom_real_callback_result.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "step_count": 4,
+      "completed_step_count": 3,
+      "summary": "Real callback quick ACK, queued async processing, dedupe, and text send are implemented and ready for owner smoke testing with a public HTTPS callback URL.",
+      "notes": "This round verifies and decrypts incoming callbacks, returns success ACK after queueing, dedupes callback/message IDs, pulls text bodies through sync_msg in a worker, and sends text replies through send_msg when credentials are configured.",
+      "user_action": "run_owner_test",
+      "acceptance_hint": "Owner should configure real Enterprise WeChat callback URL, Token, EncodingAESKey, Secret, and open_kfid, then confirm URL verification and text replies succeed.",
+      "depends_on_phase_ids": [
+        "phase-18-dify-provider"
+      ],
+      "started_at": "2026-06-13T02:00:00+08:00"
     }
   ],
   "steps": [
@@ -1831,24 +1867,24 @@
       "order": 5,
       "title": "Owner WeCom route smoke test",
       "goal": "Let the owner verify the live credential-route skeleton and its boundaries.",
-      "status": "ready_for_test",
+      "status": "done",
       "output": [
-        "docs/wecom_live_round_3_smoke_test.md"
+        "docs/wecom_live_round_3_smoke_test.md",
+        "docs/wecom_live_round_3_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Owner should inspect the WeChat Entry self-check and status API.",
+      "notes": "Smoke testing passed for the WeChat Entry self-check, status API, local mock preservation, and live boundary.",
       "depends_on": [
         "step-13-04-admin-self-check"
       ],
-      "user_action": "run_user_test",
+      "user_action": "none",
       "acceptance_hint": "Owner can mark Round 3 accepted or request wording/route polish.",
-      "progress_summary": "Ready for owner test.",
-      "blockers": [
-        "Waiting for owner smoke-test feedback"
-      ],
+      "progress_summary": "验收通过。",
+      "blockers": [],
       "related_artifact_ids": [
-        "artifact-046"
+        "artifact-046",
+        "artifact-072"
       ],
       "related_decision_ids": [
         "decision-012"
@@ -2056,24 +2092,24 @@
       "order": 4,
       "title": "Owner expression smoke test",
       "goal": "让用户在本地聊天模拟中验证表达是否更有逻辑。",
-      "status": "ready_for_test",
+      "status": "done",
       "output": [
-        "docs/expression_logic_smoke_test.md"
+        "docs/expression_logic_smoke_test.md",
+        "docs/expression_logic_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Owner should test poetic generic messages, AI-quality feedback, and work rant preservation.",
+      "notes": "Smoke testing passed for poetic generic messages, AI-quality feedback, work rant preservation, and Dify expression-shape fallback.",
       "depends_on": [
         "step-15-03-reply-engine-polish"
       ],
-      "user_action": "run_user_test",
+      "user_action": "none",
       "acceptance_hint": "用户按烟测脚本通过后，本轮表达逻辑优化即可验收。",
-      "progress_summary": "等待用户测试。",
-      "blockers": [
-        "Needs owner smoke test"
-      ],
+      "progress_summary": "验收通过。",
+      "blockers": [],
       "related_artifact_ids": [
-        "artifact-055"
+        "artifact-055",
+        "artifact-073"
       ],
       "related_decision_ids": [
         "decision-015"
@@ -2251,24 +2287,24 @@
       "order": 7,
       "title": "Owner multi-model router smoke test",
       "goal": "由用户确认默认本地兜底、状态页展示和聊天流程仍可用。",
-      "status": "ready_for_test",
+      "status": "done",
       "output": [
-        "docs/multi_model_router_smoke_test.md"
+        "docs/multi_model_router_smoke_test.md",
+        "docs/multi_model_router_result.md"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Real paid API credentials are not required for this smoke test.",
+      "notes": "Smoke testing passed for default local fallback, configured Dify mode, secret redaction, chat continuity, and safety local-first behavior.",
       "depends_on": [
         "step-16-06-admin-status"
       ],
-      "user_action": "run_user_test",
+      "user_action": "none",
       "acceptance_hint": "用户在本地页面确认外部主脑状态和聊天可用。",
-      "progress_summary": "等待用户烟测。",
-      "blockers": [
-        "Needs owner smoke test"
-      ],
+      "progress_summary": "验收通过。",
+      "blockers": [],
       "related_artifact_ids": [
-        "artifact-062"
+        "artifact-062",
+        "artifact-074"
       ],
       "related_decision_ids": [
         "decision-017"
@@ -2494,6 +2530,124 @@
       ],
       "related_decision_ids": [
         "decision-019"
+      ]
+    },
+    {
+      "id": "step-19-01-round-scope",
+      "phase_id": "phase-19-wecom-real-callback",
+      "order": 1,
+      "title": "Confirm real callback route",
+      "goal": "确认下一轮优先做真实企业微信回调，而不是表情包、语音或更大范围人格优化。",
+      "status": "done",
+      "output": [
+        "User chose A: real WeCom callback."
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Scope started as callback receive and was extended to real text send after callback receive passed owner-side setup.",
+      "depends_on": [
+        "step-18-07-dify-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Round scope is clear.",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-020"
+      ]
+    },
+    {
+      "id": "step-19-02-spec-plan",
+      "phase_id": "phase-19-wecom-real-callback",
+      "order": 2,
+      "title": "Write callback design and plan",
+      "goal": "保存真实回调接收的设计、边界和测试先行执行计划。",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-13-wecom-real-callback-design.md",
+        "docs/superpowers/plans/2026-06-13-wecom-real-callback.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Design covers URL verification, encrypted POST parsing, quick success ACK, callback queueing, sync_msg body pull, dedupe, and safe text-send behavior.",
+      "depends_on": [
+        "step-19-01-round-scope"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Design and implementation plan can be read without chat history.",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-075",
+        "artifact-076"
+      ],
+      "related_decision_ids": [
+        "decision-020"
+      ]
+    },
+    {
+      "id": "step-19-03-callback-implementation",
+      "phase_id": "phase-19-wecom-real-callback",
+      "order": 3,
+      "title": "Implement encrypted callback receive and text send",
+      "goal": "添加 AES 解密、URL 验证、加密 POST 回调入队、快速 ACK、后台 sync_msg 正文拉取、send_msg 文本发送、去重、状态文案和回归测试。",
+      "status": "done",
+      "output": [
+        "app/wecom_live.py",
+        "app/wecom_kf_api.py",
+        "app/storage.py",
+        "app/server.py",
+        "app/static/app.js",
+        "README.md",
+        "tests/test_wechat_adapter.py"
+      ],
+      "requires_user_confirmation": false,
+      "testable": true,
+      "notes": "Incoming encrypted callbacks are queued and ACKed quickly; the background worker reaches the companion flow and sends text replies with send_msg when credentials are configured.",
+      "depends_on": [
+        "step-19-02-spec-plan"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "Automated tests cover AES vectors, echostr decrypt, encrypted POST queueing, quick ACK, callback dedupe, sync_msg body pull, message dedupe, send_msg success/failure, and existing dev inbound path.",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-077"
+      ],
+      "related_decision_ids": [
+        "decision-020"
+      ]
+    },
+    {
+      "id": "step-19-04-owner-smoke-test",
+      "phase_id": "phase-19-wecom-real-callback",
+      "order": 4,
+      "title": "Owner real callback and text-send smoke test",
+      "goal": "由用户在真实企业微信后台验证公网 URL、Token、EncodingAESKey、Secret 和 open_kfid 是否能完成快速 ACK、异步处理、去重和文本收发。",
+      "status": "pending",
+      "output": [
+        "docs/wecom_real_callback_smoke_test.md",
+        "docs/wecom_real_callback_result.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": true,
+      "notes": "Requires a public HTTPS URL or tunnel reachable by Enterprise WeChat.",
+      "depends_on": [
+        "step-19-03-callback-implementation"
+      ],
+      "user_action": "run_owner_test",
+      "acceptance_hint": "Enterprise WeChat accepts the callback URL, encrypted text callback quickly returns success, duplicate callbacks do not duplicate replies, and the customer receives the AI text reply.",
+      "progress_summary": "等待用户真实平台烟测。",
+      "blockers": [
+        "Needs public HTTPS callback URL"
+      ],
+      "related_artifact_ids": [
+        "artifact-078",
+        "artifact-079"
+      ],
+      "related_decision_ids": [
+        "decision-020"
       ]
     }
   ],
@@ -3267,6 +3421,105 @@
       "step_id": "step-18-07-dify-owner-smoke-test",
       "created_at": "2026-06-12T23:55:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-071",
+      "title": "Memory chain repair result",
+      "artifact_type": "document",
+      "location": "docs/memory_chain_repair_result.md",
+      "summary": "Accepted follow-up repair for AI nickname memory, recent-event memory, recall replies, Dify memory passing, and fallback guardrails.",
+      "phase_id": "phase-14-auto-memory-polish",
+      "step_id": "step-14-03-auto-memory-engine",
+      "created_at": "2026-06-13T00:20:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-072",
+      "title": "WeCom live route acceptance result",
+      "artifact_type": "document",
+      "location": "docs/wecom_live_round_3_result.md",
+      "summary": "Owner smoke-test result for live WeCom route status, payload-only boundary, redacted credential display, and local mock preservation.",
+      "phase_id": "phase-13-wecom-live-route",
+      "step_id": "step-13-05-owner-smoke-test",
+      "created_at": "2026-06-13T01:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-073",
+      "title": "Expression logic acceptance result",
+      "artifact_type": "document",
+      "location": "docs/expression_logic_result.md",
+      "summary": "Owner smoke-test result for poetic ambiguity handling, AI-quality feedback repair, work-rant preservation, and Dify expression-shape fallback.",
+      "phase_id": "phase-15-expression-logic-polish",
+      "step_id": "step-15-04-owner-smoke-test",
+      "created_at": "2026-06-13T01:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-074",
+      "title": "Multi-model router acceptance result",
+      "artifact_type": "document",
+      "location": "docs/multi_model_router_result.md",
+      "summary": "Owner smoke-test result for local fallback, configured Dify mode, redacted provider status, chat continuity, and safety local-first behavior.",
+      "phase_id": "phase-16-multi-model-router",
+      "step_id": "step-16-07-owner-smoke-test",
+      "created_at": "2026-06-13T01:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-075",
+      "title": "WeCom real callback design",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-13-wecom-real-callback-design.md",
+      "summary": "Design for encrypted Enterprise WeChat URL verification and callback receive.",
+      "phase_id": "phase-19-wecom-real-callback",
+      "step_id": "step-19-02-spec-plan",
+      "created_at": "2026-06-13T02:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-076",
+      "title": "WeCom real callback implementation plan",
+      "artifact_type": "implementation_plan",
+      "location": "docs/superpowers/plans/2026-06-13-wecom-real-callback.md",
+      "summary": "Test-first implementation plan for callback crypto, encrypted POST receive, owner readiness docs, and verification.",
+      "phase_id": "phase-19-wecom-real-callback",
+      "step_id": "step-19-02-spec-plan",
+      "created_at": "2026-06-13T02:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-077",
+      "title": "WeCom real callback source and tests",
+      "artifact_type": "source_code",
+      "location": "app/wecom_live.py, app/server.py, app/static/app.js, tests/test_wechat_adapter.py",
+      "summary": "AES callback crypto, encrypted POST handling, readiness labels, and regression tests.",
+      "phase_id": "phase-19-wecom-real-callback",
+      "step_id": "step-19-03-callback-implementation",
+      "created_at": "2026-06-13T02:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-078",
+      "title": "WeCom real callback smoke test",
+      "artifact_type": "document",
+      "location": "docs/wecom_real_callback_smoke_test.md",
+      "summary": "Owner smoke test for public HTTPS callback URL verification and encrypted text callback receive.",
+      "phase_id": "phase-19-wecom-real-callback",
+      "step_id": "step-19-04-owner-smoke-test",
+      "created_at": "2026-06-13T02:00:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-079",
+      "title": "WeCom real callback result",
+      "artifact_type": "document",
+      "location": "docs/wecom_real_callback_result.md",
+      "summary": "Implementation result for real callback receive; owner platform smoke test still pending.",
+      "phase_id": "phase-19-wecom-real-callback",
+      "step_id": "step-19-04-owner-smoke-test",
+      "created_at": "2026-06-13T02:00:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -3743,6 +3996,36 @@
       "user_decision": "确认",
       "recommendation_reason": "The design is scoped to a provider integration, so it is ready to become a focused test-first implementation plan.",
       "notes": "Next owner choice is execution mode: Subagent-Driven or Inline Execution."
+    },
+    {
+      "id": "decision-020",
+      "title": "Build Round 4 real WeCom callback",
+      "context": "After Dify and remaining local MVP tracks were accepted, owner chose the next build-round scope.",
+      "status": "resolved",
+      "recommended_option_id": "option-real-wecom-callback",
+      "related_phase_id": "phase-19-wecom-real-callback",
+      "related_step_id": "step-19-01-round-scope",
+      "options": [
+        {
+          "id": "option-real-wecom-callback",
+          "label": "真实企微回调接收"
+        },
+        {
+          "id": "option-real-stickers",
+          "label": "真实表情包素材"
+        },
+        {
+          "id": "option-voice-provider",
+          "label": "语音供应商接入"
+        },
+        {
+          "id": "option-agent-quality",
+          "label": "更大范围智能体质量"
+        }
+      ],
+      "user_decision": "A: real WeCom callback.",
+      "recommendation_reason": "The callback receive path is the next platform milestone before real text send, stickers, or voice.",
+      "notes": "This round implements encrypted callback receive, quick ACK queueing, async sync_msg body pull, callback/message dedupe, and send_msg text sending; media sending remains deferred."
     }
   ]
 }

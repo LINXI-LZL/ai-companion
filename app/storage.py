@@ -65,6 +65,30 @@ class Storage:
                     created_at TEXT NOT NULL
                 );
 
+                CREATE TABLE IF NOT EXISTS wecom_callback_jobs (
+                    id TEXT PRIMARY KEY,
+                    dedupe_key TEXT NOT NULL UNIQUE,
+                    job_type TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    result_json TEXT NOT NULL DEFAULT '{}',
+                    attempts INTEGER NOT NULL DEFAULT 0,
+                    last_error TEXT NOT NULL DEFAULT '',
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    started_at TEXT NOT NULL DEFAULT '',
+                    finished_at TEXT NOT NULL DEFAULT ''
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_wecom_callback_jobs_status_created
+                ON wecom_callback_jobs(status, created_at);
+
+                CREATE TABLE IF NOT EXISTS wecom_processed_messages (
+                    dedupe_key TEXT PRIMARY KEY,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+
                 CREATE TABLE IF NOT EXISTS media_assets (
                     id TEXT PRIMARY KEY,
                     asset_type TEXT NOT NULL,
@@ -224,6 +248,116 @@ class Storage:
                 ),
             )
 
+    def list_audit_events(self, limit=30):
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT * FROM audit_events ORDER BY created_at DESC, rowid DESC LIMIT ?",
+                (limit,),
+            ).fetchall()
+        return [self._row_to_audit_event(row) for row in rows]
+
+    def enqueue_wecom_callback_job(self, dedupe_key, job_type, payload):
+        now = utc_now()
+        job_id = f"wecom-job-{uuid.uuid4().hex[:12]}"
+        payload_json = json.dumps(payload, ensure_ascii=False)
+        with self._connect() as conn:
+            cursor = conn.execute(
+                """
+                INSERT OR IGNORE INTO wecom_callback_jobs
+                (id, dedupe_key, job_type, status, payload_json, result_json, attempts,
+                 last_error, created_at, updated_at, started_at, finished_at)
+                VALUES (?, ?, ?, 'queued', ?, '{}', 0, '', ?, ?, '', '')
+                """,
+                (job_id, dedupe_key, job_type, payload_json, now, now),
+            )
+            created = cursor.rowcount == 1
+            if created:
+                row = conn.execute("SELECT * FROM wecom_callback_jobs WHERE id = ?", (job_id,)).fetchone()
+            else:
+                row = conn.execute("SELECT * FROM wecom_callback_jobs WHERE dedupe_key = ?", (dedupe_key,)).fetchone()
+        return self._row_to_wecom_callback_job(row), created
+
+    def list_wecom_callback_jobs(self, status=None, limit=30):
+        params = []
+        query = "SELECT * FROM wecom_callback_jobs"
+        if status:
+            query += " WHERE status = ?"
+            params.append(status)
+        query += " ORDER BY created_at ASC, rowid ASC LIMIT ?"
+        params.append(limit)
+        with self._connect() as conn:
+            rows = conn.execute(query, params).fetchall()
+        return [self._row_to_wecom_callback_job(row) for row in rows]
+
+    def claim_next_wecom_callback_job(self):
+        now = utc_now()
+        with self._connect() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute(
+                """
+                SELECT * FROM wecom_callback_jobs
+                WHERE status = 'queued'
+                ORDER BY created_at ASC, rowid ASC
+                LIMIT 1
+                """
+            ).fetchone()
+            if not row:
+                return None
+            conn.execute(
+                """
+                UPDATE wecom_callback_jobs
+                SET status = 'running', attempts = attempts + 1, updated_at = ?, started_at = ?
+                WHERE id = ?
+                """,
+                (now, now, row["id"]),
+            )
+            claimed = conn.execute("SELECT * FROM wecom_callback_jobs WHERE id = ?", (row["id"],)).fetchone()
+        return self._row_to_wecom_callback_job(claimed)
+
+    def finish_wecom_callback_job(self, job_id, result):
+        now = utc_now()
+        with self._connect() as conn:
+            conn.execute(
+                """
+                UPDATE wecom_callback_jobs
+                SET status = 'done', result_json = ?, updated_at = ?, finished_at = ?, last_error = ''
+                WHERE id = ?
+                """,
+                (json.dumps(result, ensure_ascii=False), now, now, job_id),
+            )
+        return self.get_wecom_callback_job(job_id)
+
+    def fail_wecom_callback_job(self, job_id, reason):
+        now = utc_now()
+        safe_reason = str(reason or "")[:240]
+        with self._connect() as conn:
+            conn.execute(
+                """
+                UPDATE wecom_callback_jobs
+                SET status = 'failed', last_error = ?, updated_at = ?, finished_at = ?
+                WHERE id = ?
+                """,
+                (safe_reason, now, now, job_id),
+            )
+        return self.get_wecom_callback_job(job_id)
+
+    def get_wecom_callback_job(self, job_id):
+        with self._connect() as conn:
+            row = conn.execute("SELECT * FROM wecom_callback_jobs WHERE id = ?", (job_id,)).fetchone()
+        return self._row_to_wecom_callback_job(row) if row else None
+
+    def mark_wecom_message_processed(self, dedupe_key, payload):
+        with self._connect() as conn:
+            cursor = conn.execute(
+                """
+                INSERT OR IGNORE INTO wecom_processed_messages
+                (dedupe_key, payload_json, created_at)
+                VALUES (?, ?, ?)
+                """,
+                (dedupe_key, json.dumps(payload, ensure_ascii=False), utc_now()),
+            )
+        return cursor.rowcount == 1
+
     def list_media_assets(self):
         with self._connect() as conn:
             rows = conn.execute("SELECT * FROM media_assets ORDER BY intent ASC").fetchall()
@@ -295,4 +429,30 @@ class Storage:
             "voice_intent": row["voice_intent"],
             "plan": json.loads(row["plan_json"]),
             "created_at": row["created_at"],
+        }
+
+    @staticmethod
+    def _row_to_audit_event(row):
+        return {
+            "id": row["id"],
+            "event_type": row["event_type"],
+            "payload": json.loads(row["payload_json"]),
+            "created_at": row["created_at"],
+        }
+
+    @staticmethod
+    def _row_to_wecom_callback_job(row):
+        return {
+            "id": row["id"],
+            "dedupe_key": row["dedupe_key"],
+            "job_type": row["job_type"],
+            "status": row["status"],
+            "payload": json.loads(row["payload_json"]),
+            "result": json.loads(row["result_json"] or "{}"),
+            "attempts": row["attempts"],
+            "last_error": row["last_error"],
+            "created_at": row["created_at"],
+            "updated_at": row["updated_at"],
+            "started_at": row["started_at"],
+            "finished_at": row["finished_at"],
         }

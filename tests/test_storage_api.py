@@ -66,7 +66,7 @@ class StorageAndApiTests(unittest.TestCase):
             user = store.create_user("owner", "Owner", allowed=True)
             response = create_chat_response(
                 store,
-                {"user_id": user["id"], "message": "你是我今夜辗转反侧做的梦"},
+                {"user_id": user["id"], "message": "今天有点无聊"},
                 router_config=load_router_config_from_env(
                     {"COMPANION_LLM_PROVIDER": "openai", "OPENAI_API_KEY": "secret", "OPENAI_MODEL": "gpt-test"}
                 ),
@@ -78,6 +78,35 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertEqual(response["plan"]["llm"]["provider"], "openai")
         self.assertEqual(response["plan"]["llm"]["model"], "gpt-test")
         self.assertEqual(messages[0]["plan"]["llm"]["provider"], "openai")
+
+    def test_chat_dedupes_recent_identical_external_replies(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        router_config = load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"})
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+
+            first = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "老板又临下班改需求，真的离谱"},
+                router_config=router_config,
+                router_transport=lambda request: "固定回复",
+            )["plan"]
+            second = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "老板又临下班改需求，真的离谱"},
+                router_config=router_config,
+                router_transport=lambda request: "固定回复",
+            )["plan"]
+
+        self.assertEqual(first["reply_text"], "固定回复")
+        self.assertNotEqual(second["reply_text"], "固定回复")
+        self.assertTrue(second["reply_deduped"])
 
     def test_chat_passes_user_id_to_dify_router_request(self):
         from app.llm_router import load_router_config_from_env
@@ -145,6 +174,180 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertTrue(any(memory["content"] == "用户喜欢短回复" for memory in memories))
         self.assertTrue(any(memory["source"] == "auto" for memory in memories))
         self.assertIn("我会短点说", response["plan"]["reply_text"])
+
+    def test_chat_auto_saves_ai_nickname_and_uses_it_in_identity_reply(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        local_router = load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"})
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "你是小猫猫"},
+                router_config=local_router,
+            )
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "你是谁?"},
+                router_config=local_router,
+            )
+            memories = store.list_memories(user["id"])
+
+        self.assertTrue(any(memory["content"] == "智能体昵称：小猫猫" for memory in memories))
+        self.assertTrue(any(memory["content"] == "智能体昵称：小猫猫" and memory["source"] == "auto" for memory in memories))
+        self.assertIn("小猫猫", response["plan"]["reply_text"])
+
+    def test_chat_auto_saves_recent_event_and_uses_it_in_recall_reply(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        local_router = load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"})
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我刚才手受伤了"},
+                router_config=local_router,
+            )
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我刚才怎么了?"},
+                router_config=local_router,
+            )
+            memories = store.list_memories(user["id"])
+
+        self.assertTrue(any(memory["content"] == "用户近况：用户刚才手受伤了" for memory in memories))
+        self.assertTrue(any(memory["content"] == "用户近况：用户刚才手受伤了" and memory["source"] == "auto" for memory in memories))
+        self.assertEqual(response["plan"]["scenario"], "memory_recall")
+        self.assertIn("手受伤", response["plan"]["reply_text"])
+        self.assertNotIn("自己干的事", response["plan"]["reply_text"])
+
+    def test_chat_backfills_ai_nickname_from_recent_history(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        def seed_plan(text):
+            return {
+                "reply_text": text,
+                "mode": "text_only",
+                "safety_mode": False,
+                "sticker_intent": "",
+                "voice_intent": "",
+            }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            store.save_message(user["id"], "你是小猫猫", seed_plan("旧版本没记住"))
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "你是谁?"},
+                router_config=load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"}),
+            )
+            memories = store.list_memories(user["id"])
+
+        self.assertTrue(any(memory["content"] == "智能体昵称：小猫猫" for memory in memories))
+        self.assertIn("小猫猫", response["plan"]["reply_text"])
+
+    def test_chat_backfills_recent_event_from_recent_history(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        def seed_plan(text):
+            return {
+                "reply_text": text,
+                "mode": "text_only",
+                "safety_mode": False,
+                "sticker_intent": "",
+                "voice_intent": "",
+            }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            store.save_message(user["id"], "我刚才手受伤了", seed_plan("旧版本没记住"))
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我刚才怎么了?"},
+                router_config=load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"}),
+            )
+            memories = store.list_memories(user["id"])
+
+        self.assertTrue(any(memory["content"] == "用户近况：用户刚才手受伤了" for memory in memories))
+        self.assertIn("手受伤", response["plan"]["reply_text"])
+
+    def test_chat_passes_ai_nickname_memory_to_dify(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        seen_requests = []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "以后你叫小猫猫"},
+                router_config=load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"}),
+            )
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "你是谁?"},
+                router_config=load_router_config_from_env(
+                    {
+                        "COMPANION_LLM_PROVIDER": "dify",
+                        "DIFY_API_KEY": "secret",
+                    }
+                ),
+                router_transport=lambda request: seen_requests.append(request) or "我是小猫猫，也是你的微信树洞。",
+            )
+
+        self.assertIn("智能体昵称：小猫猫", seen_requests[0]["dify_payload"]["inputs"]["memories"])
+
+    def test_chat_passes_recent_event_memory_to_dify(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        seen_requests = []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我刚才手受伤了"},
+                router_config=load_router_config_from_env({"COMPANION_LLM_PROVIDER": "local"}),
+            )
+            create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我刚才怎么了?"},
+                router_config=load_router_config_from_env(
+                    {
+                        "COMPANION_LLM_PROVIDER": "dify",
+                        "DIFY_API_KEY": "secret",
+                    }
+                ),
+                router_transport=lambda request: seen_requests.append(request) or "你刚才手受伤了，先别乱碰伤口。",
+            )
+
+        self.assertIn("用户近况：用户刚才手受伤了", seen_requests[0]["dify_payload"]["inputs"]["memories"])
 
     def test_chat_auto_saves_repeated_work_pressure_once(self):
         from app.server import create_chat_response

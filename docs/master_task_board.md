@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Remaining owner smoke tests |
-| Current step | Choose next verification focus |
-| Overall status | ready_for_test |
-| Total phases | 18 |
-| Total substeps | 74 |
-| Completed substeps | 71 |
+| Current phase | Build Round 4 WeCom real callback |
+| Current step | Owner real callback smoke test |
+| Overall status | ready_for_owner_test |
+| Total phases | 19 |
+| Total substeps | 78 |
+| Completed substeps | 77 |
 | Needs user attention | Yes |
-| Next action | Choose the next pending verification: WeCom live route, expression logic, multi-model router, or next build-round scope |
-| Current risk | Dify provider is accepted; real WeCom encrypted callback, real sticker files, and real voice provider integration remain deferred |
+| Next action | Set real WeCom env vars, expose a public HTTPS callback URL, then run `docs/wecom_real_callback_smoke_test.md` |
+| Current risk | Real callback receive and text send are implemented locally; public HTTPS reachability and real Enterprise WeChat smoke testing remain owner-side |
 
 ## Full Board
 
@@ -69,7 +69,7 @@
 | phase-13-wecom-live-route | step-13-02-spec-plan | Build Round 3 WeCom live credential route | Write spec and plan | Save live route design and implementation plan | `docs/superpowers/specs/2026-06-05-wecom-live-credential-route-design.md`, `docs/superpowers/plans/2026-06-05-wecom-live-credential-route.md` | step-13-01-round-3-scope | done | none | no | no | none |
 | phase-13-wecom-live-route | step-13-03-live-adapter | Build Round 3 WeCom live credential route | Build live adapter skeleton | Add config self-check, signature validation, callback preflight, dev inbound, and text payloads | `app/wecom_live.py`, `app/server.py`, tests | step-13-02-spec-plan | done | none | no | yes | Real encrypted callback still needs WXBizMsgCrypt-compatible library |
 | phase-13-wecom-live-route | step-13-04-admin-self-check | Build Round 3 WeCom live credential route | Add admin self-check UI | Show live channel readiness in WeChat Entry | `app/static/index.html`, `app/static/app.js` | step-13-03-live-adapter | done | none | no | yes | none |
-| phase-13-wecom-live-route | step-13-05-owner-smoke-test | Build Round 3 WeCom live credential route | Owner WeCom route smoke test | Verify status panel, local mock preservation, and live boundary | `docs/wecom_live_round_3_smoke_test.md` | step-13-04-admin-self-check | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-13-wecom-live-route | step-13-05-owner-smoke-test | Build Round 3 WeCom live credential route | Owner WeCom route smoke test | Verify status panel, local mock preservation, and live boundary | `docs/wecom_live_round_3_smoke_test.md`, `docs/wecom_live_round_3_result.md` | step-13-04-admin-self-check | done | none | no | yes | Real encrypted callback remains deferred |
 | phase-14-auto-memory-polish | step-14-01-auto-memory-scope | Auto lightweight memory polish | Confirm auto memory scope | Move memory capture out of manual user entry | User chose automatic lightweight memory | step-13-05-owner-smoke-test | done | none | no | no | none |
 | phase-14-auto-memory-polish | step-14-02-spec-plan | Auto lightweight memory polish | Write spec and plan | Save automatic memory rules and implementation route | `docs/superpowers/specs/2026-06-05-auto-lightweight-memory-design.md`, `docs/superpowers/plans/2026-06-05-auto-lightweight-memory.md` | step-14-01-auto-memory-scope | done | none | no | no | none |
 | phase-14-auto-memory-polish | step-14-03-auto-memory-engine | Auto lightweight memory polish | Build auto memory engine | Infer safe lightweight preferences from chat and remove manual add UI | `app/auto_memory.py`, `app/server.py`, `app/static/index.html`, `app/static/app.js`, tests | step-14-02-spec-plan | done | none | no | yes | none |
@@ -77,14 +77,14 @@
 | phase-15-expression-logic-polish | step-15-01-owner-feedback | Expression logic polish | Capture owner feedback | Fix replies that paste unrelated logic together | Screenshot feedback: AI replies lack logic | step-14-04-owner-smoke-test | done | none | no | no | none |
 | phase-15-expression-logic-polish | step-15-02-regression-tests | Expression logic polish | Add regression tests | Lock poetic generic and AI-quality feedback behavior | `tests/test_companion_core.py` | step-15-01-owner-feedback | done | none | no | yes | none |
 | phase-15-expression-logic-polish | step-15-03-reply-engine-polish | Expression logic polish | Polish reply expression logic | Add meta-feedback scenario and remove generic repeated-theme suffix | `app/orchestrator.py` | step-15-02-regression-tests | done | none | no | yes | none |
-| phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Expression logic polish | Owner expression smoke test | Verify replies are logical and context-specific | `docs/expression_logic_smoke_test.md` | step-15-03-reply-engine-polish | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Expression logic polish | Owner expression smoke test | Verify replies are logical and context-specific | `docs/expression_logic_smoke_test.md`, `docs/expression_logic_result.md` | step-15-03-reply-engine-polish | done | none | no | yes | Restart service once to load final Dify expression guardrail |
 | phase-16-multi-model-router | step-16-01-route-choice | External multi-model router | Confirm provider route | Choose external model strategy | User chose C: multi-model routing | step-15-04-owner-smoke-test | done | none | no | no | none |
 | phase-16-multi-model-router | step-16-02-design-spec | External multi-model router | Write design spec | Define provider router, privacy, fallback, and admin status behavior | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-01-route-choice | done | none | no | no | none |
 | phase-16-multi-model-router | step-16-03-design-review | External multi-model router | Owner design review | Confirm multi-model router before implementation | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-02-design-spec | done | none | no | no | none |
 | phase-16-multi-model-router | step-16-04-router-core | External multi-model router | Implement router core | Add provider-neutral OpenAI/DeepSeek/Gemini router with local fallback | `app/llm_router.py`, `tests/test_llm_router.py` | step-16-03-design-review | done | none | no | yes | none |
 | phase-16-multi-model-router | step-16-05-server-integration | External multi-model router | Wire router into chat flow | Let chat use external reply when configured while keeping safety and fallback | `app/server.py`, `tests/test_storage_api.py` | step-16-04-router-core | done | none | no | yes | none |
 | phase-16-multi-model-router | step-16-06-admin-status | External multi-model router | Add external brain status UI | Show mode, configured providers, timeout, and fallback reason without secrets | `app/static/index.html`, `app/static/app.js`, `tests/test_static_app.py` | step-16-05-server-integration | done | none | no | yes | none |
-| phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md` | step-16-06-admin-status | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md`, `docs/multi_model_router_result.md` | step-16-06-admin-status | done | none | no | yes | none |
 | phase-17-open-source-radar | step-17-01-github-radar | GitHub open-source radar | Create open-source radar | Compare reference projects for WeChat/WeCom bots, external brain routing, voice, stickers, and memory | `docs/github_open_source_radar.md` | step-16-06-admin-status | done | none | no | no | none |
 | phase-18-dify-provider | step-18-01-dify-provider-design | Dify provider integration | Write Dify provider design | Define Dify Chat App provider scope, API contract, privacy, fallback, and owner smoke test | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-17-01-github-radar | done | none | no | no | none |
 | phase-18-dify-provider | step-18-02-design-review | Dify provider integration | Owner Dify provider design review | Confirm the Dify provider design before implementation planning | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-18-01-dify-provider-design | done | none | no | no | none |
@@ -93,7 +93,11 @@
 | phase-18-dify-provider | step-18-05-dify-adapter | Dify provider integration | Implement Dify Chat App adapter | Build `/chat-messages` payload and parse `answer` plus conversation metadata | `app/llm_router.py`, `tests/test_llm_router.py` | step-18-04-dify-router-config | done | none | no | yes | none |
 | phase-18-dify-provider | step-18-06-dify-fallback-server-ui | Dify provider integration | Wire fallback, server user id, status UI, and README | Preserve local safety/fallback while exposing Dify readiness in Run Status | `app/server.py`, `app/static/app.js`, `README.md`, tests | step-18-05-dify-adapter | done | none | no | yes | none |
 | phase-18-dify-provider | step-18-07-dify-owner-smoke-test | Dify provider integration | Owner Dify provider smoke test | Verify no-key fallback, missing-key Dify mode, real-key Dify replies, and safety bypass | `docs/dify_provider_smoke_test.md`, `docs/dify_app_prompt_template.md`, `docs/dify_provider_result.md` | step-18-06-dify-fallback-server-ui | done | none | no | yes | none |
+| phase-19-wecom-real-callback | step-19-01-round-scope | Build Round 4 WeCom real callback | Confirm real callback route | Choose real Enterprise WeChat callback as the next build focus | User chose A and confirmed implementation | step-18-07-dify-owner-smoke-test | done | none | no | no | none |
+| phase-19-wecom-real-callback | step-19-02-spec-plan | Build Round 4 WeCom real callback | Write callback design and plan | Save callback crypto and receive-path design | `docs/superpowers/specs/2026-06-13-wecom-real-callback-design.md`, `docs/superpowers/plans/2026-06-13-wecom-real-callback.md` | step-19-01-round-scope | done | none | no | no | none |
+| phase-19-wecom-real-callback | step-19-03-callback-implementation | Build Round 4 WeCom real callback | Implement encrypted callback receive and text send | Add AES decrypt, URL verification, quick ACK queue, callback/message dedupe, async sync_msg/send_msg worker, status labels, and tests | `app/wecom_live.py`, `app/wecom_kf_api.py`, `app/server.py`, `app/storage.py`, `app/static/app.js`, `tests/test_wechat_adapter.py`, `README.md` | step-19-02-spec-plan | done | none | no | yes | Media sends remain deferred |
+| phase-19-wecom-real-callback | step-19-04-owner-smoke-test | Build Round 4 WeCom real callback | Owner real callback and text-send smoke test | Verify Enterprise WeChat can reach the public callback URL and receive AI text replies | `docs/wecom_real_callback_smoke_test.md`, `docs/wecom_real_callback_result.md` | step-19-03-callback-implementation | pending | run_owner_test | yes | yes | Requires public HTTPS URL or tunnel |
 
 ## Current Confirmation Gate
 
-Dify provider integration is accepted. Choose the next verification focus: WeCom live route, expression logic, multi-model router, or the next build-round scope.
+Build Round 4 implementation is ready for owner smoke testing. The owner needs a public HTTPS callback URL and real Enterprise WeChat callback plus customer-service credentials.

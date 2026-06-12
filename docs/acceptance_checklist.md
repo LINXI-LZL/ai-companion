@@ -91,17 +91,32 @@ These items should not block Build Round 1 acceptance:
 |---|---|---|
 | Live config self-check | Admin can see whether required WeCom credential fields are present without exposing secret values | Automated pass |
 | Signature check | SHA1 signature uses sorted Token, timestamp, nonce, and encrypted string | Automated pass |
-| Callback boundary | Valid signed callback GET returns a clear `crypto_not_configured` state until official crypto support is added | Automated pass |
+| Callback boundary | Skeleton reported encrypted callback as deferred before Build Round 4 | Historical pass |
 | Dev live inbound | Plaintext/dev `wecom_live` events route through the companion engine | Automated pass |
 | Send payload | Text send envelope includes `touser`, `open_kfid`, `msgtype`, and `text.content` | Automated pass |
 | Local mock preservation | Existing local WeChat mock keeps working | Automated pass |
 
-## Build Round 3 Owner Test
+## Build Round 4 WeCom Real Callback Acceptance
+
+| Area | Pass Criteria | Status |
+|---|---|---|
+| AES callback crypto | AES-256-CBC passes known-vector coverage | Automated pass |
+| URL verification | Valid encrypted `echostr` decrypts and returns plaintext | Automated pass |
+| Invalid callback handling | Invalid signed ciphertext returns a clear error | Automated pass |
+| Encrypted POST receive | Encrypted text XML callback enters the companion flow and returns `success` | Automated pass |
+| Quick ACK | POST callback queues work and returns `success` before `sync_msg` or `send_msg` runs | Automated pass |
+| Callback dedupe | Duplicate Enterprise WeChat callback delivery does not create duplicate jobs or sends | Automated pass |
+| Message dedupe | Duplicate `sync_msg` message IDs do not trigger duplicate replies | Automated pass |
+| Secret redaction | Status API never prints Token, Secret, or EncodingAESKey | Automated pass |
+| Real text send | Reply can be sent through WeCom Customer Service `send_msg` when `WECOM_KF_SECRET` and `open_kfid` are configured | Automated pass |
+| Send failure safety | Send API failure still returns `success` to Enterprise WeChat and writes a safe audit event | Automated pass |
+
+## Build Round 4 Owner Test
 
 | Field | Value |
 |---|---|
-| Smoke test script | `docs/wecom_live_round_3_smoke_test.md` |
-| Current owner action | Run the WeCom live route smoke test in `微信入口` |
+| Smoke test script | `docs/wecom_real_callback_smoke_test.md` |
+| Current owner action | Configure real WeCom callback with a public HTTPS URL |
 | Acceptance level | Ready for owner test |
 
 ## Auto Memory Polish Acceptance

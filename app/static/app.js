@@ -343,6 +343,9 @@ function displayLabel(value) {
     local_mock_only: "仅本地模拟",
     wecom_live: "企业微信客服真实通道",
     payload_only: "仅生成发送载荷",
+    real_text_send: "真实文本发送",
+    partial_text_send: "部分文本已发送",
+    ack_only: "仅确认回调",
     local: "仅本地规则",
     auto: "自动选择",
     openai: "OpenAI",
@@ -387,6 +390,9 @@ function llmFallbackLabel(value) {
     debug_output: "外部模型输出像调试字段，已回到本地",
     provider_timeout: "外部模型请求超时，已回到本地",
     output_too_long: "外部模型回复过长，已回到本地",
+    required_memory_missing: "外部模型漏用关键记忆，已回到本地",
+    required_reply_shape_missing: "外部模型漏用关键表达逻辑，已回到本地",
+    template_analysis_output: "外部模型输出像模板分析，已回到本地",
   };
   return labels[value] || "无";
 }
@@ -394,7 +400,10 @@ function llmFallbackLabel(value) {
 function wecomCryptoLabel(value) {
   const labels = {
     missing_wxbizmsgcrypt: "缺少官方加解密库",
-    ready: "可解密",
+    missing_encoding_aes_key: "缺少 EncodingAESKey",
+    invalid_encoding_aes_key: "EncodingAESKey 无效",
+    key_ready: "AES Key 可用",
+    ready: "可真实回调验证",
   };
   return labels[value] || value || "-";
 }
@@ -414,7 +423,9 @@ function wecomFieldLabel(value) {
 function wecomNextAction(status) {
   if (!status.configured) return "先在本机环境变量里补齐企业微信客服配置。";
   if (status.crypto_status === "missing_wxbizmsgcrypt") return "配置已具备骨架验证，真实 URL 验证还需要接入官方加解密库。";
-  return "可以进入真实回调联调。";
+  if (status.crypto_status === "invalid_encoding_aes_key") return "检查 EncodingAESKey 是否完整复制为 43 位。";
+  if (status.send_mode === "real_text_send") return "可以进行真实微信客服文本收发烟测；语音和表情包仍待媒体链路。";
+  return "可以进入真实回调联调；若要真实发回微信，继续补齐微信客服 Secret 和 open_kfid。";
 }
 
 function sourceStatusLabel(value) {

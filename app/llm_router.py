@@ -3,7 +3,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 
-from .auto_memory import can_store_memory
+from .auto_memory import AI_NICKNAME_PREFIX, EVENT_MEMORY_PREFIX, RECENT_EVENT_KEYWORDS, can_store_memory
 from .orchestrator import PERSONA_STYLE
 from .safety import classify_safety
 
@@ -15,6 +15,14 @@ DEFAULT_MAX_OUTPUT_CHARS = 260
 DEFAULT_DIFY_RESPONSE_MODE = "blocking"
 DEFAULT_DIFY_USER_PREFIX = "wechat-treehole"
 DIFY_REDACTED_HISTORY_TEXT = "[已省略敏感或高风险内容]"
+TEMPLATE_ANALYSIS_MARKERS = (
+    "你又提到",
+    "第三次出现",
+    "按字面接住",
+    "不强行升华",
+    "强行升华",
+    "它可能是在试探我",
+)
 
 
 class ProviderTimeoutError(RuntimeError):
@@ -152,10 +160,16 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
         return _local_result(config, local_reply, "empty_reply")
     if _looks_like_debug_output(candidate):
         return _local_result(config, local_reply, "debug_output")
+    if _looks_like_template_analysis(candidate):
+        return _local_result(config, local_reply, "template_analysis_output")
     if classify_safety(candidate)["safety_mode"]:
         return _local_result(config, local_reply, "unsafe_reply")
     if len(candidate) > config.max_output_chars:
         return _local_result(config, local_reply, "output_too_long")
+    if _misses_required_memory(candidate, local_plan, memories or []):
+        return _local_result(config, local_reply, "required_memory_missing")
+    if _misses_required_reply_shape(candidate, local_plan, message):
+        return _local_result(config, local_reply, "required_reply_shape_missing")
 
     metadata = {
         "enabled": True,
@@ -307,6 +321,12 @@ def _build_system_prompt(local_plan):
         f"你是微信树洞 AI，固定人格是「{PERSONA_STYLE}」：像深夜损友，嘴可以欠一点，底色要站在用户这边。\n"
         "只输出最终要发给用户的一段中文聊天回复，不要输出 JSON、英文标签、解释、标题或调试字段。\n"
         "回复要像微信好友：自然、有逻辑、先接住当前这句话，再给一点轻量推进；不要复读用户原句，不要模板化说教。\n"
+        "不要说“你又提到”“第几次出现”“按字面接住”“不强行升华”“这类事第几次回来了”等分析聊天记录的句子。\n"
+        "如果轻量记忆里有“智能体昵称：X”，用户问你是谁或叫什么时，要优先说自己是 X，再补微信树洞身份。\n"
+        "如果轻量记忆里有“用户近况：X”，用户问刚才/前面发生了什么时，要优先复述 X 的事实，不要编别的。\n"
+        "identity 场景第一轮要正面说明你是微信树洞 AI 和能陪聊吐槽，不要开场就说用户失忆或抽查。\n"
+        "capability 场景要说明你能陪吐槽、接情绪、整理表达、记安全轻量上下文，不要泛泛说我是助手。\n"
+        "meta_feedback 场景包括“什么意思”“只会回答这个吗”等质疑，要先承认没说清或会调整，再给短回复。\n"
         "长度控制在 1 到 3 句。可以吐槽事情，不要攻击用户本人。高风险自伤内容必须保持严肃支持。\n"
         f"本地已判定场景：{scenario}；本地多模态模式：{mode}。"
     )
@@ -353,6 +373,66 @@ def _format_dify_memories(memories):
     for memory in list(memories)[:6]:
         safe_memories.append(memory if can_store_memory(memory) else DIFY_REDACTED_HISTORY_TEXT)
     return "；".join(safe_memories) if safe_memories else "无"
+
+
+def _misses_required_memory(candidate, local_plan, memories):
+    scenario = local_plan.get("scenario")
+    if scenario == "identity":
+        nickname = _extract_ai_nickname(memories)
+        return bool(nickname and nickname not in candidate)
+    if scenario == "memory_recall":
+        recent_event = _extract_recent_event_memory(memories)
+        keyword = _required_recent_event_keyword(recent_event)
+        return bool(keyword and keyword not in candidate)
+    return False
+
+
+def _misses_required_reply_shape(candidate, local_plan, message):
+    scenario = local_plan.get("scenario")
+    if scenario == "meta_feedback":
+        return not _has_any(candidate, ("不狡辩", "我改", "调整", "短点", "模板", "逻辑", "听懂", "少套", "没说清", "说清"))
+    if scenario == "capability":
+        return not (
+            _has_any(candidate, ("陪", "吐槽", "接情绪", "聊天"))
+            and _has_any(candidate, ("记", "整理", "捋顺", "微信树洞"))
+        )
+    if scenario == "generic" and _looks_like_poetic_or_ambiguous_message(message):
+        return not _has_any(candidate, ("顺着聊", "大白话", "接着聊", "继续说", "我收到了", "跟着"))
+    return False
+
+
+def _looks_like_poetic_or_ambiguous_message(message):
+    text = message or ""
+    return _has_any(text, ("今夜", "辗转", "反侧", "梦", "月亮", "星星", "想你")) and len(text) <= 28
+
+
+def _has_any(text, keywords):
+    return any(keyword in text for keyword in keywords)
+
+
+def _extract_ai_nickname(memories):
+    for memory in memories:
+        if memory.startswith(AI_NICKNAME_PREFIX):
+            nickname = memory[len(AI_NICKNAME_PREFIX) :].strip()
+            if nickname:
+                return nickname
+    return ""
+
+
+def _extract_recent_event_memory(memories):
+    for memory in memories:
+        if memory.startswith(EVENT_MEMORY_PREFIX):
+            event = memory[len(EVENT_MEMORY_PREFIX) :].strip()
+            if event:
+                return event
+    return ""
+
+
+def _required_recent_event_keyword(recent_event):
+    for keyword in RECENT_EVENT_KEYWORDS:
+        if keyword in recent_event:
+            return keyword
+    return ""
 
 
 def _format_recent_history(recent_messages):
@@ -420,6 +500,10 @@ def _looks_like_debug_output(text):
         "voice script",
     )
     return any(token in stripped for token in debug_tokens)
+
+
+def _looks_like_template_analysis(text):
+    return _has_any(text or "", TEMPLATE_ANALYSIS_MARKERS)
 
 
 def _normalized_mode(value):

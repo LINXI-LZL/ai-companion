@@ -49,6 +49,7 @@ class LlmRouterTests(unittest.TestCase):
         self.assertEqual(result["metadata"]["fallback_reason"], "")
         self.assertEqual(seen_requests[0]["provider"], "deepseek")
         self.assertIn("刀子嘴豆腐心", seen_requests[0]["system_prompt"])
+        self.assertIn("不要说“你又提到”", seen_requests[0]["system_prompt"])
 
     def test_provider_status_redacts_secret_values(self):
         from app.llm_router import load_router_config_from_env
@@ -208,6 +209,136 @@ class LlmRouterTests(unittest.TestCase):
         self.assertIn("[已省略敏感或高风险内容]", memories)
         self.assertNotIn("13812345678", memories)
         self.assertNotIn("sk-abcdefg123456", memories)
+
+    def test_provider_identity_reply_missing_ai_nickname_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "我是小猫猫，也是你的微信树洞 AI。",
+            "safety_mode": False,
+            "scenario": "identity",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "你是谁?",
+            memories=["智能体昵称：小猫猫"],
+            recent_messages=[],
+            transport=lambda request: "我是你的微信树洞 AI，一个深夜损友型陪聊。",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], "我是小猫猫，也是你的微信树洞 AI。")
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "required_memory_missing")
+
+    def test_provider_memory_recall_missing_recent_event_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "你刚才说手受伤了。先别乱碰伤口，冲干净再贴上。",
+            "safety_mode": False,
+            "scenario": "memory_recall",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "我刚才怎么了?",
+            memories=["用户近况：用户刚才手受伤了"],
+            recent_messages=[],
+            transport=lambda request: "你刚才可能是累了，先休息一下。",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], "你刚才说手受伤了。先别乱碰伤口，冲干净再贴上。")
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "required_memory_missing")
+
+    def test_provider_poetic_generic_reply_missing_required_shape_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "这句话有点像半夜递过来的小纸条，我收到了。你想顺着这个梦聊，还是让我把它翻成大白话？",
+            "safety_mode": False,
+            "scenario": "generic",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "你是我今夜辗转反侧做的梦",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: "啧，这情话技能点满了啊。不过赶紧睡吧，明天还得上班呢。",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], local_plan["reply_text"])
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "required_reply_shape_missing")
+
+    def test_provider_meta_feedback_missing_repair_direction_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "这句我认，不狡辩。刚才那种回法像把几段模板硬缝上了，我改：先听懂你这一句，再短点回，不乱升华。",
+            "safety_mode": False,
+            "scenario": "meta_feedback",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "我觉得你不太智能",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: "哈，被你发现了，我确实不智能。说吧，今晚想吐槽谁？",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], local_plan["reply_text"])
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "required_reply_shape_missing")
+
+    def test_provider_template_analysis_reply_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "在，我听见了。你这是喊我上线，还是想确认我没跑？",
+            "safety_mode": False,
+            "scenario": "short_ping",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "嗳嗳嗳",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: "你又提到「嗳嗳嗳」。我先按字面接住，不强行升华；你接着说，我跟上。",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], local_plan["reply_text"])
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "template_analysis_output")
 
     def test_non_dify_provider_request_does_not_include_dify_payload(self):
         from app.llm_router import build_provider_request, load_router_config_from_env

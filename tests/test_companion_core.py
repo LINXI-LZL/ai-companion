@@ -38,6 +38,45 @@ class CompanionCoreTests(unittest.TestCase):
 
         self.assertIn("我会短点说", plan["reply_text"])
 
+    def test_ai_nickname_memory_is_reflected_in_identity_reply(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "你是谁?", memories=["智能体昵称：小猫猫"])
+
+        self.assertEqual(plan["scenario"], "identity")
+        self.assertIn("小猫猫", plan["reply_text"])
+        self.assertIn("微信树洞", plan["reply_text"])
+
+    def test_identity_first_reply_is_positive_and_functional(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "你是谁?", memories=[], recent_messages=[])
+
+        self.assertEqual(plan["scenario"], "identity")
+        self.assertIn("微信树洞", plan["reply_text"])
+        self.assertTrue("陪" in plan["reply_text"] or "吐槽" in plan["reply_text"])
+        self.assertNotIn("刚说过", plan["reply_text"])
+        self.assertNotIn("第三", plan["reply_text"])
+        self.assertNotIn("失忆", plan["reply_text"])
+
+    def test_capability_question_uses_capability_scene(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "你能干什么?", memories=[])
+
+        self.assertEqual(plan["scenario"], "capability")
+        self.assertTrue("吐槽" in plan["reply_text"] or "陪" in plan["reply_text"])
+        self.assertTrue("记" in plan["reply_text"] or "微信" in plan["reply_text"])
+
+    def test_recent_event_memory_is_reflected_in_recall_reply(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "我刚才怎么了?", memories=["用户近况：用户刚才手受伤了"])
+
+        self.assertEqual(plan["scenario"], "memory_recall")
+        self.assertIn("手受伤", plan["reply_text"])
+        self.assertNotIn("自己干的事", plan["reply_text"])
+
     def test_common_low_risk_messages_do_not_share_one_default_reply(self):
         from app.orchestrator import plan_reply
 
@@ -98,6 +137,39 @@ class CompanionCoreTests(unittest.TestCase):
         self.assertNotIn("同类剧情", plan["reply_text"])
         self.assertNotIn("人生失败", plan["reply_text"])
         self.assertNotIn("这事还在黏人", plan["reply_text"])
+        self.assertNotIn("按字面", plan["reply_text"])
+        self.assertNotIn("不强行升华", plan["reply_text"])
+
+    def test_short_interjection_reply_sounds_like_chat_not_analysis(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "嗳嗳嗳", memories=[])
+
+        self.assertEqual(plan["scenario"], "short_ping")
+        self.assertTrue("在" in plan["reply_text"] or "听见" in plan["reply_text"] or "收到" in plan["reply_text"])
+        self.assertNotIn("我听见了：", plan["reply_text"])
+        self.assertNotIn("按字面", plan["reply_text"])
+        self.assertNotIn("不强行升华", plan["reply_text"])
+
+    def test_repeated_generic_message_does_not_report_occurrence_count(self):
+        from app.orchestrator import plan_reply
+
+        recent_messages = [
+            {"incoming_text": "测试测试111"},
+            {"incoming_text": "测试测试111"},
+            {"incoming_text": "测试测试111"},
+        ]
+
+        plan = plan_reply("u1", "测试测试111", memories=[], recent_messages=recent_messages)
+        first = plan_reply("u1", "测试测试111", memories=[], recent_messages=[])
+
+        self.assertEqual(plan["scenario"], "generic")
+        self.assertNotEqual(plan["reply_text"], first["reply_text"])
+        self.assertNotIn("你又提到", plan["reply_text"])
+        self.assertNotIn("第三次出现", plan["reply_text"])
+        self.assertNotIn("第", plan["reply_text"])
+        self.assertNotIn("次", plan["reply_text"])
+        self.assertNotIn("我记着", plan["reply_text"])
 
     def test_ai_feedback_gets_direct_repair_reply_not_generic_coaching(self):
         from app.orchestrator import plan_reply
@@ -116,6 +188,16 @@ class CompanionCoreTests(unittest.TestCase):
         self.assertTrue("我改" in plan["reply_text"] or "调整" in plan["reply_text"])
         self.assertNotIn("同类剧情", plan["reply_text"])
         self.assertNotIn("人生失败", plan["reply_text"])
+
+    def test_meaning_and_only_this_are_meta_feedback(self):
+        from app.orchestrator import plan_reply
+
+        for message in ("什么意思", "只会回答这个吗"):
+            with self.subTest(message=message):
+                plan = plan_reply("u1", message, memories=[])
+
+                self.assertEqual(plan["scenario"], "meta_feedback")
+                self.assertTrue("我改" in plan["reply_text"] or "听懂" in plan["reply_text"] or "说清" in plan["reply_text"])
 
 
 if __name__ == "__main__":
