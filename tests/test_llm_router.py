@@ -184,6 +184,31 @@ class LlmRouterTests(unittest.TestCase):
         self.assertIn("[已省略敏感或高风险内容]", history)
         self.assertIn("老板又改需求", history)
 
+    def test_dify_memories_redacts_sensitive_entries(self):
+        from app.llm_router import build_provider_request, load_router_config_from_env
+
+        provider = load_router_config_from_env(
+            {
+                "COMPANION_LLM_PROVIDER": "dify",
+                "DIFY_API_KEY": "secret",
+            }
+        ).providers["dify"]
+
+        request = build_provider_request(
+            provider,
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "继续聊",
+            ["用户喜欢短回复", "用户手机号是 13812345678", "api token 是 sk-abcdefg123456"],
+            [],
+            user_id="owner",
+        )
+
+        memories = request["dify_payload"]["inputs"]["memories"]
+        self.assertIn("用户喜欢短回复", memories)
+        self.assertIn("[已省略敏感或高风险内容]", memories)
+        self.assertNotIn("13812345678", memories)
+        self.assertNotIn("sk-abcdefg123456", memories)
+
     def test_non_dify_provider_request_does_not_include_dify_payload(self):
         from app.llm_router import build_provider_request, load_router_config_from_env
 

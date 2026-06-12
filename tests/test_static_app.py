@@ -90,6 +90,16 @@ class StaticAppTests(unittest.TestCase):
         self.assertIn("local | auto | openai | deepseek | gemini | dify", readme)
         self.assertNotIn("dify-secret-key", readme)
 
+    def test_status_page_exposes_dify_response_mode_without_secrets(self):
+        index = (ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("Dify 响应模式", index)
+        self.assertIn("llm-router-dify-response-mode", index)
+        self.assertIn("llmDifyResponseMode(status)", script)
+        self.assertIn("response_mode", script)
+        self.assertNotIn("api_key", script)
+
 
 if __name__ == "__main__":
     unittest.main()

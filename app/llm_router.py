@@ -336,7 +336,7 @@ def _build_dify_payload(provider, local_plan, message, memories, recent_messages
             "mode": local_plan.get("mode") or "text_only",
             "media_intent": local_plan.get("sticker_intent") or "none",
             "voice_intent": local_plan.get("voice_intent") or "none",
-            "memories": "；".join(memories[:6]) if memories else "无",
+            "memories": _format_dify_memories(memories),
             "recent_history": _format_recent_history(recent_messages),
             "local_reply": local_plan.get("reply_text", ""),
         },
@@ -344,6 +344,13 @@ def _build_dify_payload(provider, local_plan, message, memories, recent_messages
         "response_mode": provider.response_mode or DEFAULT_DIFY_RESPONSE_MODE,
         "user": _build_dify_user(provider, user_id),
     }
+
+
+def _format_dify_memories(memories):
+    safe_memories = []
+    for memory in list(memories)[:6]:
+        safe_memories.append(memory if can_store_memory(memory) else DIFY_REDACTED_HISTORY_TEXT)
+    return "；".join(safe_memories) if safe_memories else "无"
 
 
 def _format_recent_history(recent_messages):

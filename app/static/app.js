@@ -268,6 +268,7 @@ function renderLlmRouterStatus(status) {
   document.getElementById("llm-router-timeout").textContent = `${status.timeout_seconds} 秒`;
   document.getElementById("llm-router-configured").textContent = llmConfiguredProviders(status);
   document.getElementById("llm-router-provider-order").textContent = status.provider_order.map(displayLabel).join(" → ");
+  document.getElementById("llm-router-dify-response-mode").textContent = llmDifyResponseMode(status);
   document.getElementById("llm-router-fallback").textContent = llmFallbackLabel(status.fallback_reason);
 }
 
@@ -364,6 +365,15 @@ function llmConfiguredProviders(status) {
     .filter(([, provider]) => provider.configured)
     .map(([name, provider]) => `${displayLabel(name)}${provider.model ? `（${provider.model}）` : ""}`);
   return configured.length ? configured.join("、") : "未配置 API Key";
+}
+
+function llmDifyResponseMode(status) {
+  const provider = status.providers && status.providers.dify;
+  if (!provider || !provider.response_mode) return "未配置";
+  const labels = {
+    blocking: "blocking",
+  };
+  return labels[provider.response_mode] || provider.response_mode;
 }
 
 function llmFallbackLabel(value) {
