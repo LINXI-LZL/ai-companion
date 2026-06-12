@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-16-multi-model-router",
-    "current_step_id": "step-16-07-owner-smoke-test",
-    "overall_status": "ready_for_test",
+    "current_phase_id": "phase-18-dify-provider",
+    "current_step_id": "step-18-02-design-review",
+    "overall_status": "waiting_user",
     "strategy": "hybrid",
-    "total_phase_count": 17,
-    "total_step_count": 67,
-    "completed_step_count": 65,
+    "total_phase_count": 18,
+    "total_step_count": 69,
+    "completed_step_count": 66,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Run the multi-model router smoke test and confirm whether the external-brain skeleton passes.",
-    "current_risk_summary": "Real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
+    "next_action_summary": "Review the Dify provider design spec and confirm whether to write the implementation plan.",
+    "current_risk_summary": "Dify credential setup and Dify app prompt quality need owner-side configuration later; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-12T21:35:00+08:00"
+    "updated_at": "2026-06-12T21:45:00+08:00"
   },
   "phases": [
     {
@@ -449,6 +449,29 @@
       ],
       "started_at": "2026-06-12T21:35:00+08:00",
       "finished_at": "2026-06-12T21:35:00+08:00"
+    },
+    {
+      "id": "phase-18-dify-provider",
+      "project_id": "wechat-vent-ai",
+      "order": 18,
+      "title": "Dify provider integration",
+      "goal": "把 Dify Chat App 作为可选外部主脑接入现有多模型路由，同时保留本地安全、记忆、表情/语音意图和兜底能力。",
+      "status": "waiting_user",
+      "outputs": [
+        "docs/superpowers/specs/2026-06-12-dify-provider-design.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 2,
+      "completed_step_count": 1,
+      "summary": "Dify provider design is written and waiting for owner review before implementation planning.",
+      "notes": "The design chooses lightweight Dify Chat App integration, not a full Dify migration. Round 1 avoids database migration by not persisting Dify conversation IDs.",
+      "user_action": "review_spec",
+      "acceptance_hint": "用户确认该设计后，下一步写 Dify provider 的测试优先实现计划。",
+      "depends_on_phase_ids": [
+        "phase-17-open-source-radar"
+      ],
+      "started_at": "2026-06-12T21:45:00+08:00"
     }
   ],
   "steps": [
@@ -2264,6 +2287,62 @@
         "artifact-063"
       ],
       "related_decision_ids": []
+    },
+    {
+      "id": "step-18-01-dify-provider-design",
+      "phase_id": "phase-18-dify-provider",
+      "order": 1,
+      "title": "Write Dify provider design",
+      "goal": "定义 Dify Chat App provider 的范围、接口、隐私边界、兜底策略和验收方式。",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-12-dify-provider-design.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "The design references Dify `POST /chat-messages`, keeps response mode blocking for round 1, and keeps local memory/safety as the source of truth.",
+      "depends_on": [
+        "step-17-01-github-radar"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "规格文档明确了环境变量、请求体、失败兜底、状态 UI 和测试计划。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-064"
+      ],
+      "related_decision_ids": [
+        "decision-018"
+      ]
+    },
+    {
+      "id": "step-18-02-design-review",
+      "phase_id": "phase-18-dify-provider",
+      "order": 2,
+      "title": "Owner Dify provider design review",
+      "goal": "确认 Dify provider 设计后，再进入实现计划。",
+      "status": "waiting_user",
+      "output": [
+        "docs/superpowers/specs/2026-06-12-dify-provider-design.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "This is the brainstorming gate before implementation planning. No code changes should start until the owner approves the written spec.",
+      "depends_on": [
+        "step-18-01-dify-provider-design"
+      ],
+      "user_action": "review_spec",
+      "acceptance_hint": "用户确认设计后，进入 Dify provider implementation plan。",
+      "progress_summary": "等待用户确认。",
+      "blockers": [
+        "Needs owner confirmation"
+      ],
+      "related_artifact_ids": [
+        "artifact-064"
+      ],
+      "related_decision_ids": [
+        "decision-018"
+      ]
     }
   ],
   "artifacts": [
@@ -2959,6 +3038,17 @@
       "step_id": "step-17-01-github-radar",
       "created_at": "2026-06-12T21:35:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-064",
+      "title": "Dify provider design",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-12-dify-provider-design.md",
+      "summary": "Confirmed lightweight Dify Chat App provider route with local safety, memory, media intent, and fallback boundaries.",
+      "phase_id": "phase-18-dify-provider",
+      "step_id": "step-18-01-dify-provider-design",
+      "created_at": "2026-06-12T21:45:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -3387,6 +3477,32 @@
       "user_decision": "确认实现",
       "recommendation_reason": "The design keeps paid credentials optional and preserves local fallback, so implementation can proceed safely.",
       "notes": "The first implementation uses fake transports in tests and exposes only redacted provider status."
+    },
+    {
+      "id": "decision-018",
+      "title": "Dify provider route",
+      "context": "Owner reviewed the open-source radar and confirmed the recommendation to use Dify for smarter external-agent behavior.",
+      "status": "resolved",
+      "recommended_option_id": "option-lightweight-dify-provider",
+      "related_phase_id": "phase-18-dify-provider",
+      "related_step_id": "step-18-01-dify-provider-design",
+      "options": [
+        {
+          "id": "option-lightweight-dify-provider",
+          "label": "Add Dify as a lightweight Chat App provider"
+        },
+        {
+          "id": "option-full-dify-migration",
+          "label": "Move the whole companion flow into Dify"
+        },
+        {
+          "id": "option-no-dify",
+          "label": "Keep only direct model APIs for now"
+        }
+      ],
+      "user_decision": "确认轻量 Dify Provider 设计",
+      "recommendation_reason": "This improves reply intelligence while preserving local safety, memory, WeChat boundaries, status visibility, and fallback behavior.",
+      "notes": "Implementation planning should start only after owner review of the written spec."
     }
   ]
 }

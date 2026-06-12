@@ -5,15 +5,15 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | External multi-model router |
-| Current step | Owner multi-model router smoke test |
-| Overall status | Ready for test |
-| Total phases | 17 |
-| Total substeps | 67 |
-| Completed substeps | 65 |
+| Current phase | Dify provider integration |
+| Current step | Owner Dify provider design review |
+| Overall status | Waiting for design review |
+| Total phases | 18 |
+| Total substeps | 69 |
+| Completed substeps | 66 |
 | Needs user attention | Yes |
-| Next action | Run the multi-model router smoke test |
-| Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
+| Next action | Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md` and confirm whether to write the implementation plan |
+| Current risk | Dify credential setup and Dify app prompt quality need owner-side configuration later; real WeCom encrypted callback, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
 
@@ -86,7 +86,9 @@
 | phase-16-multi-model-router | step-16-06-admin-status | External multi-model router | Add external brain status UI | Show mode, configured providers, timeout, and fallback reason without secrets | `app/static/index.html`, `app/static/app.js`, `tests/test_static_app.py` | step-16-05-server-integration | done | none | no | yes | none |
 | phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md` | step-16-06-admin-status | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 | phase-17-open-source-radar | step-17-01-github-radar | GitHub open-source radar | Create open-source radar | Compare reference projects for WeChat/WeCom bots, external brain routing, voice, stickers, and memory | `docs/github_open_source_radar.md` | step-16-06-admin-status | done | none | no | no | none |
+| phase-18-dify-provider | step-18-01-dify-provider-design | Dify provider integration | Write Dify provider design | Define Dify Chat App provider scope, API contract, privacy, fallback, and owner smoke test | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-17-01-github-radar | done | none | no | no | none |
+| phase-18-dify-provider | step-18-02-design-review | Dify provider integration | Owner Dify provider design review | Confirm the Dify provider design before implementation planning | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-18-01-dify-provider-design | waiting_user | review_spec | yes | no | Needs owner confirmation |
 
 ## Current Confirmation Gate
 
-Run `docs/multi_model_router_smoke_test.md`, then confirm whether the multi-model router skeleton passes owner smoke test.
+Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md`, then confirm whether this Dify provider route can move into implementation planning.

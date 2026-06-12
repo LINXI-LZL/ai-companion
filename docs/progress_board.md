@@ -4,12 +4,12 @@
 
 | Field | Content |
 |---|---|
-| Current phase | External multi-model router |
-| Current step | Owner multi-model router smoke test |
-| Overall status | ready_for_test |
-| Completed substeps | 65 / 67 |
-| User action needed | Run the multi-model router smoke test |
-| Next step after confirmation | Add real API credentials or continue WeCom encrypted callback integration |
+| Current phase | Dify provider integration |
+| Current step | Owner Dify provider design review |
+| Overall status | waiting_user |
+| Completed substeps | 66 / 69 |
+| User action needed | Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md` |
+| Next step after confirmation | Write the Dify provider implementation plan |
 
 ## Completed Outputs
 
@@ -32,6 +32,7 @@
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
 | External multi-model router | 6 / 7 | selected route C, provider router design spec, implementation plan, router core, server integration, admin status UI, regression tests |
 | GitHub open-source radar | 1 / 1 | `docs/github_open_source_radar.md` |
+| Dify provider integration | 1 / 2 | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` |
 
 ## Ready For Test
 
@@ -53,12 +54,19 @@
 | Expression logic smoke test | `docs/expression_logic_smoke_test.md` | ready for owner test |
 | Multi-model router smoke test | `docs/multi_model_router_smoke_test.md` | ready for owner test |
 
+## Ready For Design Review
+
+| Flow | Where | Status |
+|---|---|---|
+| Dify provider route | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | waiting for owner confirmation |
+
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
 | Owner smoke test | Confirm default local fallback, status panel, and chat continuity |
+| Dify provider implementation | Write implementation plan, then add the provider after design approval |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner smoke test of the external multi-model router skeleton. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. The project is waiting for owner review of the Dify provider design. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
