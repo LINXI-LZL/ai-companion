@@ -79,6 +79,33 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertEqual(response["plan"]["llm"]["model"], "gpt-test")
         self.assertEqual(messages[0]["plan"]["llm"]["provider"], "openai")
 
+    def test_chat_passes_user_id_to_dify_router_request(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        seen_requests = []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "老板又改需求"},
+                router_config=load_router_config_from_env(
+                    {
+                        "COMPANION_LLM_PROVIDER": "dify",
+                        "DIFY_API_KEY": "secret",
+                        "DIFY_APP_USER_PREFIX": "treehole",
+                    }
+                ),
+                router_transport=lambda request: seen_requests.append(request) or "Dify 回复",
+            )
+
+        self.assertEqual(response["plan"]["llm"]["provider"], "dify")
+        self.assertEqual(seen_requests[0]["dify_payload"]["user"], f"treehole-{user['id']}")
+
     def test_safety_chat_does_not_call_external_router(self):
         from app.llm_router import load_router_config_from_env
         from app.server import create_chat_response

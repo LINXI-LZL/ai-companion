@@ -54,6 +54,7 @@ def create_chat_response(store, payload, router_config=None, router_transport=No
         memories=memories,
         recent_messages=recent_messages,
         transport=router_transport,
+        user_id=user_id,
     )
     _apply_router_result(plan, routed)
     saved = store.save_message(user_id, message, plan)

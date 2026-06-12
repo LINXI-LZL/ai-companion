@@ -244,7 +244,7 @@ class LlmRouterTests(unittest.TestCase):
         from app.llm_router import load_router_config_from_env, route_external_reply
 
         def broken_transport(request):
-            raise TimeoutError("slow")
+            raise RuntimeError("boom")
 
         result = route_external_reply(
             load_router_config_from_env({"COMPANION_LLM_PROVIDER": "openai", "OPENAI_API_KEY": "secret"}),
@@ -258,6 +258,75 @@ class LlmRouterTests(unittest.TestCase):
         self.assertEqual(result["reply_text"], "本地兜底")
         self.assertEqual(result["metadata"]["provider"], "local")
         self.assertEqual(result["metadata"]["fallback_reason"], "provider_error")
+
+    def test_provider_timeout_has_specific_fallback_reason(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "你好",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: (_ for _ in ()).throw(TimeoutError("slow")),
+        )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "provider_timeout")
+
+    def test_provider_output_too_long_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        result = route_external_reply(
+            load_router_config_from_env(
+                {
+                    "COMPANION_LLM_PROVIDER": "dify",
+                    "DIFY_API_KEY": "secret",
+                    "COMPANION_LLM_MAX_OUTPUT_CHARS": "12",
+                }
+            ),
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "你好",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: "这是一段明显超过长度限制的外部回复",
+        )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["fallback_reason"], "output_too_long")
+
+    def test_dify_conversation_id_is_copied_to_metadata_without_changing_text(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "你好",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: {"text": "Dify 回复", "conversation_id": "conv-1"},
+        )
+
+        self.assertEqual(result["reply_text"], "Dify 回复")
+        self.assertEqual(result["metadata"]["conversation_id"], "conv-1")
+
+    def test_real_provider_timeout_has_specific_fallback_reason(self):
+        from unittest.mock import patch
+
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        with patch("app.llm_router.urllib.request.urlopen", side_effect=TimeoutError("slow")):
+            result = route_external_reply(
+                load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+                {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+                "你好",
+                memories=[],
+                recent_messages=[],
+            )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["fallback_reason"], "provider_timeout")
 
     def test_safety_plan_never_calls_external_provider(self):
         from app.llm_router import load_router_config_from_env, route_external_reply

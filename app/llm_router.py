@@ -17,6 +17,10 @@ DEFAULT_DIFY_USER_PREFIX = "wechat-treehole"
 DIFY_REDACTED_HISTORY_TEXT = "[已省略敏感或高风险内容]"
 
 
+class ProviderTimeoutError(RuntimeError):
+    pass
+
+
 @dataclass(frozen=True)
 class ProviderConfig:
     name: str
@@ -136,6 +140,11 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
     try:
         raw_reply = transport(request) if transport else _call_provider(provider, request, config.timeout_seconds)
         candidate = _coerce_text(raw_reply).strip()
+        provider_metadata = _provider_metadata(raw_reply)
+    except TimeoutError:
+        return _local_result(config, local_reply, "provider_timeout")
+    except ProviderTimeoutError:
+        return _local_result(config, local_reply, "provider_timeout")
     except Exception:
         return _local_result(config, local_reply, "provider_error")
 
@@ -145,18 +154,19 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
         return _local_result(config, local_reply, "debug_output")
     if classify_safety(candidate)["safety_mode"]:
         return _local_result(config, local_reply, "unsafe_reply")
+    if len(candidate) > config.max_output_chars:
+        return _local_result(config, local_reply, "output_too_long")
 
-    candidate = _fit_text(candidate, config.max_output_chars)
-    return {
-        "reply_text": candidate,
-        "metadata": {
-            "enabled": True,
-            "provider": provider.name,
-            "model": provider.model,
-            "fallback_reason": "",
-            "mode": config.mode,
-        },
+    metadata = {
+        "enabled": True,
+        "provider": provider.name,
+        "model": provider.model,
+        "fallback_reason": "",
+        "mode": config.mode,
     }
+    if provider_metadata.get("conversation_id"):
+        metadata["conversation_id"] = provider_metadata["conversation_id"]
+    return {"reply_text": candidate, "metadata": metadata}
 
 
 def build_provider_request(provider, local_plan, message, memories, recent_messages, user_id=""):
@@ -278,7 +288,9 @@ def _post_json(url, headers, payload, timeout_seconds):
     try:
         with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
             return json.loads(response.read().decode("utf-8"))
-    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:
+    except TimeoutError as exc:
+        raise ProviderTimeoutError("provider request timed out") from exc
+    except (urllib.error.HTTPError, urllib.error.URLError) as exc:
         raise RuntimeError("provider request failed") from exc
 
 
@@ -380,12 +392,6 @@ def _provider_metadata(value):
     return {
         "conversation_id": str(value.get("conversation_id") or ""),
     }
-
-
-def _fit_text(text, max_chars):
-    if len(text) <= max_chars:
-        return text
-    return text[: max_chars - 1].rstrip() + "…"
 
 
 def _looks_like_debug_output(text):
