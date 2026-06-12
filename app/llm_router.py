@@ -164,7 +164,7 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
         "fallback_reason": "",
         "mode": config.mode,
     }
-    if provider_metadata.get("conversation_id"):
+    if provider.name == "dify" and provider_metadata.get("conversation_id"):
         metadata["conversation_id"] = provider_metadata["conversation_id"]
     return {"reply_text": candidate, "metadata": metadata}
 
@@ -290,7 +290,11 @@ def _post_json(url, headers, payload, timeout_seconds):
             return json.loads(response.read().decode("utf-8"))
     except TimeoutError as exc:
         raise ProviderTimeoutError("provider request timed out") from exc
-    except (urllib.error.HTTPError, urllib.error.URLError) as exc:
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError("provider request failed") from exc
+    except urllib.error.URLError as exc:
+        if isinstance(getattr(exc, "reason", None), TimeoutError):
+            raise ProviderTimeoutError("provider request timed out") from exc
         raise RuntimeError("provider request failed") from exc
 
 

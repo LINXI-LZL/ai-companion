@@ -311,6 +311,21 @@ class LlmRouterTests(unittest.TestCase):
         self.assertEqual(result["reply_text"], "Dify 回复")
         self.assertEqual(result["metadata"]["conversation_id"], "conv-1")
 
+    def test_non_dify_provider_does_not_copy_conversation_id_metadata(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "openai", "OPENAI_API_KEY": "secret"}),
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "你好",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: {"text": "外部回复", "conversation_id": "conv-openai"},
+        )
+
+        self.assertEqual(result["reply_text"], "外部回复")
+        self.assertNotIn("conversation_id", result["metadata"])
+
     def test_real_provider_timeout_has_specific_fallback_reason(self):
         from unittest.mock import patch
 
@@ -327,6 +342,42 @@ class LlmRouterTests(unittest.TestCase):
 
         self.assertEqual(result["reply_text"], "本地兜底")
         self.assertEqual(result["metadata"]["fallback_reason"], "provider_timeout")
+
+    def test_urlerror_wrapped_timeout_has_specific_fallback_reason(self):
+        from unittest.mock import patch
+        import urllib.error
+
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        with patch("app.llm_router.urllib.request.urlopen", side_effect=urllib.error.URLError(TimeoutError("timed out"))):
+            result = route_external_reply(
+                load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+                {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+                "你好",
+                memories=[],
+                recent_messages=[],
+            )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["fallback_reason"], "provider_timeout")
+
+    def test_generic_urlerror_stays_provider_error(self):
+        from unittest.mock import patch
+        import urllib.error
+
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        with patch("app.llm_router.urllib.request.urlopen", side_effect=urllib.error.URLError("dns failed")):
+            result = route_external_reply(
+                load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+                {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+                "你好",
+                memories=[],
+                recent_messages=[],
+            )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["fallback_reason"], "provider_error")
 
     def test_safety_plan_never_calls_external_provider(self):
         from app.llm_router import load_router_config_from_env, route_external_reply
