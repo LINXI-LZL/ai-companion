@@ -7,10 +7,12 @@ from .orchestrator import PERSONA_STYLE
 from .safety import classify_safety
 
 
-SUPPORTED_PROVIDERS = ("openai", "deepseek", "gemini")
+SUPPORTED_PROVIDERS = ("openai", "deepseek", "gemini", "dify")
 DEFAULT_MODE = "local"
 DEFAULT_TIMEOUT_SECONDS = 8.0
 DEFAULT_MAX_OUTPUT_CHARS = 260
+DEFAULT_DIFY_RESPONSE_MODE = "blocking"
+DEFAULT_DIFY_USER_PREFIX = "wechat-treehole"
 
 
 @dataclass(frozen=True)
@@ -19,16 +21,21 @@ class ProviderConfig:
     api_key: str = ""
     model: str = ""
     base_url: str = ""
+    response_mode: str = ""
+    user_prefix: str = ""
 
     @property
     def configured(self):
         return bool(self.api_key.strip())
 
     def to_status(self):
-        return {
+        status = {
             "configured": self.configured,
             "model": self.model,
         }
+        if self.name == "dify":
+            status["response_mode"] = self.response_mode or DEFAULT_DIFY_RESPONSE_MODE
+        return status
 
 
 @dataclass(frozen=True)
@@ -95,6 +102,14 @@ def load_router_config_from_env(env):
             api_key=_clean(env.get("GEMINI_API_KEY")),
             model=_clean(env.get("GEMINI_MODEL")) or "gemini-2.0-flash",
             base_url=_clean(env.get("GEMINI_BASE_URL")) or "https://generativelanguage.googleapis.com/v1beta",
+        ),
+        "dify": ProviderConfig(
+            name="dify",
+            api_key=_clean(env.get("DIFY_API_KEY")),
+            model="Dify Chat App",
+            base_url=_clean(env.get("DIFY_API_BASE_URL")) or "https://api.dify.ai/v1",
+            response_mode=_normalized_dify_response_mode(env.get("DIFY_RESPONSE_MODE")),
+            user_prefix=_clean(env.get("DIFY_APP_USER_PREFIX")) or DEFAULT_DIFY_USER_PREFIX,
         ),
     }
     return RouterConfig(
@@ -322,6 +337,13 @@ def _normalized_mode(value):
     if mode in ("local", "auto", *SUPPORTED_PROVIDERS):
         return mode
     return DEFAULT_MODE
+
+
+def _normalized_dify_response_mode(value):
+    mode = _clean(value).lower() or DEFAULT_DIFY_RESPONSE_MODE
+    if mode == "blocking":
+        return mode
+    return DEFAULT_DIFY_RESPONSE_MODE
 
 
 def _clean(value):

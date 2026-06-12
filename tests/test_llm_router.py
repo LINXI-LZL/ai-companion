@@ -67,6 +67,39 @@ class LlmRouterTests(unittest.TestCase):
         self.assertNotIn("sk-secret", str(status))
         self.assertNotIn("deepseek-secret", str(status))
 
+    def test_dify_config_status_redacts_secret_and_exposes_response_mode(self):
+        from app.llm_router import load_router_config_from_env
+
+        status = load_router_config_from_env(
+            {
+                "COMPANION_LLM_PROVIDER": "dify",
+                "DIFY_API_KEY": "dify-secret-key",
+                "DIFY_API_BASE_URL": "https://example.dify.local/v1",
+                "DIFY_RESPONSE_MODE": "blocking",
+                "DIFY_APP_USER_PREFIX": "treehole",
+            }
+        ).to_status()
+
+        self.assertTrue(status["enabled"])
+        self.assertEqual(status["active_provider"], "dify")
+        self.assertTrue(status["providers"]["dify"]["configured"])
+        self.assertEqual(status["providers"]["dify"]["model"], "Dify Chat App")
+        self.assertEqual(status["providers"]["dify"]["response_mode"], "blocking")
+        self.assertNotIn("dify-secret-key", str(status))
+
+    def test_auto_mode_can_choose_dify_when_only_dify_is_configured(self):
+        from app.llm_router import load_router_config_from_env
+
+        config = load_router_config_from_env(
+            {
+                "COMPANION_LLM_PROVIDER": "auto",
+                "DIFY_API_KEY": "dify-secret-key",
+            }
+        )
+
+        self.assertEqual(config.choose_provider().name, "dify")
+        self.assertIn("dify", config.to_status()["provider_order"])
+
     def test_transport_error_falls_back_to_local_reply(self):
         from app.llm_router import load_router_config_from_env, route_external_reply
 
