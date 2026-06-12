@@ -5,11 +5,11 @@
 | Field | Content |
 |---|---|
 | Current phase | Dify provider integration |
-| Current step | Dify router config implementation |
-| Overall status | waiting_user |
-| Completed substeps | 68 / 74 |
-| User action needed | Choose Subagent-Driven or Inline Execution |
-| Next step after confirmation | Start Task 1 in `docs/superpowers/plans/2026-06-12-dify-provider.md` |
+| Current step | Dify owner smoke test |
+| Overall status | ready_for_test |
+| Completed substeps | 71 / 74 |
+| User action needed | Run the Dify provider smoke test |
+| Next step after confirmation | Confirm `docs/dify_provider_smoke_test.md` results or report any failed case |
 
 ## Completed Outputs
 
@@ -32,7 +32,7 @@
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
 | External multi-model router | 6 / 7 | selected route C, provider router design spec, implementation plan, router core, server integration, admin status UI, regression tests |
 | GitHub open-source radar | 1 / 1 | `docs/github_open_source_radar.md` |
-| Dify provider integration | 3 / 7 | Dify design spec, owner design confirmation, implementation plan |
+| Dify provider integration | 6 / 7 | Dify design spec, owner design confirmation, implementation plan, provider source, automated tests, status/README docs |
 
 ## Ready For Test
 
@@ -53,20 +53,21 @@
 | Automatic memory result | `docs/auto_memory_result.md` | accepted |
 | Expression logic smoke test | `docs/expression_logic_smoke_test.md` | ready for owner test |
 | Multi-model router smoke test | `docs/multi_model_router_smoke_test.md` | ready for owner test |
+| Dify provider smoke test | `docs/dify_provider_smoke_test.md` | ready for owner test |
 
-## Ready For Execution Choice
+## Waiting For Owner Smoke Test
 
 | Flow | Where | Status |
 |---|---|---|
-| Dify provider implementation | `docs/superpowers/plans/2026-06-12-dify-provider.md` | waiting for owner to choose execution mode |
+| Dify provider integration | `docs/dify_provider_smoke_test.md` | implementation is complete and waiting for owner verification |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
 | Owner smoke test | Confirm default local fallback, status panel, and chat continuity |
-| Dify provider implementation | Add Dify config, Chat App adapter, fallback handling, status labels, README, and smoke test |
+| Dify provider integration | Run local mode, missing-key Dify mode, real-key Dify mode, and local safety smoke tests |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for the owner to choose how to execute the Dify implementation plan. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. The Dify provider integration is implemented and waiting for owner smoke testing with a real Dify Chat App key. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.

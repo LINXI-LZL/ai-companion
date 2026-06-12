@@ -5,18 +5,18 @@
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
     "current_phase_id": "phase-18-dify-provider",
-    "current_step_id": "step-18-04-dify-router-config",
-    "overall_status": "waiting_user",
+    "current_step_id": "step-18-07-dify-owner-smoke-test",
+    "overall_status": "ready_for_test",
     "strategy": "hybrid",
     "total_phase_count": 18,
     "total_step_count": 74,
-    "completed_step_count": 68,
+    "completed_step_count": 71,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Choose Subagent-Driven or Inline Execution for the Dify provider implementation plan.",
-    "current_risk_summary": "Dify credential setup and Dify app prompt quality need owner-side configuration later; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
+    "next_action_summary": "Run docs/dify_provider_smoke_test.md to verify local mode, missing-key Dify fallback, real-key Dify replies, and local safety control.",
+    "current_risk_summary": "Dify credential setup and Dify app prompt quality need owner-side verification; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-12T22:05:00+08:00"
+    "updated_at": "2026-06-12T22:30:00+08:00"
   },
   "phases": [
     {
@@ -456,19 +456,27 @@
       "order": 18,
       "title": "Dify provider integration",
       "goal": "把 Dify Chat App 作为可选外部主脑接入现有多模型路由，同时保留本地安全、记忆、表情/语音意图和兜底能力。",
-      "status": "waiting_user",
+      "status": "ready_for_test",
       "outputs": [
         "docs/superpowers/specs/2026-06-12-dify-provider-design.md",
-        "docs/superpowers/plans/2026-06-12-dify-provider.md"
+        "docs/superpowers/plans/2026-06-12-dify-provider.md",
+        "app/llm_router.py",
+        "app/server.py",
+        "app/static/app.js",
+        "README.md",
+        "tests/test_llm_router.py",
+        "tests/test_storage_api.py",
+        "tests/test_static_app.py",
+        "docs/dify_provider_smoke_test.md"
       ],
       "requires_user_confirmation": true,
-      "testable": false,
+      "testable": true,
       "step_count": 7,
-      "completed_step_count": 3,
-      "summary": "Dify provider design and implementation plan are complete; implementation is waiting for owner choice of execution mode.",
-      "notes": "The implementation plan keeps Dify as a provider inside the current router and avoids a database migration by not persisting Dify conversation IDs in this round.",
-      "user_action": "choose_execution_mode",
-      "acceptance_hint": "用户选择 Subagent-Driven 或 Inline Execution 后，开始执行 Dify provider 的测试优先实现计划。",
+      "completed_step_count": 6,
+      "summary": "Dify provider integration is implemented and waiting for owner smoke testing.",
+      "notes": "Dify is integrated as a provider inside the current router. Local safety, fallback, memory, and media intent remain controlled locally; Dify conversation IDs are returned as response metadata only when Dify provides one.",
+      "user_action": "run_user_test",
+      "acceptance_hint": "用户按 docs/dify_provider_smoke_test.md 验证本地模式、缺 Key Dify 兜底、真实 Key Dify 回复和本地安全边界。",
       "depends_on_phase_ids": [
         "phase-17-open-source-radar"
       ],
@@ -2377,25 +2385,24 @@
       "order": 4,
       "title": "Implement Dify router config",
       "goal": "让路由器识别 Dify provider，加载 Dify 环境变量，并在状态输出中隐藏密钥。",
-      "status": "waiting_user",
+      "status": "done",
       "output": [
         "app/llm_router.py",
         "tests/test_llm_router.py"
       ],
-      "requires_user_confirmation": true,
+      "requires_user_confirmation": false,
       "testable": true,
-      "notes": "Implementation is waiting for the owner to choose Subagent-Driven or Inline Execution.",
+      "notes": "Dify provider environment loading, redacted status output, and auto-mode provider selection are implemented.",
       "depends_on": [
         "step-18-03-dify-implementation-plan"
       ],
-      "user_action": "choose_execution_mode",
-      "acceptance_hint": "执行方式确认后，先写 Dify config 失败测试，再补最小实现。",
-      "progress_summary": "等待选择执行方式。",
-      "blockers": [
-        "Needs execution mode choice"
-      ],
+      "user_action": "none",
+      "acceptance_hint": "自动测试覆盖 Dify 配置、状态脱敏和 auto 模式选择。",
+      "progress_summary": "已完成。",
+      "blockers": [],
       "related_artifact_ids": [
-        "artifact-065"
+        "artifact-066",
+        "artifact-067"
       ],
       "related_decision_ids": []
     },
@@ -2405,23 +2412,24 @@
       "order": 5,
       "title": "Implement Dify Chat App adapter",
       "goal": "构造 Dify `/chat-messages` 请求体，解析 `answer` 和会话元数据。",
-      "status": "not_started",
+      "status": "done",
       "output": [
         "app/llm_router.py",
         "tests/test_llm_router.py"
       ],
       "requires_user_confirmation": false,
       "testable": true,
-      "notes": "This step starts after Dify config support is implemented.",
+      "notes": "Dify `/chat-messages` payload construction, answer parsing, privacy-redacted recent history, and conversation metadata handling are implemented.",
       "depends_on": [
         "step-18-04-dify-router-config"
       ],
       "user_action": "none",
       "acceptance_hint": "假传输测试能证明 Dify payload 结构正确，并能读取 `answer`。",
-      "progress_summary": "未开始。",
+      "progress_summary": "已完成。",
       "blockers": [],
       "related_artifact_ids": [
-        "artifact-065"
+        "artifact-066",
+        "artifact-067"
       ],
       "related_decision_ids": []
     },
@@ -2431,7 +2439,7 @@
       "order": 6,
       "title": "Wire Dify fallback, server user id, status UI, and README",
       "goal": "保持本地安全与兜底优先，同时让运行状态页和 README 显示 Dify 支持方式。",
-      "status": "not_started",
+      "status": "done",
       "output": [
         "app/llm_router.py",
         "app/server.py",
@@ -2441,16 +2449,17 @@
       ],
       "requires_user_confirmation": false,
       "testable": true,
-      "notes": "This step covers timeout, too-long output, safety bypass, Dify user id, and visible status labels.",
+      "notes": "Fallback handling, server user id forwarding, admin Dify labels, and README Dify setup instructions are implemented.",
       "depends_on": [
         "step-18-05-dify-adapter"
       ],
       "user_action": "none",
       "acceptance_hint": "自动测试证明无 Key、超时、过长输出和安全模式都能回到本地。",
-      "progress_summary": "未开始。",
+      "progress_summary": "已完成。",
       "blockers": [],
       "related_artifact_ids": [
-        "artifact-065"
+        "artifact-066",
+        "artifact-067"
       ],
       "related_decision_ids": []
     },
@@ -2460,24 +2469,24 @@
       "order": 7,
       "title": "Owner Dify provider smoke test",
       "goal": "验证无 Key 兜底、Dify 模式缺 Key、真实 Key 对话质量和安全模式本地优先。",
-      "status": "not_started",
+      "status": "ready_for_test",
       "output": [
         "docs/dify_provider_smoke_test.md"
       ],
       "requires_user_confirmation": true,
       "testable": true,
-      "notes": "Smoke test doc will be created at the end of implementation.",
+      "notes": "Owner smoke test doc is ready for local mode, missing-key Dify mode, real-key Dify mode, and local safety checks.",
       "depends_on": [
         "step-18-06-dify-fallback-server-ui"
       ],
       "user_action": "run_user_test",
       "acceptance_hint": "用户按烟测文档确认 Dify 接入是否符合预期。",
-      "progress_summary": "未开始。",
+      "progress_summary": "等待用户烟测。",
       "blockers": [
-        "Needs implementation first"
+        "Needs owner smoke test"
       ],
       "related_artifact_ids": [
-        "artifact-065"
+        "artifact-068"
       ],
       "related_decision_ids": [
         "decision-019"
@@ -3198,6 +3207,39 @@
       "phase_id": "phase-18-dify-provider",
       "step_id": "step-18-03-dify-implementation-plan",
       "created_at": "2026-06-12T22:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-066",
+      "title": "Dify provider source",
+      "artifact_type": "source_code",
+      "location": "app/llm_router.py, app/server.py, app/static/app.js, README.md",
+      "summary": "Dify Chat App provider configuration, adapter, fallback handling, server user id forwarding, status labels, and run documentation.",
+      "phase_id": "phase-18-dify-provider",
+      "step_id": "step-18-06-dify-fallback-server-ui",
+      "created_at": "2026-06-12T22:30:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-067",
+      "title": "Dify provider tests",
+      "artifact_type": "test",
+      "location": "tests/test_llm_router.py, tests/test_storage_api.py, tests/test_static_app.py",
+      "summary": "Automated coverage for Dify config, payload shape, response parsing, fallback behavior, user id forwarding, and admin/README visibility.",
+      "phase_id": "phase-18-dify-provider",
+      "step_id": "step-18-06-dify-fallback-server-ui",
+      "created_at": "2026-06-12T22:30:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-068",
+      "title": "Dify provider smoke test",
+      "artifact_type": "document",
+      "location": "docs/dify_provider_smoke_test.md",
+      "summary": "Owner-facing smoke test for local mode, missing-key Dify fallback, real-key Dify replies, and local safety control.",
+      "phase_id": "phase-18-dify-provider",
+      "step_id": "step-18-07-dify-owner-smoke-test",
+      "created_at": "2026-06-12T22:30:00+08:00",
       "version": "v0.1"
     }
   ],
