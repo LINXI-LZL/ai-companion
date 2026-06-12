@@ -4,12 +4,12 @@
 
 | Field | Content |
 |---|---|
-| Current phase | Expression logic polish |
-| Current step | Owner expression smoke test |
-| Overall status | ready_for_test |
-| Completed substeps | 58 / 59 |
-| User action needed | Run the expression logic smoke test |
-| Next step after confirmation | Accept expression logic polish or request wording tuning |
+| Current phase | External multi-model router design |
+| Current step | Owner design review |
+| Overall status | ready_for_design_review |
+| Completed substeps | 60 / 62 |
+| User action needed | Review the multi-model router design |
+| Next step after confirmation | Create implementation plan for provider router |
 
 ## Completed Outputs
 
@@ -30,6 +30,7 @@
 | Build Round 3 WeCom live credential route | 4 / 5 | live route design spec, implementation plan, `wecom_live` adapter, server endpoints, admin self-check |
 | Auto lightweight memory polish | 4 / 4 | automatic memory design spec, implementation plan, auto memory extractor, server wiring, automatic memory UI, acceptance result |
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
+| External multi-model router design | 2 / 3 | selected route C, provider router design spec |
 
 ## Ready For Test
 
@@ -49,13 +50,14 @@
 | Automatic memory smoke test | `docs/auto_memory_smoke_test.md` | passed |
 | Automatic memory result | `docs/auto_memory_result.md` | accepted |
 | Expression logic smoke test | `docs/expression_logic_smoke_test.md` | ready for owner test |
+| Multi-model router design | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | ready for owner review |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
-| Owner acceptance | Run the expression logic smoke test and decide whether the expression polish passes |
+| Design review | Review the multi-model router design and confirm implementation |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner feedback on expression logic polish. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. The project is waiting for owner review of the external multi-model router design. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.

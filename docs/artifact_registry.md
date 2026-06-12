@@ -57,3 +57,4 @@
 | artifact-053 | Expression logic regression tests | test | `tests/test_companion_core.py` | phase-15-expression-logic-polish | step-15-02-regression-tests | Tests for generic poetic messages and AI-quality feedback replies |
 | artifact-054 | Expression logic reply engine polish | source_code | `app/orchestrator.py` | phase-15-expression-logic-polish | step-15-03-reply-engine-polish | Meta-feedback scenario, generic reply cleanup, and scenario-specific repeat notes |
 | artifact-055 | Expression logic smoke test | document | `docs/expression_logic_smoke_test.md` | phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Owner smoke test for logical, context-specific expression quality |
+| artifact-056 | Multi-model router design | design_spec | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | phase-16-multi-model-router | step-16-02-design-spec | Design for OpenAI, DeepSeek, Gemini routing with local fallback and redacted status |

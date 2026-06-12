@@ -5,14 +5,14 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | Expression logic polish |
-| Current step | Owner expression smoke test |
-| Overall status | Ready for owner test |
-| Total phases | 15 |
-| Total substeps | 59 |
-| Completed substeps | 58 |
+| Current phase | External multi-model router design |
+| Current step | Owner design review |
+| Overall status | Ready for design review |
+| Total phases | 16 |
+| Total substeps | 62 |
+| Completed substeps | 60 |
 | Needs user attention | Yes |
-| Next action | Run the expression logic smoke test |
+| Next action | Review the multi-model router design |
 | Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
@@ -78,7 +78,10 @@
 | phase-15-expression-logic-polish | step-15-02-regression-tests | Expression logic polish | Add regression tests | Lock poetic generic and AI-quality feedback behavior | `tests/test_companion_core.py` | step-15-01-owner-feedback | done | none | no | yes | none |
 | phase-15-expression-logic-polish | step-15-03-reply-engine-polish | Expression logic polish | Polish reply expression logic | Add meta-feedback scenario and remove generic repeated-theme suffix | `app/orchestrator.py` | step-15-02-regression-tests | done | none | no | yes | none |
 | phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Expression logic polish | Owner expression smoke test | Verify replies are logical and context-specific | `docs/expression_logic_smoke_test.md` | step-15-03-reply-engine-polish | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-16-multi-model-router | step-16-01-route-choice | External multi-model router design | Confirm provider route | Choose external model strategy | User chose C: multi-model routing | step-15-04-owner-smoke-test | done | none | no | no | none |
+| phase-16-multi-model-router | step-16-02-design-spec | External multi-model router design | Write design spec | Define provider router, privacy, fallback, and admin status behavior | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-01-route-choice | done | none | no | no | none |
+| phase-16-multi-model-router | step-16-03-design-review | External multi-model router design | Owner design review | Confirm multi-model router before implementation | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-02-design-spec | ready_for_review | review_design | yes | no | Needs owner design review |
 
 ## Current Confirmation Gate
 
-Run `docs/expression_logic_smoke_test.md` in the local app, then decide whether the expression logic polish passes.
+Review `docs/superpowers/specs/2026-06-12-multi-model-router-design.md`, then confirm whether to implement the multi-model router.

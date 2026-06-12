@@ -4,19 +4,19 @@
     "title": "微信树洞 AI",
     "summary": "一个接入微信环境的 AI 陪聊智能体，像嘴欠但靠谱的深夜损友一样陪你和少数朋友吐槽、emo、睡前聊天，并通过公开样本蒸馏、表情包意图和短语音脚本增强真人感。",
     "project_type": "multi_platform",
-    "current_phase_id": "phase-15-expression-logic-polish",
-    "current_step_id": "step-15-04-owner-smoke-test",
-    "overall_status": "ready_for_test",
+    "current_phase_id": "phase-16-multi-model-router",
+    "current_step_id": "step-16-03-design-review",
+    "overall_status": "ready_for_design_review",
     "strategy": "hybrid",
-    "total_phase_count": 15,
-    "total_step_count": 59,
-    "completed_step_count": 58,
+    "total_phase_count": 16,
+    "total_step_count": 62,
+    "completed_step_count": 60,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Run the expression logic smoke test and decide whether the expression polish passes.",
+    "next_action_summary": "Review the multi-model router design and confirm whether implementation can begin.",
     "current_risk_summary": "Real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-05T20:05:00+08:00"
+    "updated_at": "2026-06-12T20:10:00+08:00"
   },
   "phases": [
     {
@@ -395,6 +395,29 @@
         "phase-14-auto-memory-polish"
       ],
       "started_at": "2026-06-05T20:05:00+08:00"
+    },
+    {
+      "id": "phase-16-multi-model-router",
+      "project_id": "wechat-vent-ai",
+      "order": 16,
+      "title": "External multi-model router design",
+      "goal": "把外部大模型 API 作为可切换主脑接入设计清楚，同时保留本地安全、记忆、多模态意图和失败兜底。",
+      "status": "ready_for_review",
+      "outputs": [
+        "docs/superpowers/specs/2026-06-12-multi-model-router-design.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "step_count": 3,
+      "completed_step_count": 2,
+      "summary": "Owner selected multi-model routing; design spec is ready for review before implementation.",
+      "notes": "The implementation should not require real API keys to keep the app runnable locally. Real paid credentials remain an owner setup step.",
+      "user_action": "review_design",
+      "acceptance_hint": "用户确认设计后再进入实现计划和代码开发。",
+      "depends_on_phase_ids": [
+        "phase-15-expression-logic-polish"
+      ],
+      "started_at": "2026-06-12T20:10:00+08:00"
     }
   ],
   "steps": [
@@ -1990,6 +2013,87 @@
       "related_decision_ids": [
         "decision-015"
       ]
+    },
+    {
+      "id": "step-16-01-route-choice",
+      "phase_id": "phase-16-multi-model-router",
+      "order": 1,
+      "title": "Confirm provider route",
+      "goal": "确认外部主脑使用多模型路由，而不是单一供应商。",
+      "status": "done",
+      "output": [
+        "User chose C: multi-model routing."
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Route includes OpenAI preferred provider, DeepSeek fallback/cost option, Gemini optional provider, and local fallback.",
+      "depends_on": [
+        "step-15-04-owner-smoke-test"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "外部 API 接入路线已明确。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [],
+      "related_decision_ids": [
+        "decision-016"
+      ]
+    },
+    {
+      "id": "step-16-02-design-spec",
+      "phase_id": "phase-16-multi-model-router",
+      "order": 2,
+      "title": "Write multi-model router design",
+      "goal": "定义 provider router、隐私边界、失败兜底、后台状态和首轮实现范围。",
+      "status": "done",
+      "output": [
+        "docs/superpowers/specs/2026-06-12-multi-model-router-design.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "Design references current official docs for OpenAI Responses API, DeepSeek Chat Completion, and Gemini generateContent.",
+      "depends_on": [
+        "step-16-01-route-choice"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "设计说明能指导下一轮实现并避免泄露密钥。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-056"
+      ],
+      "related_decision_ids": [
+        "decision-016"
+      ]
+    },
+    {
+      "id": "step-16-03-design-review",
+      "phase_id": "phase-16-multi-model-router",
+      "order": 3,
+      "title": "Owner design review",
+      "goal": "让用户确认多模型路由设计后再开始代码实现。",
+      "status": "ready_for_review",
+      "output": [
+        "docs/superpowers/specs/2026-06-12-multi-model-router-design.md"
+      ],
+      "requires_user_confirmation": true,
+      "testable": false,
+      "notes": "Implementation should wait for owner confirmation because external API calls affect cost, privacy, and credentials.",
+      "depends_on": [
+        "step-16-02-design-spec"
+      ],
+      "user_action": "review_design",
+      "acceptance_hint": "用户确认后进入实现计划。",
+      "progress_summary": "等待用户确认设计。",
+      "blockers": [
+        "Needs owner design review"
+      ],
+      "related_artifact_ids": [
+        "artifact-056"
+      ],
+      "related_decision_ids": [
+        "decision-016"
+      ]
     }
   ],
   "artifacts": [
@@ -2597,6 +2701,17 @@
       "step_id": "step-15-04-owner-smoke-test",
       "created_at": "2026-06-05T20:05:00+08:00",
       "version": "v0.1"
+    },
+    {
+      "id": "artifact-056",
+      "title": "Multi-model router design",
+      "artifact_type": "design_spec",
+      "location": "docs/superpowers/specs/2026-06-12-multi-model-router-design.md",
+      "summary": "Design for OpenAI, DeepSeek, Gemini routing with local fallback and redacted status.",
+      "phase_id": "phase-16-multi-model-router",
+      "step_id": "step-16-02-design-spec",
+      "created_at": "2026-06-12T20:10:00+08:00",
+      "version": "v0.1"
     }
   ],
   "decisions": [
@@ -2977,6 +3092,32 @@
       "user_decision": "Optimize AI expression logic after screenshot feedback.",
       "recommendation_reason": "The issue is a local reply-planning bug, so a focused expression logic polish is faster and lower risk than redesigning the whole personality.",
       "notes": "This keeps the accepted personality and automatic memory behavior while improving sentence logic."
+    },
+    {
+      "id": "decision-016",
+      "title": "External model API route",
+      "context": "Owner wants the companion to become smarter by connecting external model or agent APIs.",
+      "status": "resolved",
+      "recommended_option_id": "option-multi-model-router",
+      "related_phase_id": "phase-16-multi-model-router",
+      "related_step_id": "step-16-01-route-choice",
+      "options": [
+        {
+          "id": "option-openai-first",
+          "label": "OpenAI 主模型接入"
+        },
+        {
+          "id": "option-deepseek-first",
+          "label": "DeepSeek 接入"
+        },
+        {
+          "id": "option-multi-model-router",
+          "label": "多模型路由"
+        }
+      ],
+      "user_decision": "C: multi-model routing.",
+      "recommendation_reason": "Multi-model routing improves quality while keeping fallback choices for cost, availability, and future provider changes.",
+      "notes": "Implementation should keep local fallback active and never expose API keys in UI or logs."
     }
   ]
 }
