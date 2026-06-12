@@ -35,7 +35,7 @@ Set one provider locally, then restart the service:
 $env:COMPANION_LLM_PROVIDER='auto'
 $env:DEEPSEEK_API_KEY='your-key'
 $env:DEEPSEEK_MODEL='deepseek-chat'
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m app.server --port 8765
+python -m app.server --port 8765
 ```
 
 Expected on `运行状态`:

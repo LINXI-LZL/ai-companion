@@ -9,7 +9,7 @@ The current project gate is choosing the Build Round 2 focus.
 ## How To Run Locally
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m app.server --port 8765
+python -m app.server --port 8765
 ```
 
 Open:
@@ -21,7 +21,7 @@ http://127.0.0.1:8765
 ## How To Verify
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 Expected result: all tests pass.

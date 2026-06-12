@@ -25,7 +25,7 @@ Add coverage for AES-256-CBC known-vector encryption/decryption and encrypted `e
 Run:
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m unittest tests.test_wechat_adapter -v
+python -m unittest tests.test_wechat_adapter -v
 ```
 
 Expected before implementation: import errors for AES and encryption helpers.
@@ -87,7 +87,7 @@ Document the callback endpoint and make clear that real outbound sending is stil
 Run:
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest
+python -m pytest
 ```
 
 Result: 76 tests passed.
@@ -97,7 +97,7 @@ Result: 76 tests passed.
 Run:
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m json.tool docs\project_state.json > $null
+python -m json.tool docs\project_state.json > $null
 ```
 
 Result: exit code 0.

@@ -34,7 +34,7 @@ Add tests for self-blame boundaries, high-risk serious mode, and ten similar wor
 Run:
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m unittest tests.test_companion_core tests.test_storage_api -v
+python -m unittest tests.test_companion_core tests.test_storage_api -v
 ```
 
 Expected before implementation: at least one new test fails because scenario metadata and ten-turn variation are not implemented.
@@ -74,7 +74,7 @@ Keep high-risk safety replies first. Keep existing `mode`, `sticker_intent`, `vo
 Run:
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 Expected after implementation: all tests pass.

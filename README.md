@@ -4,10 +4,10 @@
 
 ## 本地运行
 
-使用 Codex 自带的 Python 运行环境启动服务：
+使用本机 Python 启动服务：
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m app.server --port 8765
+python -m app.server --port 8765
 ```
 
 启动后打开：
@@ -109,5 +109,5 @@ docs/wecom_real_callback_smoke_test.md
 运行完整测试：
 
 ```powershell
-& 'C:\Users\25968\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest -q
+python -m pytest -q
 ```
