@@ -24,7 +24,7 @@ The Round 1 app includes:
 - public sample source status
 - sticker and voice intent fallback
 - safety-mode behavior
-- optional external model router for OpenAI, DeepSeek, and Gemini
+- optional external model router for OpenAI, DeepSeek, Gemini, and Dify
 
 Real WeChat integration, real sticker assets, and real voice synthesis are intentionally deferred.
 
@@ -38,11 +38,21 @@ $env:OPENAI_API_KEY='your-openai-key'
 $env:OPENAI_MODEL='gpt-4o-mini'
 ```
 
+```powershell
+$env:COMPANION_LLM_PROVIDER='dify'
+$env:DIFY_API_KEY='your-dify-key'
+$env:DIFY_API_BASE_URL='https://api.dify.ai/v1'
+$env:DIFY_RESPONSE_MODE='blocking'
+$env:DIFY_APP_USER_PREFIX='wechat-treehole'
+```
+
 Supported provider modes:
 
 ```text
-local | auto | openai | deepseek | gemini
+local | auto | openai | deepseek | gemini | dify
 ```
+
+Dify is used through its Chat App `/chat-messages` API. The app sends structured local context to Dify, but local safety and local fallback stay in control.
 
 The Run Status page shows provider readiness without displaying API keys.
 

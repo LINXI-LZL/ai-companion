@@ -347,6 +347,7 @@ function displayLabel(value) {
     openai: "OpenAI",
     deepseek: "DeepSeek",
     gemini: "Gemini",
+    dify: "Dify",
   };
   return labels[value] || value || "-";
 }
@@ -374,6 +375,8 @@ function llmFallbackLabel(value) {
     empty_reply: "外部模型返回为空，已回到本地",
     unsafe_reply: "外部模型输出触发安全兜底",
     debug_output: "外部模型输出像调试字段，已回到本地",
+    provider_timeout: "外部模型请求超时，已回到本地",
+    output_too_long: "外部模型回复过长，已回到本地",
   };
   return labels[value] || "无";
 }

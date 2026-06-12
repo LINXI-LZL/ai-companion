@@ -79,6 +79,17 @@ class StaticAppTests(unittest.TestCase):
         self.assertIn("/api/llm-router/status", script)
         self.assertIn("renderLlmRouterStatus", script)
 
+    def test_static_app_and_readme_expose_dify_provider_without_secrets(self):
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn('dify: "Dify"', script)
+        self.assertIn("provider_timeout", script)
+        self.assertIn("output_too_long", script)
+        self.assertIn("DIFY_API_KEY", readme)
+        self.assertIn("local | auto | openai | deepseek | gemini | dify", readme)
+        self.assertNotIn("dify-secret-key", readme)
+
 
 if __name__ == "__main__":
     unittest.main()
