@@ -120,7 +120,7 @@ def load_router_config_from_env(env):
     )
 
 
-def route_external_reply(config, local_plan, message, memories=None, recent_messages=None, transport=None):
+def route_external_reply(config, local_plan, message, memories=None, recent_messages=None, transport=None, user_id=""):
     local_reply = local_plan.get("reply_text", "")
     if local_plan.get("safety_mode"):
         return _local_result(config, local_reply, "safety_mode")
@@ -130,7 +130,7 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
         reason = "router_disabled" if config.mode == "local" else "provider_not_configured"
         return _local_result(config, local_reply, reason)
 
-    request = build_provider_request(provider, local_plan, message, memories or [], recent_messages or [])
+    request = build_provider_request(provider, local_plan, message, memories or [], recent_messages or [], user_id=user_id)
     try:
         raw_reply = transport(request) if transport else _call_provider(provider, request, config.timeout_seconds)
         candidate = _coerce_text(raw_reply).strip()
@@ -157,14 +157,16 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
     }
 
 
-def build_provider_request(provider, local_plan, message, memories, recent_messages):
+def build_provider_request(provider, local_plan, message, memories, recent_messages, user_id=""):
     system_prompt = _build_system_prompt(local_plan)
     user_prompt = _build_user_prompt(message, memories, recent_messages, local_plan)
     return {
         "provider": provider.name,
         "model": provider.model,
+        "message": message,
         "system_prompt": system_prompt,
         "user_prompt": user_prompt,
+        "dify_payload": _build_dify_payload(provider, local_plan, message, memories, recent_messages, user_id),
     }
 
 
@@ -175,6 +177,8 @@ def _call_provider(provider, request, timeout_seconds):
         return _call_deepseek(provider, request, timeout_seconds)
     if provider.name == "gemini":
         return _call_gemini(provider, request, timeout_seconds)
+    if provider.name == "dify":
+        return _call_dify(provider, request, timeout_seconds)
     raise ValueError(f"unsupported provider: {provider.name}")
 
 
@@ -248,6 +252,22 @@ def _call_gemini(provider, request, timeout_seconds):
     return "\n".join(part.get("text", "") for part in parts)
 
 
+def _call_dify(provider, request, timeout_seconds):
+    data = _post_json(
+        f"{provider.base_url.rstrip('/')}/chat-messages",
+        {
+            "Authorization": f"Bearer {provider.api_key}",
+            "Content-Type": "application/json",
+        },
+        request["dify_payload"],
+        timeout_seconds,
+    )
+    return {
+        "text": data.get("answer", ""),
+        "conversation_id": data.get("conversation_id", ""),
+    }
+
+
 def _post_json(url, headers, payload, timeout_seconds):
     body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(url, data=body, headers=headers, method="POST")
@@ -288,6 +308,39 @@ def _build_user_prompt(message, memories, recent_messages, local_plan):
     )
 
 
+def _build_dify_payload(provider, local_plan, message, memories, recent_messages, user_id):
+    return {
+        "inputs": {
+            "persona_style": PERSONA_STYLE,
+            "scenario": local_plan.get("scenario") or "generic",
+            "mode": local_plan.get("mode") or "text_only",
+            "media_intent": local_plan.get("sticker_intent") or "none",
+            "voice_intent": local_plan.get("voice_intent") or "none",
+            "memories": "；".join(memories[:6]) if memories else "无",
+            "recent_history": _format_recent_history(recent_messages),
+            "local_reply": local_plan.get("reply_text", ""),
+        },
+        "query": message,
+        "response_mode": provider.response_mode or DEFAULT_DIFY_RESPONSE_MODE,
+        "user": _build_dify_user(provider, user_id),
+    }
+
+
+def _format_recent_history(recent_messages):
+    history = []
+    for item in list(recent_messages)[:6]:
+        incoming = item.get("incoming_text", "")
+        reply = item.get("reply_text", "")
+        if incoming or reply:
+            history.append(f"用户：{incoming}\nAI：{reply}")
+    return "\n---\n".join(history) if history else "无"
+
+
+def _build_dify_user(provider, user_id):
+    safe_user = "".join(ch if ch.isalnum() or ch in ("-", "_") else "-" for ch in _clean(user_id))
+    return f"{provider.user_prefix or DEFAULT_DIFY_USER_PREFIX}-{safe_user or 'anonymous'}"
+
+
 def _local_result(config, reply_text, reason):
     return {
         "reply_text": reply_text,
@@ -305,10 +358,18 @@ def _coerce_text(value):
     if isinstance(value, str):
         return value
     if isinstance(value, dict):
-        for key in ("reply_text", "text", "content", "output_text"):
+        for key in ("reply_text", "text", "answer", "content", "output_text"):
             if value.get(key):
                 return str(value[key])
     return str(value or "")
+
+
+def _provider_metadata(value):
+    if not isinstance(value, dict):
+        return {}
+    return {
+        "conversation_id": str(value.get("conversation_id") or ""),
+    }
 
 
 def _fit_text(text, max_chars):
