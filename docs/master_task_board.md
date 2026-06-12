@@ -6,13 +6,13 @@
 |---|---|
 | Project | 微信树洞 AI |
 | Current phase | Dify provider integration |
-| Current step | Owner Dify provider design review |
-| Overall status | Waiting for design review |
+| Current step | Dify router config implementation |
+| Overall status | Waiting for execution choice |
 | Total phases | 18 |
-| Total substeps | 69 |
-| Completed substeps | 66 |
+| Total substeps | 74 |
+| Completed substeps | 68 |
 | Needs user attention | Yes |
-| Next action | Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md` and confirm whether to write the implementation plan |
+| Next action | Choose Subagent-Driven or Inline Execution for the Dify provider implementation |
 | Current risk | Dify credential setup and Dify app prompt quality need owner-side configuration later; real WeCom encrypted callback, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
@@ -87,8 +87,13 @@
 | phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md` | step-16-06-admin-status | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 | phase-17-open-source-radar | step-17-01-github-radar | GitHub open-source radar | Create open-source radar | Compare reference projects for WeChat/WeCom bots, external brain routing, voice, stickers, and memory | `docs/github_open_source_radar.md` | step-16-06-admin-status | done | none | no | no | none |
 | phase-18-dify-provider | step-18-01-dify-provider-design | Dify provider integration | Write Dify provider design | Define Dify Chat App provider scope, API contract, privacy, fallback, and owner smoke test | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-17-01-github-radar | done | none | no | no | none |
-| phase-18-dify-provider | step-18-02-design-review | Dify provider integration | Owner Dify provider design review | Confirm the Dify provider design before implementation planning | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-18-01-dify-provider-design | waiting_user | review_spec | yes | no | Needs owner confirmation |
+| phase-18-dify-provider | step-18-02-design-review | Dify provider integration | Owner Dify provider design review | Confirm the Dify provider design before implementation planning | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | step-18-01-dify-provider-design | done | none | no | no | none |
+| phase-18-dify-provider | step-18-03-dify-implementation-plan | Dify provider integration | Write Dify implementation plan | Produce a test-first task plan for implementation | `docs/superpowers/plans/2026-06-12-dify-provider.md` | step-18-02-design-review | done | none | no | no | none |
+| phase-18-dify-provider | step-18-04-dify-router-config | Dify provider integration | Implement Dify router config | Add Dify provider env loading, status redaction, and auto-mode selection | `app/llm_router.py`, `tests/test_llm_router.py` | step-18-03-dify-implementation-plan | waiting_user | choose_execution_mode | yes | yes | Waiting for execution mode choice |
+| phase-18-dify-provider | step-18-05-dify-adapter | Dify provider integration | Implement Dify Chat App adapter | Build `/chat-messages` payload and parse `answer` plus conversation metadata | `app/llm_router.py`, `tests/test_llm_router.py` | step-18-04-dify-router-config | not_started | none | no | yes | none |
+| phase-18-dify-provider | step-18-06-dify-fallback-server-ui | Dify provider integration | Wire fallback, server user id, status UI, and README | Preserve local safety/fallback while exposing Dify readiness in Run Status | `app/server.py`, `app/static/app.js`, `README.md`, tests | step-18-05-dify-adapter | not_started | none | no | yes | none |
+| phase-18-dify-provider | step-18-07-dify-owner-smoke-test | Dify provider integration | Owner Dify provider smoke test | Verify no-key fallback, missing-key Dify mode, real-key Dify replies, and safety bypass | `docs/dify_provider_smoke_test.md` | step-18-06-dify-fallback-server-ui | not_started | run_user_test | yes | yes | Needs implementation first |
 
 ## Current Confirmation Gate
 
-Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md`, then confirm whether this Dify provider route can move into implementation planning.
+Choose how to execute `docs/superpowers/plans/2026-06-12-dify-provider.md`: Subagent-Driven or Inline Execution.

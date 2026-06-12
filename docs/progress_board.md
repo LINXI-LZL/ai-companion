@@ -5,11 +5,11 @@
 | Field | Content |
 |---|---|
 | Current phase | Dify provider integration |
-| Current step | Owner Dify provider design review |
+| Current step | Dify router config implementation |
 | Overall status | waiting_user |
-| Completed substeps | 66 / 69 |
-| User action needed | Review `docs/superpowers/specs/2026-06-12-dify-provider-design.md` |
-| Next step after confirmation | Write the Dify provider implementation plan |
+| Completed substeps | 68 / 74 |
+| User action needed | Choose Subagent-Driven or Inline Execution |
+| Next step after confirmation | Start Task 1 in `docs/superpowers/plans/2026-06-12-dify-provider.md` |
 
 ## Completed Outputs
 
@@ -32,7 +32,7 @@
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
 | External multi-model router | 6 / 7 | selected route C, provider router design spec, implementation plan, router core, server integration, admin status UI, regression tests |
 | GitHub open-source radar | 1 / 1 | `docs/github_open_source_radar.md` |
-| Dify provider integration | 1 / 2 | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` |
+| Dify provider integration | 3 / 7 | Dify design spec, owner design confirmation, implementation plan |
 
 ## Ready For Test
 
@@ -54,19 +54,19 @@
 | Expression logic smoke test | `docs/expression_logic_smoke_test.md` | ready for owner test |
 | Multi-model router smoke test | `docs/multi_model_router_smoke_test.md` | ready for owner test |
 
-## Ready For Design Review
+## Ready For Execution Choice
 
 | Flow | Where | Status |
 |---|---|---|
-| Dify provider route | `docs/superpowers/specs/2026-06-12-dify-provider-design.md` | waiting for owner confirmation |
+| Dify provider implementation | `docs/superpowers/plans/2026-06-12-dify-provider.md` | waiting for owner to choose execution mode |
 
 ## Not Started Yet
 
 | Phase | Remaining Work |
 |---|---|
 | Owner smoke test | Confirm default local fallback, status panel, and chat continuity |
-| Dify provider implementation | Write implementation plan, then add the provider after design approval |
+| Dify provider implementation | Add Dify config, Chat App adapter, fallback handling, status labels, README, and smoke test |
 
 ## Current Blocker
 
-No engineering blocker is active. The project is waiting for owner review of the Dify provider design. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.
+No engineering blocker is active. The project is waiting for the owner to choose how to execute the Dify implementation plan. Real encrypted Enterprise WeChat callback verification still needs official WXBizMsgCrypt-compatible crypto support and public HTTPS.

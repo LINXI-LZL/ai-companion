@@ -14,3 +14,4 @@
 | decision-016 | External model API route | resolved | phase-16-multi-model-router / step-16-01 | Use multi-model routing so OpenAI, DeepSeek, Gemini, and local fallback can coexist | C: multi-model routing |
 | decision-017 | Multi-model router implementation confirmation | resolved | phase-16-multi-model-router / step-16-03 | Implement now because design keeps credentials optional and local fallback active | 确认实现 |
 | decision-018 | Dify provider route | resolved | phase-18-dify-provider / step-18-01 | Add Dify as a lightweight Chat App provider inside the existing router, while keeping local safety, memory, media intent, and fallback as the source of truth | 确认轻量 Dify Provider 设计 |
+| decision-019 | Dify provider design review | resolved | phase-18-dify-provider / step-18-02 | Move from written design into a test-first implementation plan | 确认 |
