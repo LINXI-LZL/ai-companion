@@ -100,6 +100,19 @@ class LlmRouterTests(unittest.TestCase):
         self.assertEqual(config.choose_provider().name, "dify")
         self.assertIn("dify", config.to_status()["provider_order"])
 
+    def test_dify_response_mode_defaults_to_blocking_for_unsupported_values(self):
+        from app.llm_router import load_router_config_from_env
+
+        status = load_router_config_from_env(
+            {
+                "COMPANION_LLM_PROVIDER": "dify",
+                "DIFY_API_KEY": "secret",
+                "DIFY_RESPONSE_MODE": "streaming",
+            }
+        ).to_status()
+
+        self.assertEqual(status["providers"]["dify"]["response_mode"], "blocking")
+
     def test_transport_error_falls_back_to_local_reply(self):
         from app.llm_router import load_router_config_from_env, route_external_reply
 
