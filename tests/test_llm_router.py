@@ -261,9 +261,27 @@ class LlmRouterTests(unittest.TestCase):
         url, headers, payload, timeout_seconds = post_json.call_args.args
         self.assertEqual(url, "https://dify.example/v1/chat-messages")
         self.assertEqual(headers["Authorization"], "Bearer secret")
+        self.assertEqual(headers["Accept"], "application/json")
+        self.assertIn("DifySmokeTest", headers["User-Agent"])
         self.assertEqual(payload["response_mode"], "blocking")
         self.assertEqual(payload["query"], "你是谁")
         self.assertEqual(timeout_seconds, 8)
+
+    def test_dify_thinking_output_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic"},
+            "你好",
+            memories=[],
+            recent_messages=[],
+            transport=lambda request: {"answer": "<think>internal reasoning</think>\n你好"},
+        )
+
+        self.assertEqual(result["reply_text"], "本地兜底")
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "debug_output")
 
     def test_transport_error_falls_back_to_local_reply(self):
         from app.llm_router import load_router_config_from_env, route_external_reply

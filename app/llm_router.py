@@ -272,6 +272,8 @@ def _call_dify(provider, request, timeout_seconds):
         {
             "Authorization": f"Bearer {provider.api_key}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "DifySmokeTest/1.0 WeChatTreeholeAI",
         },
         request["dify_payload"],
         timeout_seconds,
@@ -407,7 +409,7 @@ def _provider_metadata(value):
 
 def _looks_like_debug_output(text):
     stripped = text.strip()
-    if stripped.startswith(("{", "[", "```")):
+    if stripped.startswith(("{", "[", "```", "<think>")):
         return True
     debug_tokens = (
         "text_only",
