@@ -3,6 +3,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 
+from .auto_memory import can_store_memory
 from .orchestrator import PERSONA_STYLE
 from .safety import classify_safety
 
@@ -13,6 +14,7 @@ DEFAULT_TIMEOUT_SECONDS = 8.0
 DEFAULT_MAX_OUTPUT_CHARS = 260
 DEFAULT_DIFY_RESPONSE_MODE = "blocking"
 DEFAULT_DIFY_USER_PREFIX = "wechat-treehole"
+DIFY_REDACTED_HISTORY_TEXT = "[已省略敏感或高风险内容]"
 
 
 @dataclass(frozen=True)
@@ -160,14 +162,16 @@ def route_external_reply(config, local_plan, message, memories=None, recent_mess
 def build_provider_request(provider, local_plan, message, memories, recent_messages, user_id=""):
     system_prompt = _build_system_prompt(local_plan)
     user_prompt = _build_user_prompt(message, memories, recent_messages, local_plan)
-    return {
+    request = {
         "provider": provider.name,
         "model": provider.model,
         "message": message,
         "system_prompt": system_prompt,
         "user_prompt": user_prompt,
-        "dify_payload": _build_dify_payload(provider, local_plan, message, memories, recent_messages, user_id),
     }
+    if provider.name == "dify":
+        request["dify_payload"] = _build_dify_payload(provider, local_plan, message, memories, recent_messages, user_id)
+    return request
 
 
 def _call_provider(provider, request, timeout_seconds):
@@ -329,11 +333,17 @@ def _build_dify_payload(provider, local_plan, message, memories, recent_messages
 def _format_recent_history(recent_messages):
     history = []
     for item in list(recent_messages)[:6]:
-        incoming = item.get("incoming_text", "")
-        reply = item.get("reply_text", "")
+        incoming = _safe_dify_history_text(item.get("incoming_text", ""))
+        reply = _safe_dify_history_text(item.get("reply_text", ""))
         if incoming or reply:
             history.append(f"用户：{incoming}\nAI：{reply}")
     return "\n---\n".join(history) if history else "无"
+
+
+def _safe_dify_history_text(text):
+    if not text:
+        return ""
+    return text if can_store_memory(text) else DIFY_REDACTED_HISTORY_TEXT
 
 
 def _build_dify_user(provider, user_id):

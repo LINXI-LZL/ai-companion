@@ -155,6 +155,54 @@ class LlmRouterTests(unittest.TestCase):
         self.assertIn("用户喜欢短回复", request["dify_payload"]["inputs"]["memories"])
         self.assertIn("用户：你好", request["dify_payload"]["inputs"]["recent_history"])
 
+    def test_dify_recent_history_redacts_sensitive_previous_turns(self):
+        from app.llm_router import build_provider_request, load_router_config_from_env
+
+        provider = load_router_config_from_env(
+            {
+                "COMPANION_LLM_PROVIDER": "dify",
+                "DIFY_API_KEY": "secret",
+            }
+        ).providers["dify"]
+
+        request = build_provider_request(
+            provider,
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "继续聊",
+            [],
+            [
+                {"incoming_text": "我的手机号是 13812345678", "reply_text": "别把手机号发出来"},
+                {"incoming_text": "api token 是 sk-abcdefg123456", "reply_text": "这个别发给别人"},
+                {"incoming_text": "老板又改需求", "reply_text": "这事确实烦"},
+            ],
+            user_id="owner",
+        )
+
+        history = request["dify_payload"]["inputs"]["recent_history"]
+        self.assertNotIn("13812345678", history)
+        self.assertNotIn("sk-abcdefg123456", history)
+        self.assertIn("[已省略敏感或高风险内容]", history)
+        self.assertIn("老板又改需求", history)
+
+    def test_non_dify_provider_request_does_not_include_dify_payload(self):
+        from app.llm_router import build_provider_request, load_router_config_from_env
+
+        provider = load_router_config_from_env(
+            {"OPENAI_API_KEY": "secret"}
+        ).providers["openai"]
+
+        request = build_provider_request(
+            provider,
+            {"reply_text": "本地兜底", "safety_mode": False, "scenario": "generic", "mode": "text_only"},
+            "你好",
+            [],
+            [],
+        )
+
+        self.assertNotIn("dify_payload", request)
+        self.assertIn("system_prompt", request)
+        self.assertIn("user_prompt", request)
+
     def test_dify_call_posts_chat_messages_and_reads_answer(self):
         from unittest.mock import patch
 
