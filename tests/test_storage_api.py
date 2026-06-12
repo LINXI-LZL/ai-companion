@@ -55,6 +55,52 @@ class StorageAndApiTests(unittest.TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0]["incoming_text"], "我又拖到最后一天，真服了我自己")
 
+    def test_chat_can_use_external_router_reply_when_configured(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "你是我今夜辗转反侧做的梦"},
+                router_config=load_router_config_from_env(
+                    {"COMPANION_LLM_PROVIDER": "openai", "OPENAI_API_KEY": "secret", "OPENAI_MODEL": "gpt-test"}
+                ),
+                router_transport=lambda request: "外部模型回复",
+            )
+            messages = store.list_messages(user["id"])
+
+        self.assertEqual(response["plan"]["reply_text"], "外部模型回复")
+        self.assertEqual(response["plan"]["llm"]["provider"], "openai")
+        self.assertEqual(response["plan"]["llm"]["model"], "gpt-test")
+        self.assertEqual(messages[0]["plan"]["llm"]["provider"], "openai")
+
+    def test_safety_chat_does_not_call_external_router(self):
+        from app.llm_router import load_router_config_from_env
+        from app.server import create_chat_response
+        from app.storage import Storage
+
+        calls = []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Storage(Path(tmp) / "app.db")
+            store.initialize()
+            user = store.create_user("owner", "Owner", allowed=True)
+            response = create_chat_response(
+                store,
+                {"user_id": user["id"], "message": "我真的撑不下去了，不想继续了"},
+                router_config=load_router_config_from_env({"COMPANION_LLM_PROVIDER": "openai", "OPENAI_API_KEY": "secret"}),
+                router_transport=lambda request: calls.append(request) or "外部模型回复",
+            )
+
+        self.assertTrue(response["plan"]["safety_mode"])
+        self.assertEqual(response["plan"]["llm"]["fallback_reason"], "safety_mode")
+        self.assertEqual(calls, [])
+
     def test_chat_auto_saves_short_reply_preference_memory(self):
         from app.server import create_chat_response
         from app.storage import Storage

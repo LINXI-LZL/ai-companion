@@ -5,14 +5,14 @@
 | Field | Content |
 |---|---|
 | Project | 微信树洞 AI |
-| Current phase | External multi-model router design |
-| Current step | Owner design review |
-| Overall status | Ready for design review |
+| Current phase | External multi-model router |
+| Current step | Owner multi-model router smoke test |
+| Overall status | Ready for test |
 | Total phases | 16 |
-| Total substeps | 62 |
-| Completed substeps | 60 |
+| Total substeps | 66 |
+| Completed substeps | 64 |
 | Needs user attention | Yes |
-| Next action | Review the multi-model router design |
+| Next action | Run the multi-model router smoke test |
 | Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
@@ -78,10 +78,14 @@
 | phase-15-expression-logic-polish | step-15-02-regression-tests | Expression logic polish | Add regression tests | Lock poetic generic and AI-quality feedback behavior | `tests/test_companion_core.py` | step-15-01-owner-feedback | done | none | no | yes | none |
 | phase-15-expression-logic-polish | step-15-03-reply-engine-polish | Expression logic polish | Polish reply expression logic | Add meta-feedback scenario and remove generic repeated-theme suffix | `app/orchestrator.py` | step-15-02-regression-tests | done | none | no | yes | none |
 | phase-15-expression-logic-polish | step-15-04-owner-smoke-test | Expression logic polish | Owner expression smoke test | Verify replies are logical and context-specific | `docs/expression_logic_smoke_test.md` | step-15-03-reply-engine-polish | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
-| phase-16-multi-model-router | step-16-01-route-choice | External multi-model router design | Confirm provider route | Choose external model strategy | User chose C: multi-model routing | step-15-04-owner-smoke-test | done | none | no | no | none |
-| phase-16-multi-model-router | step-16-02-design-spec | External multi-model router design | Write design spec | Define provider router, privacy, fallback, and admin status behavior | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-01-route-choice | done | none | no | no | none |
-| phase-16-multi-model-router | step-16-03-design-review | External multi-model router design | Owner design review | Confirm multi-model router before implementation | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-02-design-spec | ready_for_review | review_design | yes | no | Needs owner design review |
+| phase-16-multi-model-router | step-16-01-route-choice | External multi-model router | Confirm provider route | Choose external model strategy | User chose C: multi-model routing | step-15-04-owner-smoke-test | done | none | no | no | none |
+| phase-16-multi-model-router | step-16-02-design-spec | External multi-model router | Write design spec | Define provider router, privacy, fallback, and admin status behavior | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-01-route-choice | done | none | no | no | none |
+| phase-16-multi-model-router | step-16-03-design-review | External multi-model router | Owner design review | Confirm multi-model router before implementation | `docs/superpowers/specs/2026-06-12-multi-model-router-design.md` | step-16-02-design-spec | done | none | no | no | none |
+| phase-16-multi-model-router | step-16-04-router-core | External multi-model router | Implement router core | Add provider-neutral OpenAI/DeepSeek/Gemini router with local fallback | `app/llm_router.py`, `tests/test_llm_router.py` | step-16-03-design-review | done | none | no | yes | none |
+| phase-16-multi-model-router | step-16-05-server-integration | External multi-model router | Wire router into chat flow | Let chat use external reply when configured while keeping safety and fallback | `app/server.py`, `tests/test_storage_api.py` | step-16-04-router-core | done | none | no | yes | none |
+| phase-16-multi-model-router | step-16-06-admin-status | External multi-model router | Add external brain status UI | Show mode, configured providers, timeout, and fallback reason without secrets | `app/static/index.html`, `app/static/app.js`, `tests/test_static_app.py` | step-16-05-server-integration | done | none | no | yes | none |
+| phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md` | step-16-06-admin-status | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
 
 ## Current Confirmation Gate
 
-Review `docs/superpowers/specs/2026-06-12-multi-model-router-design.md`, then confirm whether to implement the multi-model router.
+Run `docs/multi_model_router_smoke_test.md`, then confirm whether the multi-model router skeleton passes owner smoke test.

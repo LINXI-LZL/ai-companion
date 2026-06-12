@@ -2,11 +2,13 @@ import argparse
 import json
 import mimetypes
 import os
+import sys
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from .auto_memory import can_store_memory, infer_auto_memories
+from .llm_router import load_router_config_from_env, route_external_reply
 from .orchestrator import plan_reply
 from .sample_sources import load_source_status
 from .storage import DEFAULT_DB, Storage
@@ -23,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATIC_DIR = ROOT / "app" / "static"
 
 
-def create_chat_response(store, payload):
+def create_chat_response(store, payload, router_config=None, router_transport=None):
     user_id = payload.get("user_id") or ""
     message = (payload.get("message") or "").strip()
     if not message:
@@ -44,6 +46,16 @@ def create_chat_response(store, payload):
 
     memories = [memory["content"] for memory in store.list_memories(user_id)]
     plan = plan_reply(user_id, message, memories=memories, recent_messages=recent_messages)
+    router_config = router_config or load_router_config_from_env(os.environ)
+    routed = route_external_reply(
+        router_config,
+        plan,
+        message,
+        memories=memories,
+        recent_messages=recent_messages,
+        transport=router_transport,
+    )
+    _apply_router_result(plan, routed)
     saved = store.save_message(user_id, message, plan)
     store.record_audit(
         "chat_response",
@@ -52,6 +64,8 @@ def create_chat_response(store, payload):
             "message_id": saved["id"],
             "mode": plan["mode"],
             "safety_mode": plan["safety_mode"],
+            "llm_provider": plan["llm"]["provider"],
+            "llm_fallback_reason": plan["llm"]["fallback_reason"],
         },
     )
     return {
@@ -123,6 +137,22 @@ def _save_memory_once(store, user_id, content, source):
     return store.save_memory(user_id, content, source=source)
 
 
+def _apply_router_result(plan, routed):
+    plan["llm"] = routed["metadata"]
+    if routed["reply_text"] == plan["reply_text"]:
+        return
+    plan["reply_text"] = routed["reply_text"]
+    plan["voice_script"] = _build_voice_script(plan["reply_text"], plan["voice_intent"])
+
+
+def _build_voice_script(reply_text, voice_intent):
+    if voice_intent == "voice_sleepy_companion":
+        return "低一点声音说：" + reply_text
+    if voice_intent == "voice_serious_grounding":
+        return "认真平稳地说：" + reply_text
+    return ""
+
+
 class CompanionRequestHandler(SimpleHTTPRequestHandler):
     store = None
 
@@ -148,6 +178,9 @@ class CompanionRequestHandler(SimpleHTTPRequestHandler):
             return
         if parsed.path == "/api/wecom-live/status":
             self._send_json({"status": load_wecom_config_from_env(os.environ).to_status()})
+            return
+        if parsed.path == "/api/llm-router/status":
+            self._send_json({"status": load_router_config_from_env(os.environ).to_status()})
             return
         if parsed.path == "/api/wecom-live/callback":
             query = {key: values[0] for key, values in parse_qs(parsed.query).items()}
@@ -284,7 +317,11 @@ def main():
     parser.add_argument("--db", default=str(DEFAULT_DB))
     args = parser.parse_args()
     server = make_server(args.port, Path(args.db))
-    print(f"Local companion app running at http://127.0.0.1:{args.port}")
+    try:
+        if sys.stdout:
+            print(f"Local companion app running at http://127.0.0.1:{args.port}")
+    except (OSError, ValueError):
+        pass
     server.serve_forever()
 
 

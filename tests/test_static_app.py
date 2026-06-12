@@ -70,6 +70,15 @@ class StaticAppTests(unittest.TestCase):
         self.assertIn("智能体会从聊天里自动保存稳定偏好", index)
         self.assertIn("自动记忆为空", script)
 
+    def test_status_page_contains_external_brain_router_status(self):
+        index = (ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("外部主脑", index)
+        self.assertIn("llm-router-status", index)
+        self.assertIn("/api/llm-router/status", script)
+        self.assertIn("renderLlmRouterStatus", script)
+
 
 if __name__ == "__main__":
     unittest.main()

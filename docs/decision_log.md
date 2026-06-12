@@ -11,3 +11,5 @@
 | decision-007 | Multimodal realism scope | resolved | phase-02-blueprint / step-02-08 | Support sticker intent and short voice scripts first; connect real media assets later after license and API review | Confirmed |
 | decision-008 | MVP architecture route | resolved | phase-04-architecture / step-04-03 | Use a modular monolith with one database and a background worker | Confirmed |
 | decision-009 | Build Round 1 scope | resolved | phase-06-build-round-scoping / step-06-01 | Start with a local companion simulator and admin foundation; defer real WeChat and real media integrations | Confirmed |
+| decision-016 | External model API route | resolved | phase-16-multi-model-router / step-16-01 | Use multi-model routing so OpenAI, DeepSeek, Gemini, and local fallback can coexist | C: multi-model routing |
+| decision-017 | Multi-model router implementation confirmation | resolved | phase-16-multi-model-router / step-16-03 | Implement now because design keeps credentials optional and local fallback active | 确认实现 |

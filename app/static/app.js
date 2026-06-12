@@ -118,6 +118,7 @@ async function refreshAll() {
   await refreshSources();
   await refreshMedia();
   await refreshWecomLiveStatus();
+  await refreshLlmRouterStatus();
   await refreshMessages();
   await refreshMemories();
 }
@@ -244,6 +245,11 @@ async function refreshWecomLiveStatus() {
   renderWecomLiveStatus(data.status);
 }
 
+async function refreshLlmRouterStatus() {
+  const data = await api("/api/llm-router/status");
+  renderLlmRouterStatus(data.status);
+}
+
 function renderWecomLiveStatus(status) {
   document.getElementById("wecom-live-channel").textContent = displayLabel(status.channel);
   document.getElementById("wecom-live-status").textContent = status.configured ? "配置已填写" : "缺少配置";
@@ -253,6 +259,16 @@ function renderWecomLiveStatus(status) {
   document.getElementById("wecom-live-missing").textContent =
     status.missing_fields.length === 0 ? "无" : status.missing_fields.map(wecomFieldLabel).join("、");
   document.getElementById("wecom-live-next").textContent = wecomNextAction(status);
+}
+
+function renderLlmRouterStatus(status) {
+  document.getElementById("llm-router-status").textContent = status.enabled ? "外部模型已启用" : "本地兜底";
+  document.getElementById("llm-router-mode").textContent = displayLabel(status.mode);
+  document.getElementById("llm-router-active-provider").textContent = llmActiveProviderLabel(status);
+  document.getElementById("llm-router-timeout").textContent = `${status.timeout_seconds} 秒`;
+  document.getElementById("llm-router-configured").textContent = llmConfiguredProviders(status);
+  document.getElementById("llm-router-provider-order").textContent = status.provider_order.map(displayLabel).join(" → ");
+  document.getElementById("llm-router-fallback").textContent = llmFallbackLabel(status.fallback_reason);
 }
 
 function renderPlan(response) {
@@ -326,8 +342,40 @@ function displayLabel(value) {
     local_mock_only: "仅本地模拟",
     wecom_live: "企业微信客服真实通道",
     payload_only: "仅生成发送载荷",
+    local: "仅本地规则",
+    auto: "自动选择",
+    openai: "OpenAI",
+    deepseek: "DeepSeek",
+    gemini: "Gemini",
   };
   return labels[value] || value || "-";
+}
+
+function llmActiveProviderLabel(status) {
+  if (!status.enabled) return "本地规则";
+  const provider = status.providers[status.active_provider];
+  const model = provider && provider.model ? ` · ${provider.model}` : "";
+  return `${displayLabel(status.active_provider)}${model}`;
+}
+
+function llmConfiguredProviders(status) {
+  const configured = Object.entries(status.providers)
+    .filter(([, provider]) => provider.configured)
+    .map(([name, provider]) => `${displayLabel(name)}${provider.model ? `（${provider.model}）` : ""}`);
+  return configured.length ? configured.join("、") : "未配置 API Key";
+}
+
+function llmFallbackLabel(value) {
+  const labels = {
+    router_disabled: "未启用外部主脑",
+    provider_not_configured: "当前模式缺少可用 API Key",
+    safety_mode: "安全模式使用本地回应",
+    provider_error: "外部模型请求失败，已回到本地",
+    empty_reply: "外部模型返回为空，已回到本地",
+    unsafe_reply: "外部模型输出触发安全兜底",
+    debug_output: "外部模型输出像调试字段，已回到本地",
+  };
+  return labels[value] || "无";
 }
 
 function wecomCryptoLabel(value) {

@@ -198,6 +198,20 @@
               <h3>素材状态</h3>
               <div class="list-stack" id="media-list"></div>
             </section>
+            <section class="panel">
+              <h3>外部主脑</h3>
+              <div class="metrics">
+                <div><span>状态</span><strong id="llm-router-status">-</strong></div>
+                <div><span>模式</span><strong id="llm-router-mode">-</strong></div>
+                <div><span>当前模型</span><strong id="llm-router-active-provider">-</strong></div>
+                <div><span>超时</span><strong id="llm-router-timeout">-</strong></div>
+              </div>
+              <dl class="kv">
+                <div><dt>可用供应商</dt><dd id="llm-router-configured">-</dd></div>
+                <div><dt>自动顺序</dt><dd id="llm-router-provider-order">-</dd></div>
+                <div><dt>兜底原因</dt><dd id="llm-router-fallback">-</dd></div>
+              </dl>
+            </section>
           </div>
         </section>
       </main>
