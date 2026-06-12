@@ -8,15 +8,15 @@
     "current_step_id": "step-16-07-owner-smoke-test",
     "overall_status": "ready_for_test",
     "strategy": "hybrid",
-    "total_phase_count": 16,
-    "total_step_count": 66,
-    "completed_step_count": 64,
+    "total_phase_count": 17,
+    "total_step_count": 67,
+    "completed_step_count": 65,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
     "next_action_summary": "Run the multi-model router smoke test and confirm whether the external-brain skeleton passes.",
     "current_risk_summary": "Real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
-    "updated_at": "2026-06-12T21:05:00+08:00"
+    "updated_at": "2026-06-12T21:35:00+08:00"
   },
   "phases": [
     {
@@ -425,6 +425,30 @@
         "phase-15-expression-logic-polish"
       ],
       "started_at": "2026-06-12T20:10:00+08:00"
+    },
+    {
+      "id": "phase-17-open-source-radar",
+      "project_id": "wechat-vent-ai",
+      "order": 17,
+      "title": "GitHub open-source radar",
+      "goal": "梳理可参考的 GitHub 开源项目，明确哪些适合借鉴架构、哪些适合后续试接、哪些存在许可证或合规风险。",
+      "status": "done",
+      "outputs": [
+        "docs/github_open_source_radar.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "step_count": 1,
+      "completed_step_count": 1,
+      "summary": "Open-source radar document is complete.",
+      "notes": "This research does not change the current implementation route; it informs future Dify provider, WeCom adapter hardening, memory distillation, voice, and sticker rounds.",
+      "user_action": "none",
+      "acceptance_hint": "用户可以用该文档判断下一轮是否优先接 Dify、继续企微通道，还是进入语音/表情包路线。",
+      "depends_on_phase_ids": [
+        "phase-16-multi-model-router"
+      ],
+      "started_at": "2026-06-12T21:35:00+08:00",
+      "finished_at": "2026-06-12T21:35:00+08:00"
     }
   ],
   "steps": [
@@ -2215,6 +2239,31 @@
       "related_decision_ids": [
         "decision-017"
       ]
+    },
+    {
+      "id": "step-17-01-github-radar",
+      "phase_id": "phase-17-open-source-radar",
+      "order": 1,
+      "title": "Create GitHub open-source radar",
+      "goal": "对微信/企微机器人、外部主脑、语音、表情包和记忆相关开源项目做产品化取舍。",
+      "status": "done",
+      "output": [
+        "docs/github_open_source_radar.md"
+      ],
+      "requires_user_confirmation": false,
+      "testable": false,
+      "notes": "The radar recommends learning from LangBot and CowAgent, adding Dify later as an optional provider, keeping personal-WeChat automation research-only, and treating voice/sticker assets as license-gated tracks.",
+      "depends_on": [
+        "step-16-06-admin-status"
+      ],
+      "user_action": "none",
+      "acceptance_hint": "文档给出每个项目的采用建议、风险和与当前代码的落点。",
+      "progress_summary": "已完成。",
+      "blockers": [],
+      "related_artifact_ids": [
+        "artifact-063"
+      ],
+      "related_decision_ids": []
     }
   ],
   "artifacts": [
@@ -2898,6 +2947,17 @@
       "phase_id": "phase-16-multi-model-router",
       "step_id": "step-16-07-owner-smoke-test",
       "created_at": "2026-06-12T21:05:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-063",
+      "title": "GitHub open-source radar",
+      "artifact_type": "research_doc",
+      "location": "docs/github_open_source_radar.md",
+      "summary": "Radar of open-source projects for WeChat/WeCom bots, external brain routing, voice, sticker, memory, and integration strategy.",
+      "phase_id": "phase-17-open-source-radar",
+      "step_id": "step-17-01-github-radar",
+      "created_at": "2026-06-12T21:35:00+08:00",
       "version": "v0.1"
     }
   ],

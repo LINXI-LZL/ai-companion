@@ -7,7 +7,7 @@
 | Current phase | External multi-model router |
 | Current step | Owner multi-model router smoke test |
 | Overall status | ready_for_test |
-| Completed substeps | 64 / 66 |
+| Completed substeps | 65 / 67 |
 | User action needed | Run the multi-model router smoke test |
 | Next step after confirmation | Add real API credentials or continue WeCom encrypted callback integration |
 
@@ -31,6 +31,7 @@
 | Auto lightweight memory polish | 4 / 4 | automatic memory design spec, implementation plan, auto memory extractor, server wiring, automatic memory UI, acceptance result |
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
 | External multi-model router | 6 / 7 | selected route C, provider router design spec, implementation plan, router core, server integration, admin status UI, regression tests |
+| GitHub open-source radar | 1 / 1 | `docs/github_open_source_radar.md` |
 
 ## Ready For Test
 

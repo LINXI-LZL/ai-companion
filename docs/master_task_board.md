@@ -8,9 +8,9 @@
 | Current phase | External multi-model router |
 | Current step | Owner multi-model router smoke test |
 | Overall status | Ready for test |
-| Total phases | 16 |
-| Total substeps | 66 |
-| Completed substeps | 64 |
+| Total phases | 17 |
+| Total substeps | 67 |
+| Completed substeps | 65 |
 | Needs user attention | Yes |
 | Next action | Run the multi-model router smoke test |
 | Current risk | Real WeCom encrypted callback verification, real sticker files, and real voice provider integration remain deferred |
@@ -85,6 +85,7 @@
 | phase-16-multi-model-router | step-16-05-server-integration | External multi-model router | Wire router into chat flow | Let chat use external reply when configured while keeping safety and fallback | `app/server.py`, `tests/test_storage_api.py` | step-16-04-router-core | done | none | no | yes | none |
 | phase-16-multi-model-router | step-16-06-admin-status | External multi-model router | Add external brain status UI | Show mode, configured providers, timeout, and fallback reason without secrets | `app/static/index.html`, `app/static/app.js`, `tests/test_static_app.py` | step-16-05-server-integration | done | none | no | yes | none |
 | phase-16-multi-model-router | step-16-07-owner-smoke-test | External multi-model router | Owner multi-model router smoke test | Verify default local fallback and status panel behavior | `docs/multi_model_router_smoke_test.md` | step-16-06-admin-status | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-17-open-source-radar | step-17-01-github-radar | GitHub open-source radar | Create open-source radar | Compare reference projects for WeChat/WeCom bots, external brain routing, voice, stickers, and memory | `docs/github_open_source_radar.md` | step-16-06-admin-status | done | none | no | no | none |
 
 ## Current Confirmation Gate
 
