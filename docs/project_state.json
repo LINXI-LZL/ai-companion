@@ -13,8 +13,8 @@
     "completed_step_count": 71,
     "owner_role": "nontechnical_pm",
     "requires_user_attention": true,
-    "next_action_summary": "Run docs/dify_provider_smoke_test.md to verify local mode, missing-key Dify fallback, real-key Dify replies, and local safety control.",
-    "current_risk_summary": "Dify credential setup and Dify app prompt quality need owner-side verification; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
+    "next_action_summary": "Paste docs/dify_app_prompt_template.md into the Dify Chat App, then rerun the real-key Dify prompts from docs/dify_provider_smoke_test.md.",
+    "current_risk_summary": "Dify technical routing works with a real key, but Dify app prompt quality still needs tuning because the model can answer as DeepSeek instead of 微信树洞 AI; real encrypted Enterprise WeChat callback verification, real sticker files, and real voice provider integration remain deferred.",
     "created_at": "2026-06-04T20:28:26+08:00",
     "updated_at": "2026-06-12T22:30:00+08:00"
   },
@@ -467,14 +467,15 @@
         "tests/test_llm_router.py",
         "tests/test_storage_api.py",
         "tests/test_static_app.py",
-        "docs/dify_provider_smoke_test.md"
+        "docs/dify_provider_smoke_test.md",
+        "docs/dify_app_prompt_template.md"
       ],
       "requires_user_confirmation": true,
       "testable": true,
       "step_count": 7,
       "completed_step_count": 6,
-      "summary": "Dify provider integration is implemented and waiting for owner smoke testing.",
-      "notes": "Dify is integrated as a provider inside the current router. Local safety, fallback, memory, and media intent remain controlled locally; Dify conversation IDs are returned as response metadata only when Dify provides one.",
+      "summary": "Dify provider integration is implemented and real-key routing works; the owner is tuning the Dify app prompt so replies match the 微信树洞 AI persona.",
+      "notes": "Dify is integrated as a provider inside the current router. Local safety, fallback, memory, and media intent remain controlled locally; Dify conversation IDs are returned as response metadata only when Dify provides one. Real-key smoke testing showed provider routing works, but the Dify app prompt must prevent DeepSeek/provider self-introduction.",
       "user_action": "run_user_test",
       "acceptance_hint": "用户按 docs/dify_provider_smoke_test.md 验证本地模式、缺 Key Dify 兜底、真实 Key Dify 回复和本地安全边界。",
       "depends_on_phase_ids": [
@@ -2471,22 +2472,24 @@
       "goal": "验证无 Key 兜底、Dify 模式缺 Key、真实 Key 对话质量和安全模式本地优先。",
       "status": "ready_for_test",
       "output": [
-        "docs/dify_provider_smoke_test.md"
+        "docs/dify_provider_smoke_test.md",
+        "docs/dify_app_prompt_template.md"
       ],
       "requires_user_confirmation": true,
       "testable": true,
-      "notes": "Owner smoke test doc is ready for local mode, missing-key Dify mode, real-key Dify mode, and local safety checks.",
+      "notes": "Owner smoke test doc is ready. Real-key Dify routing now works, but reply quality needs Dify app prompt tuning because the model can self-identify as DeepSeek.",
       "depends_on": [
         "step-18-06-dify-fallback-server-ui"
       ],
       "user_action": "run_user_test",
-      "acceptance_hint": "用户按烟测文档确认 Dify 接入是否符合预期。",
-      "progress_summary": "等待用户烟测。",
+      "acceptance_hint": "用户把 docs/dify_app_prompt_template.md 贴进 Dify Chat App 后，按烟测文档确认 Dify 回复是否符合微信树洞 AI 人格。",
+      "progress_summary": "真实 Dify Key 连通已通过；等待 Dify App 提示词调优后复测人格质量。",
       "blockers": [
-        "Needs owner smoke test"
+        "Dify app prompt needs persona tuning"
       ],
       "related_artifact_ids": [
-        "artifact-068"
+        "artifact-068",
+        "artifact-069"
       ],
       "related_decision_ids": [
         "decision-019"
@@ -3240,6 +3243,17 @@
       "phase_id": "phase-18-dify-provider",
       "step_id": "step-18-07-dify-owner-smoke-test",
       "created_at": "2026-06-12T22:30:00+08:00",
+      "version": "v0.1"
+    },
+    {
+      "id": "artifact-069",
+      "title": "Dify app prompt template",
+      "artifact_type": "document",
+      "location": "docs/dify_app_prompt_template.md",
+      "summary": "Copy-ready Dify Chat App prompt to keep replies in the 微信树洞 AI persona and avoid DeepSeek/provider self-introduction.",
+      "phase_id": "phase-18-dify-provider",
+      "step_id": "step-18-07-dify-owner-smoke-test",
+      "created_at": "2026-06-12T23:45:00+08:00",
       "version": "v0.1"
     }
   ],

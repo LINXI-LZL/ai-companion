@@ -8,8 +8,8 @@
 | Current step | Dify owner smoke test |
 | Overall status | ready_for_test |
 | Completed substeps | 71 / 74 |
-| User action needed | Run the Dify provider smoke test |
-| Next step after confirmation | Confirm `docs/dify_provider_smoke_test.md` results or report any failed case |
+| User action needed | Paste the Dify app prompt template and rerun the real-key Dify prompts |
+| Next step after confirmation | Confirm whether Dify replies no longer self-identify as DeepSeek and match the 微信树洞 AI persona |
 
 ## Completed Outputs
 
@@ -32,7 +32,7 @@
 | Expression logic polish | 3 / 4 | regression tests, meta-feedback scenario, generic reply cleanup, expression smoke test |
 | External multi-model router | 6 / 7 | selected route C, provider router design spec, implementation plan, router core, server integration, admin status UI, regression tests |
 | GitHub open-source radar | 1 / 1 | `docs/github_open_source_radar.md` |
-| Dify provider integration | 6 / 7 | Dify design spec, owner design confirmation, implementation plan, provider source, automated tests, status/README docs |
+| Dify provider integration | 6 / 7 | Dify design spec, owner design confirmation, implementation plan, provider source, automated tests, status/README docs, app prompt template |
 
 ## Ready For Test
 
@@ -53,7 +53,7 @@
 | Automatic memory result | `docs/auto_memory_result.md` | accepted |
 | Expression logic smoke test | `docs/expression_logic_smoke_test.md` | ready for owner test |
 | Multi-model router smoke test | `docs/multi_model_router_smoke_test.md` | ready for owner test |
-| Dify provider smoke test | `docs/dify_provider_smoke_test.md` | ready for owner test |
+| Dify provider smoke test | `docs/dify_provider_smoke_test.md`, `docs/dify_app_prompt_template.md` | real-key routing works; persona prompt tuning needed |
 
 ## Waiting For Owner Smoke Test
 

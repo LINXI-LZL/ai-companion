@@ -12,8 +12,8 @@
 | Total substeps | 74 |
 | Completed substeps | 71 |
 | Needs user attention | Yes |
-| Next action | Run `docs/dify_provider_smoke_test.md` with local mode, missing-key Dify mode, real-key Dify mode, and local safety checks |
-| Current risk | Dify credential setup and Dify app prompt quality need owner-side verification; real WeCom encrypted callback, real sticker files, and real voice provider integration remain deferred |
+| Next action | Paste `docs/dify_app_prompt_template.md` into the Dify Chat App, then rerun the real-key Dify smoke prompts |
+| Current risk | Dify technical routing works, but Dify app prompt quality still needs tuning because the model can answer as DeepSeek instead of 微信树洞 AI; real WeCom encrypted callback, real sticker files, and real voice provider integration remain deferred |
 
 ## Full Board
 
@@ -92,8 +92,8 @@
 | phase-18-dify-provider | step-18-04-dify-router-config | Dify provider integration | Implement Dify router config | Add Dify provider env loading, status redaction, and auto-mode selection | `app/llm_router.py`, `tests/test_llm_router.py` | step-18-03-dify-implementation-plan | done | none | no | yes | none |
 | phase-18-dify-provider | step-18-05-dify-adapter | Dify provider integration | Implement Dify Chat App adapter | Build `/chat-messages` payload and parse `answer` plus conversation metadata | `app/llm_router.py`, `tests/test_llm_router.py` | step-18-04-dify-router-config | done | none | no | yes | none |
 | phase-18-dify-provider | step-18-06-dify-fallback-server-ui | Dify provider integration | Wire fallback, server user id, status UI, and README | Preserve local safety/fallback while exposing Dify readiness in Run Status | `app/server.py`, `app/static/app.js`, `README.md`, tests | step-18-05-dify-adapter | done | none | no | yes | none |
-| phase-18-dify-provider | step-18-07-dify-owner-smoke-test | Dify provider integration | Owner Dify provider smoke test | Verify no-key fallback, missing-key Dify mode, real-key Dify replies, and safety bypass | `docs/dify_provider_smoke_test.md` | step-18-06-dify-fallback-server-ui | ready_for_test | run_user_test | yes | yes | Needs owner smoke test |
+| phase-18-dify-provider | step-18-07-dify-owner-smoke-test | Dify provider integration | Owner Dify provider smoke test | Verify no-key fallback, missing-key Dify mode, real-key Dify replies, and safety bypass | `docs/dify_provider_smoke_test.md`, `docs/dify_app_prompt_template.md` | step-18-06-dify-fallback-server-ui | ready_for_test | run_user_test | yes | yes | Dify real-key routing works; Dify app prompt needs persona tuning |
 
 ## Current Confirmation Gate
 
-Run `docs/dify_provider_smoke_test.md` to confirm the Dify provider integration with owner credentials and safety checks.
+Paste `docs/dify_app_prompt_template.md` into the Dify Chat App, then rerun `docs/dify_provider_smoke_test.md` to confirm real-key replies match the 微信树洞 AI persona.
