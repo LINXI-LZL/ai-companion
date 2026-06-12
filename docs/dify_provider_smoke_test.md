@@ -1,6 +1,10 @@
 # Dify Provider Smoke Test
 
-Use this checklist after the Dify provider build is installed. The goal is to confirm that Dify can act as the optional external brain while local fallback and local safety still stay in control.
+Use this checklist after the Dify provider build is installed.
+
+## Goal
+
+Verify that Dify can be used as the optional external brain without breaking local fallback, safety, or the Run Status page.
 
 ## Prerequisites
 
@@ -20,30 +24,34 @@ Open:
 http://127.0.0.1:8765
 ```
 
-## Test 1: Local Mode Without Any Dify Key
+## Test 1: No Dify Key
 
 **Goal:** Prove the app still works locally when no Dify credential exists.
 
-**Setup:**
+**Precondition:** Start the app without `DIFY_API_KEY`.
+
+Optional cleanup:
 
 ```powershell
 Remove-Item Env:DIFY_API_KEY -ErrorAction SilentlyContinue
-Remove-Item Env:DIFY_API_BASE_URL -ErrorAction SilentlyContinue
-$env:COMPANION_LLM_PROVIDER='local'
 ```
+
+Note: the default/local mode is enough for this test; do not add a Dify key.
 
 **Steps:**
 
 1. Start the local app.
-2. Open the Chat Simulator.
-3. Send a normal message such as `老板又临下班改需求，真的离谱`.
-4. Open Run Status.
+2. Open `http://127.0.0.1:8765`.
+3. Go to `运行状态`.
+4. Check `外部主脑`.
+5. Go to `聊天模拟`.
+6. Send `你是谁`.
 
 **Expected result:**
 
-- The chat returns a local companion reply.
-- Run Status shows local fallback/local mode.
-- The JSON plan, if inspected, shows `provider` as `local` and `fallback_used=true`.
+- The app keeps running.
+- Status shows local fallback or `provider_not_configured`.
+- Chat returns a Chinese reply.
 
 ## Test 2: Dify Mode Without `DIFY_API_KEY`
 
@@ -59,14 +67,16 @@ $env:COMPANION_LLM_PROVIDER='dify'
 **Steps:**
 
 1. Restart the local app.
-2. Send a normal message in the Chat Simulator.
-3. Open Run Status or inspect the `/api/chat` JSON response.
+2. Go to `聊天模拟`.
+3. Send `老板又改需求`.
+4. Open `运行状态`.
+5. Check the external-brain fallback status or inspect the `/api/chat` JSON response.
 
 **Expected result:**
 
-- The chat still returns a local companion reply.
-- The response falls back locally.
-- The fallback reason should identify provider unavailability. In this build, missing credentials may be shown as `provider_not_configured`; if surfaced with owner-facing wording, treat this as the `provider_unavailable` no-key path.
+- The app does not crash.
+- The fallback reason says the provider is not configured: `provider_not_configured`.
+- Chat still returns a local reply.
 
 ## Test 3: Dify Mode With A Real Key
 
@@ -84,22 +94,27 @@ $env:DIFY_RESPONSE_MODE='blocking'
 **Steps:**
 
 1. Restart the local app.
-2. Send a short normal message, for example `你是谁` or `老板又改需求`.
-3. Open Run Status or inspect the `/api/chat` JSON response.
+2. Go to `聊天模拟`.
+3. Send `你是谁`.
+4. Send `嗳`.
+5. Send `什么意思`.
+6. Send `老板又临下班改需求，真的离谱`.
+7. Open Run Status or inspect the `/api/chat` JSON response.
 
 **Expected result:**
 
-- The reply comes back successfully.
+- Replies are Chinese and coherent.
+- Replies do not include JSON, English debug labels, or provider names.
+- Run Status shows Dify as configured.
 - The JSON plan shows provider `dify`.
 - `fallback_used=false`.
 - `conversation_id` may appear in metadata when Dify returns one.
-- Run Status shows Dify as configured without exposing the API key.
 
 ## Test 4: Local Safety Remains In Control
 
 **Goal:** Prove crisis/self-harm content is handled by local safety instead of being blindly sent to Dify.
 
-**Setup:** Use either local mode or configured Dify mode.
+**Precondition:** Dify mode is configured with a real key.
 
 **Steps:**
 
@@ -108,9 +123,10 @@ $env:DIFY_RESPONSE_MODE='blocking'
 
 **Expected result:**
 
-- The app returns the local safety reply/fallback.
+- The app returns a serious local safety response.
+- The fallback reason is exactly `safety_mode`.
+- No playful sticker or voice mode is used.
 - Dify is not relied on for this response.
-- The JSON plan should show safety handling and local fallback, not an unrestricted Dify answer.
 
 ## Deferred Items
 
