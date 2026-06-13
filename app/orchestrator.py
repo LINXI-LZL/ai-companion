@@ -42,6 +42,23 @@ DIRECT_META_FEEDBACK_PHRASES = (
     "就会这个",
 )
 
+DEPTH_FEEDBACK_EXACT = (
+    "不够",
+    "还不够",
+    "不够啊",
+    "没安慰到我",
+    "没安慰我",
+    "太浅了",
+)
+
+DEPTH_FEEDBACK_PHRASES = (
+    "说深一点",
+    "认真安慰",
+    "认真点",
+    "展开说",
+    "讲深一点",
+)
+
 SCENARIO_KEYWORDS = (
     ("identity", ("你是谁", "你是啥", "你是什么", "你到底是谁", "你叫什么", "你叫啥", "你的名字")),
     ("capability", ("你能干什么", "你能干嘛", "你会什么", "你有什么功能", "你能做什么", "你可以干什么", "你可以干嘛", "能陪我干嘛")),
@@ -52,7 +69,7 @@ SCENARIO_KEYWORDS = (
     ("self_blame", ("没用", "做不好", "我真差", "我好差", "怪我", "都是我的问题")),
     ("night_emo", ("难过", "委屈", "想哭", "烦死", "心烦", "emo", "没人可以说话", "孤独")),
     ("boredom", ("无聊", "不知道干嘛", "没意思")),
-    ("relationship", ("朋友", "对象", "恋爱", "分手", "吵架", "冷战", "不回我")),
+    ("relationship", ("朋友", "对象", "恋爱", "分手", "吵架", "冷战", "不回我", "暗恋", "喜欢的人", "官宣", "男生", "女生")),
 )
 
 SCENARIO_REPLY_PACKS = {
@@ -132,11 +149,13 @@ SCENARIO_REPLY_PACKS = {
 
 
 def plan_reply(user_id, message, memories=None, recent_messages=None):
+    recent_messages = recent_messages or []
     safety = classify_safety(message)
     decision = decide_mode(message, safety)
-    repeat_count = _count_repeated_user_message(message, recent_messages or [])
-    scenario = "safety" if safety["safety_mode"] else _classify_scenario(message, decision)
-    scenario_turn_count = _count_recent_scenario(scenario, recent_messages or [])
+    repeat_count = _count_repeated_user_message(message, recent_messages)
+    scenario = "safety" if safety["safety_mode"] else _classify_scenario(message, decision, recent_messages)
+    scenario_turn_count = _count_recent_scenario(scenario, recent_messages)
+    context_topic = _latest_substantial_user_message(recent_messages) if scenario == "depth_feedback" else ""
     reply_text = _build_reply_text(
         message,
         memories or [],
@@ -145,6 +164,7 @@ def plan_reply(user_id, message, memories=None, recent_messages=None):
         repeat_count,
         scenario,
         scenario_turn_count,
+        recent_messages,
     )
     voice_script = _build_voice_script(reply_text, decision["voice_intent"])
     media = resolve_media(decision["mode"], decision["sticker_intent"], decision["voice_intent"])
@@ -166,6 +186,7 @@ def plan_reply(user_id, message, memories=None, recent_messages=None):
         "memory_used": list(memories or []),
         "repeat_count": repeat_count,
         "reply_deduped": False,
+        "context_topic": context_topic,
     }
 
 
@@ -196,7 +217,16 @@ def avoid_recent_reply_repeat(plan, recent_messages):
     return False
 
 
-def _build_reply_text(message, memories, safety, decision, repeat_count=0, scenario="generic", scenario_turn_count=0):
+def _build_reply_text(
+    message,
+    memories,
+    safety,
+    decision,
+    repeat_count=0,
+    scenario="generic",
+    scenario_turn_count=0,
+    recent_messages=None,
+):
     if safety["safety_mode"]:
         return safety["reply_text"]
 
@@ -212,6 +242,8 @@ def _build_reply_text(message, memories, safety, decision, repeat_count=0, scena
         if recent_event:
             return prefix + _build_memory_recall_reply(recent_event, variant_index)
         return prefix + "我这边没抓到可靠的轻量记忆，不硬编。你把刚才那句再丢我一遍，我这次记牢。"
+    if scenario == "depth_feedback":
+        return prefix + _build_depth_feedback_reply(recent_messages or [], variant_index)
 
     if decision["mode"] == "text_plus_short_voice":
         return prefix + _pick_contextual_variant(
@@ -219,6 +251,9 @@ def _build_reply_text(message, memories, safety, decision, repeat_count=0, scena
             SCENARIO_REPLY_PACKS["tired_voice"],
             _repeat_note_for("tired_voice", variant_index),
         )
+
+    if scenario == "relationship" and _looks_like_unrequited_loss(text):
+        return prefix + _build_unrequited_loss_reply(variant_index)
 
     if scenario in SCENARIO_REPLY_PACKS:
         return prefix + _pick_contextual_variant(
@@ -262,12 +297,14 @@ def _has_any(text, keywords):
     return any(keyword in text for keyword in keywords)
 
 
-def _classify_scenario(message, decision=None):
+def _classify_scenario(message, decision=None, recent_messages=None):
     text = message or ""
     if decision and decision["mode"] == "text_plus_short_voice":
         return "tired_voice"
     if _is_memory_recall_question(text):
         return "memory_recall"
+    if _is_depth_feedback(text):
+        return "depth_feedback"
     if _is_meta_feedback(text):
         return "meta_feedback"
     if _is_short_ping(text):
@@ -279,7 +316,7 @@ def _classify_scenario(message, decision=None):
 
 
 def _count_recent_scenario(scenario, recent_messages):
-    if scenario in ("safety", "generic", "meta_feedback"):
+    if scenario in ("safety", "generic", "meta_feedback", "depth_feedback"):
         return 0
     count = 0
     for item in recent_messages:
@@ -302,7 +339,7 @@ def _normalize(text):
 
 
 def _variant_index_for(scenario, repeat_count, scenario_turn_count):
-    if scenario in ("generic", "meta_feedback"):
+    if scenario in ("generic", "meta_feedback", "depth_feedback"):
         return repeat_count
     return max(repeat_count, scenario_turn_count)
 
@@ -318,6 +355,11 @@ def _is_meta_feedback(text):
 def _is_direct_meta_feedback(text):
     normalized = _normalize(text)
     return normalized in DIRECT_META_FEEDBACK_EXACT or _has_any(text, DIRECT_META_FEEDBACK_PHRASES)
+
+
+def _is_depth_feedback(text):
+    normalized = _normalize(text)
+    return normalized in DEPTH_FEEDBACK_EXACT or _has_any(text or "", DEPTH_FEEDBACK_PHRASES)
 
 
 def _extract_ai_nickname(memories):
@@ -366,6 +408,32 @@ def _build_memory_recall_reply(recent_event, variant_index):
     return _pick_contextual_variant(variant_index, variants)
 
 
+def _build_unrequited_loss_reply(variant_index):
+    variants = (
+        "这个真的会难受。暗恋最疼的点，不是她官宣这一条消息本身，而是你心里那段没来得及说出口的期待突然被判出局了。先别装大度，今晚你可以酸、可以失落，但别把这件事翻译成“我不够好”。",
+        "我认真安慰你，不拿梗糊弄：看到暗恋的人和别人官宣，像是自己默默排了很久的队，突然发现窗口关了。你难受很正常，先允许自己失落，别急着祝福，也别拿自己和那个男生硬比。",
+        "这事扎人，因为它不是简单的“她谈恋爱了”，而是你偷偷放在心里的位置被别人占了。你现在难受不是小题大做，是那点期待真的落空了；先别审判自己，今晚先把这口气慢慢吐出来。",
+    )
+    return _pick_contextual_variant(variant_index, variants)
+
+
+def _build_depth_feedback_reply(recent_messages, variant_index):
+    topic = _latest_substantial_user_message(recent_messages)
+    if _looks_like_unrequited_loss(topic):
+        variants = (
+            "你说不够是对的，我刚才回浅了。暗恋的人官宣，疼的不是一条动态，是你心里那段还没说出口的期待被按了暂停。你现在难受，不代表你输了；先别急着体面，今晚允许自己酸、失落，但不要把它变成“我不够好”的判决。",
+            "嗯，刚才那句确实没接住你。你要的不是一句“别难过”，是有人承认：看着暗恋的人跟别人官宣，真的会像自己被悄悄排除在故事外。先别逼自己洒脱，你可以难受一会儿，我在这儿陪你把这股劲儿放下来。",
+            "不够，那我认真补上。你难受的核心不是那个男生多厉害，而是你喜欢她这件事还没来得及有结果，就被现实突然盖章了。别急着跟他比，也别急着骂自己没出息；今晚先承认一句：我就是很失落。",
+        )
+        return _pick_contextual_variant(variant_index, variants)
+    variants = (
+        "你说不够是对的，我刚才太浅了。你要的不是一句俏皮话，是有人认真接住你。我们往深一点说：最刺你的不是表面这句话，而是它戳到了你心里哪块？",
+        "收到，我不继续糊弄。刚才我只接了表面情绪，没往里走；你把最难受的那一小块丢出来，我认真陪你拆，不拿模板盖过去。",
+        "嗯，是我没给够。那我们别急着换话题：这件事真正让你卡住的，是委屈、失望、不甘心，还是觉得自己没被看见？",
+    )
+    return _pick_contextual_variant(variant_index, variants)
+
+
 def _event_to_spoken_recall(recent_event):
     text = recent_event.replace("用户", "你", 1)
     for prefix in ("你刚才", "你刚刚", "你刚", "你今天", "你今晚", "你最近"):
@@ -398,6 +466,12 @@ def _reply_candidates_for_plan(plan):
         if not recent_event:
             return []
         return [prefix + _build_memory_recall_reply(recent_event, index) for index in range(6)]
+    if scenario == "depth_feedback":
+        context_topic = plan.get("context_topic", "")
+        context = [{"incoming_text": context_topic}] if context_topic else []
+        return [prefix + _build_depth_feedback_reply(context, index) for index in range(6)]
+    if scenario == "relationship" and _looks_like_unrequited_loss(plan.get("input_text", "")):
+        return [prefix + _build_unrequited_loss_reply(index) for index in range(6)]
     if scenario in SCENARIO_REPLY_PACKS:
         return [
             prefix + _pick_contextual_variant(index, SCENARIO_REPLY_PACKS[scenario], _repeat_note_for(scenario, index))
@@ -424,6 +498,22 @@ def _reply_candidates_for_plan(plan):
 
 def _normalize_reply(text):
     return " ".join((text or "").split()).strip()
+
+
+def _looks_like_unrequited_loss(text):
+    text = text or ""
+    return _has_any(text, ("暗恋", "喜欢的人", "官宣")) and _has_any(text, ("男生", "女生", "别人", "别的", "官宣"))
+
+
+def _latest_substantial_user_message(recent_messages):
+    for item in recent_messages or []:
+        text = item.get("incoming_text", "")
+        if len(_normalize(text)) <= 2:
+            continue
+        if _is_depth_feedback(text) or _is_meta_feedback(text):
+            continue
+        return text
+    return ""
 
 
 def _repeat_note_for(scenario, index):

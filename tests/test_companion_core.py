@@ -171,6 +171,35 @@ class CompanionCoreTests(unittest.TestCase):
         self.assertNotIn("次", plan["reply_text"])
         self.assertNotIn("我记着", plan["reply_text"])
 
+    def test_crush_official_announcement_gets_deeper_relationship_support(self):
+        from app.orchestrator import plan_reply
+
+        plan = plan_reply("u1", "我这暗恋的女生跟别的男生官宣了，你还没安慰我呢", memories=[])
+
+        self.assertEqual(plan["scenario"], "relationship")
+        self.assertTrue("暗恋" in plan["reply_text"] or "官宣" in plan["reply_text"])
+        self.assertTrue("难受" in plan["reply_text"] or "失落" in plan["reply_text"] or "疼" in plan["reply_text"])
+        self.assertGreater(len(plan["reply_text"]), 70)
+        self.assertNotIn("够解气", plan["reply_text"])
+
+    def test_not_enough_feedback_deepens_recent_relationship_context(self):
+        from app.orchestrator import plan_reply
+
+        recent_messages = [
+            {
+                "incoming_text": "我这暗恋的女生跟别的男生官宣了，你还没安慰我呢",
+                "reply_text": "我先站你这边。",
+            }
+        ]
+
+        plan = plan_reply("u1", "不够", memories=[], recent_messages=recent_messages)
+
+        self.assertEqual(plan["scenario"], "depth_feedback")
+        self.assertTrue("刚才" in plan["reply_text"] or "太浅" in plan["reply_text"])
+        self.assertTrue("暗恋" in plan["reply_text"] or "官宣" in plan["reply_text"])
+        self.assertTrue("难受" in plan["reply_text"] or "不够好" in plan["reply_text"])
+        self.assertNotIn("别光说不够", plan["reply_text"])
+
     def test_ai_feedback_gets_direct_repair_reply_not_generic_coaching(self):
         from app.orchestrator import plan_reply
 

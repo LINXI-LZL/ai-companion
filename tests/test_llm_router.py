@@ -314,6 +314,37 @@ class LlmRouterTests(unittest.TestCase):
         self.assertEqual(result["metadata"]["provider"], "local")
         self.assertEqual(result["metadata"]["fallback_reason"], "required_reply_shape_missing")
 
+    def test_provider_depth_feedback_too_shallow_falls_back_to_local_reply(self):
+        from app.llm_router import load_router_config_from_env, route_external_reply
+
+        local_plan = {
+            "reply_text": "你说不够是对的，我刚才回浅了。暗恋的人官宣，疼的不是一条动态，是你心里那段还没说出口的期待被按了暂停。",
+            "safety_mode": False,
+            "scenario": "depth_feedback",
+            "mode": "text_only",
+            "sticker_intent": "none",
+            "voice_intent": "none",
+        }
+
+        result = route_external_reply(
+            load_router_config_from_env({"COMPANION_LLM_PROVIDER": "dify", "DIFY_API_KEY": "secret"}),
+            local_plan,
+            "不够",
+            memories=[],
+            recent_messages=[
+                {
+                    "incoming_text": "我这暗恋的女生跟别的男生官宣了，你还没安慰我呢",
+                    "reply_text": "我先站你这边。",
+                }
+            ],
+            transport=lambda request: "那我再多安慰你两句，别难过。",
+            user_id="owner",
+        )
+
+        self.assertEqual(result["reply_text"], local_plan["reply_text"])
+        self.assertEqual(result["metadata"]["provider"], "local")
+        self.assertEqual(result["metadata"]["fallback_reason"], "required_reply_shape_missing")
+
     def test_provider_template_analysis_reply_falls_back_to_local_reply(self):
         from app.llm_router import load_router_config_from_env, route_external_reply
 

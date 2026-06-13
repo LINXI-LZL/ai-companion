@@ -327,6 +327,8 @@ def _build_system_prompt(local_plan):
         "identity 场景第一轮要正面说明你是微信树洞 AI 和能陪聊吐槽，不要开场就说用户失忆或抽查。\n"
         "capability 场景要说明你能陪吐槽、接情绪、整理表达、记安全轻量上下文，不要泛泛说我是助手。\n"
         "meta_feedback 场景包括“什么意思”“只会回答这个吗”等质疑，要先承认没说清或会调整，再给短回复。\n"
+        "depth_feedback 场景包括“不够”“没安慰到我”“说深一点”：先承认刚才回浅了，再结合最近历史认真补上，不要反过来责怪用户。\n"
+        "relationship 场景遇到暗恋、官宣、喜欢的人和别人确定关系时，要给 2 到 4 句有内容的安慰，承认失落和期待落空，不要只问“够不够”。\n"
         "长度控制在 1 到 3 句。可以吐槽事情，不要攻击用户本人。高风险自伤内容必须保持严肃支持。\n"
         f"本地已判定场景：{scenario}；本地多模态模式：{mode}。"
     )
@@ -395,6 +397,11 @@ def _misses_required_reply_shape(candidate, local_plan, message):
         return not (
             _has_any(candidate, ("陪", "吐槽", "接情绪", "聊天"))
             and _has_any(candidate, ("记", "整理", "捋顺", "微信树洞"))
+        )
+    if scenario == "depth_feedback":
+        return not (
+            _has_any(candidate, ("刚才", "回浅", "太浅", "没接住", "不够", "认真"))
+            and _has_any(candidate, ("难受", "疼", "失落", "期待", "不够好", "认真"))
         )
     if scenario == "generic" and _looks_like_poetic_or_ambiguous_message(message):
         return not _has_any(candidate, ("顺着聊", "大白话", "接着聊", "继续说", "我收到了", "跟着"))
